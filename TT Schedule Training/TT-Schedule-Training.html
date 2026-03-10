@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trouble Ticket Schedule – Lead FE Training</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Aharoni', 'Segoe UI', Arial, sans-serif;
+    background: #F7F7F7;
+    color: #1C1E44;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* ── Slide container ── */
+  #deck { width: 100%; height: 100vh; position: relative; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+  .slide.active { display: flex; }
+
+  /* ── Slide chrome ── */
+  .slide-header {
+    background: #1C1E44;
+    padding: 18px 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 8px rgba(28,30,68,0.25);
+    border-bottom: 3px solid #0062c4;
+  }
+  .slide-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.3px;
+  }
+  .slide-header .slide-num {
+    margin-left: auto;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    white-space: nowrap;
+  }
+  .slide-icon {
+    font-size: 26px;
+    opacity: 0.9;
+  }
+
+  .slide-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 48px 24px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    background: #F7F7F7;
+  }
+  .slide-body.center {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .slide-body.two-col {
+    flex-direction: row;
+  }
+  .col { flex: 1; min-width: 0; }
+
+  /* ── Typography ── */
+  h1.title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+  }
+  .subtitle {
+    font-size: 18px;
+    color: rgba(255,255,255,0.75);
+    margin-top: 10px;
+  }
+  .audience-tag {
+    display: inline-block;
+    background: rgba(0,98,196,0.2);
+    border: 1px solid #0062c4;
+    color: #88ABE3;
+    border-radius: 20px;
+    padding: 5px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 18px;
+    letter-spacing: 0.5px;
+  }
+
+  p.body-text {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  ul.points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  ul.points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: #333;
+    line-height: 1.5;
+  }
+  ul.points li .bullet {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #0062c4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 1px;
+  }
+  ul.points li .bullet.green  { background: #00BF00; }
+  ul.points li .bullet.orange { background: #e65100; }
+  ul.points li .bullet.red    { background: #c0392b; }
+  ul.points li .bullet.tick   { background: #0062c4; font-size: 13px; }
+
+  .callout {
+    background: rgba(136,171,227,0.15);
+    border-left: 4px solid #0062c4;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #1C1E44;
+    line-height: 1.6;
+  }
+  .callout strong { color: #0062c4; }
+
+  .tip {
+    background: rgba(0,98,196,0.08);
+    border-left: 4px solid #88ABE3;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+    color: #1C1E44;
+    line-height: 1.5;
+  }
+
+  h3.section-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #0062c4;
+    margin-bottom: 14px;
+  }
+
+  /* ── Navigation ── */
+  #nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid #88ABE3;
+    border-radius: 32px;
+    padding: 8px 20px;
+    box-shadow: 0 4px 16px rgba(28,30,68,0.15);
+    z-index: 100;
+  }
+  #nav button {
+    background: none;
+    border: none;
+    color: #88ABE3;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+    line-height: 1;
+  }
+  #nav button:hover { color: #1C1E44; background: rgba(0,98,196,0.08); }
+  #nav button:disabled { color: #d0d9e8; cursor: default; background: none; }
+  #progress { font-size: 12px; color: #88ABE3; min-width: 60px; text-align: center; }
+  .dot-row { display: flex; gap: 5px; align-items: center; }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #d0d9e8;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .dot.active { background: #0062c4; }
+
+  /* ── SVG diagram wrapper ── */
+  .diagram-wrap {
+    background: #fff;
+    border: 1px solid #d0d9e8;
+    border-radius: 12px;
+    padding: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ── Colour legend items ── */
+  .legend { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #333;
+  }
+  .swatch {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .swatch.circle { border-radius: 50%; }
+
+  /* ── Priority badges ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* ── Step list ── */
+  .steps { display: flex; flex-direction: column; gap: 14px; }
+  .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0062c4, #1C1E44);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,98,196,0.3);
+  }
+  .step-content { flex: 1; }
+  .step-content strong { color: #1C1E44; font-size: 14px; display: block; margin-bottom: 3px; }
+  .step-content span { font-size: 13px; color: #555; line-height: 1.5; }
+
+  /* title slide bg */
+  .title-slide-bg {
+    background: radial-gradient(ellipse at 30% 40%, rgba(0,98,196,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 70%, rgba(28,30,68,0.4) 0%, transparent 55%),
+                #1C1E44;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    text-align: center;
+    padding: 48px;
+  }
+  .title-logo {
+    width: 72px; height: 72px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #0062c4, #1C1E44);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 32px rgba(0,98,196,0.4);
+  }
+  .agenda-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .agenda-item {
+    background: #fff;
+    border: 1px solid #d0d9e8;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #1C1E44;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .agenda-item .ai-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0062c4;
+    min-width: 18px;
+  }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- ══════════════ SLIDE 1 – Title ══════════════ -->
+  <div class="slide active" id="s1">
+    <div class="title-slide-bg">
+      <div class="title-logo">📅</div>
+      <h1 class="title">Trouble Ticket Schedule</h1>
+      <p class="subtitle">Lead Field Engineer Training Guide</p>
+      <p class="audience-tag">For Lead Field Engineers &amp; Country Managers</p>
+      <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:32px;">Use ← → arrow keys or the buttons below to navigate</p>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 2 – What is TT Schedule ══════════════ -->
+  <div class="slide" id="s2">
+    <div class="slide-header">
+      <span class="slide-icon">🎯</span>
+      <h2>What is TT Schedule?</h2>
+      <span class="slide-num">2 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h3 class="section-label">Purpose</h3>
+        <p class="body-text">TT Schedule is a visual planning tool that lets you assign open trouble tickets to field engineer teams across a 14-day calendar. It is designed to replace any in-house scheduling you currently do.</p>
+        <ul class="points">
+          <li><div class="bullet tick">✓</div>See all open tickets for your country in one place</li>
+          <li><div class="bullet tick">✓</div>Drag tickets directly onto the calendar for a team</li>
+          <li><div class="bullet tick">✓</div>Plan team movements with a live map view</li>
+          <li><div class="bullet tick">✓</div>Schedule non-work events (leave, training, travel, etc.)</li>
+          <li><div class="bullet tick">✓</div>Changes save automatically — nothing to export</li>
+        </ul>
+        <div class="callout">
+          <strong>Who uses it?</strong> Lead Field Engineers and Country Managers who are responsible for dispatching teams to sites.
+        </div>
+      </div>
+      <div class="col" style="max-width:340px;">
+        <h3 class="section-label">Access</h3>
+        <p class="body-text">Navigate to <strong style="color:#0062c4;">AMN Portal → FE Tools → FE Scheduler</strong> from the main menu. You must be logged in with an internal account.</p>
+        <div style="margin-top:8px;">
+          <img src="slide2.png" alt="FE Scheduler screenshot" style="width:100%;border-radius:8px;border:1px solid #30363d;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 3 – Interface Overview ══════════════ -->
+  <div class="slide" id="s3">
+    <div class="slide-header">
+      <span class="slide-icon">🗺️</span>
+      <h2>Interface Overview</h2>
+      <span class="slide-num">3 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col" style="max-width:420px;">
+        <div>
+          <img src="slide3.png" alt="Interface overview screenshot" style="width:100%;border-radius:8px;border:1px solid #30363d;">
+        </div>
+      </div>
+      <div class="col">
+        <h3 class="section-label">Four Key Areas</h3>
+        <ul class="points" style="gap:18px;">
+          <li>
+            <div class="bullet" style="background:#5c6bc0;font-size:13px;font-weight:700;">A</div>
+            <div>
+              <strong style="color:#1C1E44;display:block;margin-bottom:3px;">Events Panel</strong>
+              <span style="font-size:13px;color:#555;">Coloured chips for non-ticket events (leave, training, travel, etc.). Drag these onto the calendar.</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet" style="background:#5c6bc0;font-size:13px;font-weight:700;">B</div>
+            <div>
+              <strong style="color:#1C1E44;display:block;margin-bottom:3px;">Open Tickets Tray</strong>
+              <span style="font-size:13px;color:#555;">All unresolved AMN Portal tickets for your country, sorted by priority. Drag cards onto the calendar to schedule them.</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet" style="background:#5c6bc0;font-size:13px;font-weight:700;">C</div>
+            <div>
+              <strong style="color:#1C1E44;display:block;margin-bottom:3px;">Map View</strong>
+              <span style="font-size:13px;color:#555;">Shows BTS sites with open tickets plotted on a map. Markers are colour-coded by priority. You can also drag markers onto the calendar.</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet" style="background:#5c6bc0;font-size:13px;font-weight:700;">D</div>
+            <div>
+              <strong style="color:#1C1E44;display:block;margin-bottom:3px;">Timetable</strong>
+              <span style="font-size:13px;color:#555;">14-day grid with one row per team. Drop tickets and events here to build the schedule.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 4 – Getting Started ══════════════ -->
+  <div class="slide" id="s4">
+    <div class="slide-header">
+      <span class="slide-icon">🚀</span>
+      <h2>Getting Started</h2>
+      <span class="slide-num">4 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h3 class="section-label">Step by step</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Open TT Schedule</strong>
+              <span>Navigate to <em>AMN Portal → FE Tools → FE Scheduler</em> from the main portal navigation.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Select your country</strong>
+              <span>Use the Country dropdown in the top-right of the header bar. Only countries with open tickets will appear.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Wait for data to load</strong>
+              <span>The page fetches open tickets, field engineers, and any previously saved schedule simultaneously. This takes 1–3 seconds.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Review what loaded</strong>
+              <span>Check the ticket count badge, confirm the map has plotted markers, and verify that your teams appear in the timetable.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <strong>Start scheduling</strong>
+              <span>Drag tickets from the tray onto calendar cells. The schedule saves automatically after each change.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col" style="max-width:280px;">
+        <h3 class="section-label">Country Selector</h3>
+        <div>
+          <img src="slide4.png" alt="Country selector screenshot" style="width:100%;border-radius:8px;border:1px solid #30363d;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 5 – Open Tickets Tray ══════════════ -->
+  <div class="slide" id="s5">
+    <div class="slide-header">
+      <span class="slide-icon">🎫</span>
+      <h2>Open Tickets Tray</h2>
+      <span class="slide-num">5 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col" style="max-width:340px;">
+        <div>
+          <img src="slide5.png" alt="Open tickets tray screenshot" style="width:100%;border-radius:8px;border:1px solid #30363d;">
+        </div>
+      </div>
+      <div class="col">
+        <h3 class="section-label">Priority Colour Coding</h3>
+        <div class="legend">
+          <div class="legend-item"><div class="swatch" style="background:#111111;width:18px;height:8px;border-radius:2px;"></div><span class="badge" style="background:#111111;">URGENT</span>&nbsp;Immediate attention required</div>
+          <div class="legend-item"><div class="swatch" style="background:#d32f2f;width:18px;height:8px;border-radius:2px;"></div><span class="badge" style="background:#d32f2f;">HIGH</span>&nbsp;Schedule these first</div>
+          <div class="legend-item"><div class="swatch" style="background:#f57c00;width:18px;height:8px;border-radius:2px;"></div><span class="badge" style="background:#f57c00;">MEDIUM</span>&nbsp;Schedule these next</div>
+          <div class="legend-item"><div class="swatch" style="background:#43a047;width:18px;height:8px;border-radius:2px;"></div><span class="badge" style="background:#43a047;">LOW</span>&nbsp;Schedule these last</div>
+        </div>
+        <div class="callout" style="margin-top:16px;">
+          <strong>★ High Value Sites</strong> are shown with a gold border and orange site name. These should be prioritised regardless of ticket priority level.
+        </div>
+        <h3 class="section-label" style="margin-top:20px;">Ticket Detail Popup</h3>
+        <p class="body-text" style="font-size:13px;">Click the site name on any ticket card to see full details: ticket ID, BTS site, BSC, fault code, due date, assigned engineer, and ETA.</p>
+        <div class="tip">Once a ticket is dragged onto the timetable, its card becomes faded in the tray to show it is already scheduled.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 6 – The Map ══════════════ -->
+  <div class="slide" id="s6">
+    <div class="slide-header">
+      <span class="slide-icon">🗺️</span>
+      <h2>Map View</h2>
+      <span class="slide-num">6 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col" style="max-width:480px;">
+        <div>
+          <img src="slide6.png" alt="Map view screenshot" style="width:100%;border-radius:8px;border:1px solid #30363d;">
+        </div>
+      </div>
+      <div class="col">
+        <h3 class="section-label">Map Marker Colours</h3>
+        <div class="legend">
+          <div class="legend-item"><div class="swatch circle" style="background:#111111;border:2px solid #ffd600;"></div>Black with gold border — Urgent or High Value Site</div>
+          <div class="legend-item"><div class="swatch circle" style="background:#d32f2f;border:1.5px solid white;"></div>Red — High priority ticket</div>
+          <div class="legend-item"><div class="swatch circle" style="background:#f57c00;border:1.5px solid white;"></div>Orange — Medium priority ticket</div>
+          <div class="legend-item"><div class="swatch circle" style="background:#43a047;border:1.5px solid white;"></div>Green — Low priority ticket</div>
+          <div class="legend-item"><div class="swatch circle" style="background:#9e9e9e;border:1.5px solid white;"></div>Grey — Site visible but no open ticket</div>
+        </div>
+        <div class="callout" style="margin-top:16px;">
+          <strong>Hover</strong> over a ticket card in the tray to highlight its BTS marker on the map (turns gold and shows a popup). This helps you find the site geographically.
+        </div>
+        <h3 class="section-label" style="margin-top:16px;">Team Route</h3>
+        <p class="body-text" style="font-size:13px;">Click the <strong style="color:#0062c4;">Route</strong> button in a team cell to draw a dashed route line on the map showing the order of site visits, numbered chronologically.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 7 – Scheduling a Ticket ══════════════ -->
+  <div class="slide" id="s7">
+    <div class="slide-header">
+      <span class="slide-icon">📌</span>
+      <h2>Scheduling a Ticket</h2>
+      <span class="slide-num">7 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h3 class="section-label">How to schedule</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Find the ticket in the tray</strong>
+              <span>Tickets are sorted by priority (urgent first). Hover over a card to highlight its location on the map.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Drag the card</strong>
+              <span>Click and hold the ticket card. The cursor changes to a grab hand. Drag it towards the timetable.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Drop onto the correct team &amp; date</strong>
+              <span>The target cell highlights with a blue dashed border when you hover over it. Release to drop.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Confirm it appeared</strong>
+              <span>The ticket entry appears in the cell. The tray card fades to show it is scheduled.</span>
+            </div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:18px;border-left-color:#00BF00;background:rgba(63,185,80,0.1);">
+          <strong style="color:#00BF00;">ETA set automatically:</strong> When you drag a ticket onto the schedule, the ETA date on the trouble ticket is set automatically to match the date you dropped it on. You no longer need to manually update the ETA on the ticket.
+        </div>
+        <div class="callout" style="margin-top:12px;">
+          <strong>Same ticket, multiple teams:</strong> A ticket can only be scheduled to one team at a time. If it is already on the board, its tray card will be faded and cannot be dragged again. To move it to a different team, drag it directly from its current position in the timetable and drop it onto the desired team's cell.
+        </div>
+      </div>
+      <div class="col" style="max-width:300px;">
+        <div class="diagram-wrap">
+          <svg width="260" height="260" viewBox="0 0 260 260">
+            <!-- Tray card -->
+            <rect x="10" y="10" width="110" height="46" rx="5" fill="#fff" stroke="#d32f2f" stroke-width="1"/>
+            <rect x="10" y="10" width="4" height="46" rx="2" fill="#d32f2f"/>
+            <text x="20" y="28" font-size="9" fill="#1a237e" font-weight="700">ABI_KD_001</text>
+            <rect x="20" y="33" width="26" height="10" rx="4" fill="#d32f2f"/>
+            <text x="33" y="41" font-size="7" fill="white" text-anchor="middle">HIGH</text>
+            <text x="90" y="42" font-size="9" fill="#9e9e9e">↕ drag</text>
+
+            <!-- Arrow down -->
+            <line x1="65" y1="60" x2="65" y2="95" stroke="#5c6bc0" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+            <defs>
+              <marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 z" fill="#5c6bc0"/>
+              </marker>
+            </defs>
+
+            <!-- Calendar cell highlighted -->
+            <rect x="10" y="100" width="110" height="60" rx="5" fill="#e8eaf6" stroke="#5c6bc0" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="65" y="124" font-size="9" fill="#5c6bc0" text-anchor="middle" font-weight="600">Team 1</text>
+            <text x="65" y="138" font-size="8" fill="#3949ab" text-anchor="middle">Tue 11 Mar</text>
+            <text x="65" y="152" font-size="8" fill="#9e9e9e" text-anchor="middle">Drop here</text>
+
+            <!-- Arrow down -->
+            <line x1="65" y1="164" x2="65" y2="192" stroke="#5c6bc0" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+
+            <!-- Result in cell -->
+            <rect x="10" y="196" width="110" height="55" rx="5" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+            <rect x="14" y="200" width="98" height="18" rx="3" fill="#ffebee"/>
+            <rect x="14" y="200" width="3" height="18" rx="2" fill="#d32f2f"/>
+            <text x="20" y="212" font-size="8" fill="#b71c1c">#001 ABI_KD_001</text>
+            <text x="108" y="212" font-size="9" fill="#9e9e9e">×</text>
+            <text x="65" y="240" font-size="8" fill="#3fb950" text-anchor="middle">✓ Scheduled</text>
+
+            <!-- Tray card faded note -->
+            <rect x="140" y="10" width="110" height="46" rx="5" fill="#fafafa" stroke="#e0e0e0" stroke-width="1" opacity="0.5"/>
+            <rect x="140" y="10" width="4" height="46" rx="2" fill="#bdbdbd" opacity="0.5"/>
+            <text x="150" y="28" font-size="9" fill="#9e9e9e" font-weight="700">ABI_KD_001</text>
+            <text x="150" y="44" font-size="8" fill="#bdbdbd" font-style="italic">faded — scheduled</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 8 – Event Types ══════════════ -->
+  <div class="slide" id="s8">
+    <div class="slide-header">
+      <span class="slide-icon">📋</span>
+      <h2>Scheduling Events (Non-Ticket)</h2>
+      <span class="slide-num">8 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col" style="flex:0 0 180px;">
+        <h3 class="section-label">Available Event Types</h3>
+        <div class="legend" style="gap:10px;margin-bottom:20px;">
+          <div class="legend-item"><div class="swatch" style="background:#e65100;width:80px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:white;font-weight:700;">Admin Day</span></div></div>
+          <div class="legend-item"><div class="swatch" style="background:#7b1fa2;width:80px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:white;font-weight:700;">Annual Leave</span></div></div>
+          <div class="legend-item"><div class="swatch" style="background:#37474f;width:80px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:white;font-weight:700;">Data Centre</span></div></div>
+          <div class="legend-item"><div class="swatch" style="background:#00838f;width:80px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:white;font-weight:700;">Fault Testing</span></div></div>
+          <div class="legend-item"><div class="swatch" style="background:#c62828;width:80px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:white;font-weight:700;">Non-Working Day</span></div></div>
+          <div class="legend-item"><div class="swatch" style="background:#00695c;width:80px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:white;font-weight:700;">Prep for Trip</span></div></div>
+          <div class="legend-item"><div class="swatch" style="background:#1565c0;width:80px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:white;font-weight:700;">Training</span></div></div>
+          <div class="legend-item"><div class="swatch" style="background:#757575;width:80px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:white;font-weight:700;">Travel</span></div></div>
+          <div class="legend-item"><div class="swatch" style="background:#5d4037;width:80px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:white;font-weight:700;">Warehouse</span></div></div>
+        </div>
+      </div>
+      <div class="col">
+        <h3 class="section-label">How to add an event</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Locate the Events panel</strong>
+              <span>The narrow panel on the far left, below the header. It shows coloured chips for each event type.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Drag the chip</strong>
+              <span>Click and hold any event chip and drag it to the desired team row and day.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Drop onto the cell</strong>
+              <span>The event appears as a coloured bar in the cell. Multiple events can be stacked in the same day alongside tickets.</span>
+            </div>
+          </div>
+        </div>
+        <div class="tip">To remove an event, click the <strong>×</strong> button that appears on the right side of any entry in the timetable cell.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 9 – Managing Teams ══════════════ -->
+  <div class="slide" id="s9">
+    <div class="slide-header">
+      <span class="slide-icon">👥</span>
+      <h2>Managing Teams</h2>
+      <span class="slide-num">9 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col" style="max-width:320px;">
+        <div class="diagram-wrap">
+          <svg width="280" height="230" viewBox="0 0 280 230">
+            <!-- Team cell -->
+            <rect width="280" height="230" rx="8" fill="#0d1117"/>
+            <rect x="8" y="8" width="264" height="100" rx="6" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+            <rect x="8" y="8" width="4" height="100" rx="2" fill="#1a237e"/>
+            <!-- Team name row -->
+            <text x="18" y="26" font-size="9" fill="#9e9e9e">Team name:</text>
+            <rect x="70" y="14" width="140" height="18" rx="3" fill="transparent" stroke="#c5cae9" stroke-width="1" stroke-dasharray="3,2"/>
+            <text x="78" y="26" font-size="9" fill="#1a237e" font-weight="700">Team Alpha</text>
+            <!-- Remove btn -->
+            <rect x="224" y="14" width="20" height="18" rx="3" fill="none"/>
+            <text x="234" y="26" font-size="12" fill="#e57373" text-anchor="middle">×</text>
+            <!-- Lead FE row -->
+            <text x="18" y="52" font-size="8" fill="#9e9e9e">Lead FE:</text>
+            <rect x="60" y="42" width="140" height="16" rx="3" fill="#fff" stroke="#e0e0e0" stroke-width="1"/>
+            <text x="68" y="53" font-size="8" fill="#3949ab">Ahmed Musa ▾</text>
+            <!-- Route btn -->
+            <rect x="210" y="78" width="54" height="18" rx="4" fill="none" stroke="#1a237e" stroke-width="1"/>
+            <text x="237" y="90" font-size="8" fill="#1a237e" text-anchor="middle">⬡ Route</text>
+            <!-- Annotations -->
+            <line x1="140" y1="110" x2="140" y2="125" stroke="#30363d" stroke-width="1"/>
+            <text x="140" y="134" font-size="8" fill="#8b949e" text-anchor="middle">Editable name (click to type)</text>
+            <text x="140" y="145" font-size="8" fill="#8b949e" text-anchor="middle">Lead FE dropdown   ·   Route button   ·   Remove (×)</text>
+
+            <!-- Add team button -->
+            <rect x="8" y="158" width="110" height="30" rx="6" fill="#3949ab"/>
+            <text x="63" y="177" font-size="10" fill="white" text-anchor="middle" font-weight="600">+ Add Team</text>
+            <text x="63" y="200" font-size="8" fill="#8b949e" text-anchor="middle">Creates a new row in the timetable</text>
+            <text x="63" y="212" font-size="8" fill="#484f58" text-anchor="middle">Max 20 teams per country</text>
+          </svg>
+        </div>
+      </div>
+      <div class="col">
+        <h3 class="section-label">Team Actions</h3>
+        <ul class="points">
+          <li>
+            <div class="bullet">1</div>
+            <div>
+              <strong style="color:#1C1E44;display:block;">Rename a team</strong>
+              <span style="font-size:13px;color:#555;">Click the team name field and type directly. Changes save automatically.</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet">2</div>
+            <div>
+              <strong style="color:#1C1E44;display:block;">Assign a Lead FE</strong>
+              <span style="font-size:13px;color:#555;">Use the Lead FE dropdown in the team cell. The list shows all field engineers registered for your country.</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet">3</div>
+            <div>
+              <strong style="color:#1C1E44;display:block;">Add a team</strong>
+              <span style="font-size:13px;color:#555;">Click the <strong style="color:#0062c4;">+ Add Team</strong> button at the bottom of the timetable. A new row is added immediately.</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet red">×</div>
+            <div>
+              <strong style="color:#1C1E44;display:block;">Remove a team</strong>
+              <span style="font-size:13px;color:#555;">Click the × button in the top-right of the team cell. At least one team must always remain. Removing a team also clears the ETA dates for any tickets it had scheduled.</span>
+            </div>
+          </li>
+        </ul>
+        <div class="callout" style="margin-top:16px;">
+          Each team gets a unique colour (shown as the left border stripe). This same colour is used for route lines on the map.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 10 – Moving & Removing Entries ══════════════ -->
+  <div class="slide" id="s10">
+    <div class="slide-header">
+      <span class="slide-icon">↔️</span>
+      <h2>Moving &amp; Removing Entries</h2>
+      <span class="slide-num">10 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h3 class="section-label">Moving an entry</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Drag from within the timetable</strong>
+              <span>Any entry already on the calendar can be dragged to a different day or a different team. The cursor shows a grab hand.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Drop on the new cell</strong>
+              <span>Release over any cell. The entry disappears from its original location and appears in the new one.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>ETA updates automatically</strong>
+              <span>For ticket entries, the ETA in AMN Portal is updated to match the new calendar day.</span>
+            </div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:16px;">
+          You cannot drop a ticket entry onto a cell that already contains the same ticket — the system ignores the duplicate drop.
+        </div>
+        <h3 class="section-label" style="margin-top:20px;">Removing an entry</h3>
+        <p class="body-text" style="font-size:13px;">Click the <strong style="color:#1C1E44;">×</strong> button on the right of any entry chip in the timetable. The entry is removed and the ticket's ETA in AMN Portal is cleared.</p>
+      </div>
+      <div class="col" style="max-width:300px;">
+        <div class="diagram-wrap">
+          <svg width="260" height="240" viewBox="0 0 260 240">
+            <!-- From cell -->
+            <rect x="10" y="10" width="110" height="70" rx="5" fill="#161b22" stroke="#30363d"/>
+            <text x="65" y="24" font-size="8" fill="#8b949e" text-anchor="middle">Mon 10</text>
+            <rect x="16" y="30" width="98" height="18" rx="3" fill="#ffebee"/>
+            <rect x="16" y="30" width="3" height="18" rx="2" fill="#d32f2f"/>
+            <text x="22" y="42" font-size="8" fill="#b71c1c">#001 ABI_KD_001</text>
+            <text x="110" y="42" font-size="9" fill="#9e9e9e">×</text>
+            <rect x="16" y="52" width="98" height="18" rx="3" fill="#e65100"/>
+            <text x="65" y="64" font-size="8" fill="white" text-anchor="middle">Travel</text>
+            <text x="110" y="64" font-size="9" fill="white">×</text>
+
+            <!-- Arrow -->
+            <line x1="65" y1="84" x2="65" y2="90" stroke="#30363d" stroke-width="1" stroke-dasharray="3,2"/>
+            <line x1="65" y1="90" x2="195" y2="90" stroke="#5c6bc0" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arr2)"/>
+            <text x="130" y="86" font-size="8" fill="#5c6bc0" text-anchor="middle">drag to move</text>
+
+            <!-- To cell -->
+            <rect x="140" y="100" width="110" height="50" rx="5" fill="#e8eaf6" stroke="#5c6bc0" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="195" y="119" font-size="8" fill="#5c6bc0" text-anchor="middle">Wed 12</text>
+            <text x="195" y="135" font-size="8" fill="#9e9e9e" text-anchor="middle">Drop here</text>
+
+            <!-- After state -->
+            <rect x="10" y="160" width="110" height="50" rx="5" fill="#161b22" stroke="#30363d"/>
+            <text x="65" y="174" font-size="8" fill="#8b949e" text-anchor="middle">Mon 10 (after)</text>
+            <rect x="16" y="180" width="98" height="18" rx="3" fill="#e65100"/>
+            <text x="65" y="192" font-size="8" fill="white" text-anchor="middle">Travel</text>
+
+            <rect x="140" y="160" width="110" height="50" rx="5" fill="#161b22" stroke="#30363d"/>
+            <text x="195" y="174" font-size="8" fill="#8b949e" text-anchor="middle">Wed 12 (after)</text>
+            <rect x="146" y="180" width="98" height="18" rx="3" fill="#ffebee"/>
+            <rect x="146" y="180" width="3" height="18" rx="2" fill="#d32f2f"/>
+            <text x="152" y="192" font-size="8" fill="#b71c1c">#001 ABI_KD_001</text>
+
+            <text x="130" y="228" font-size="8" fill="#3fb950" text-anchor="middle">✓ Moved — ETA updated in AMN Portal</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 11 – Team Route Planning ══════════════ -->
+  <div class="slide" id="s11">
+    <div class="slide-header">
+      <span class="slide-icon">🧭</span>
+      <h2>Team Route Planning</h2>
+      <span class="slide-num">11 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h3 class="section-label">What the Route button does</h3>
+        <p class="body-text">Once a team has tickets scheduled across multiple days, the <strong style="color:#0062c4;">Route</strong> button draws a numbered travel line on the map showing the order of site visits, sorted by date.</p>
+        <div class="steps" style="margin-top:16px;">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Schedule tickets for a team across several days</strong>
+              <span>At least one site must have a known GPS location in the database.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Click the Route button</strong>
+              <span>Found in the team cell, bottom-right. It shows the team's colour and a route icon.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Review the route on the map</strong>
+              <span>A dashed line connects sites in chronological order. Each stop is numbered. Click a stop marker to see the site name and date.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Click Route again to hide</strong>
+              <span>The button toggles the route on and off. The map returns to normal markers.</span>
+            </div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:16px;">
+          If no sites have location data yet, a notification will appear: <em>"No located sites assigned to this team yet."</em>
+        </div>
+      </div>
+      <div class="col" style="max-width:480px;">
+        <div>
+          <img src="slide11.png" alt="Team route screenshot" style="width:100%;border-radius:8px;border:1px solid #30363d;">
+        </div>
+        <div class="callout" style="margin-top:16px; font-size:12px;">
+          Each team has a distinct colour. Up to 10 different team colours cycle automatically.
+        </div>
+        <div class="callout" style="margin-top:12px;border-left-color:#f9a825;background:rgba(249,168,37,0.12);font-size:14px;">
+          <strong style="color:#f9a825;">Pro tip:</strong> Use the route view to identify nearby sites that fall between scheduled stops — you may be able to add them to the trip and cover more tickets in a single visit, maximising team efficiency.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 12 – Navigating Time ══════════════ -->
+  <div class="slide" id="s12">
+    <div class="slide-header">
+      <span class="slide-icon">📆</span>
+      <h2>Navigating the Calendar</h2>
+      <span class="slide-num">12 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h3 class="section-label">Default view</h3>
+        <p class="body-text">The timetable shows <strong style="color:#0062c4;">today + the next 13 days</strong> (14 days total). Today's column is highlighted in light blue.</p>
+
+        <h3 class="section-label" style="margin-top:20px;">Viewing the past 7 days</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Click and drag the column header bar to the right</strong>
+              <span>The cursor changes to a left-right resize arrow when over the header. Drag right by more than 60px to switch to the past 7-day view.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>The header hint changes</strong>
+              <span>A message in orange reads <em>"Showing past 7 days"</em>. You can review what was scheduled last week.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Drag left to return to today</strong>
+              <span>Drag the header bar left by more than 60px to snap back to the current 14-day view.</span>
+            </div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:16px;">The hint bar below the events/tray panel shows which view is active and how to navigate.</div>
+      </div>
+      <div class="col" style="max-width:300px;">
+        <div class="diagram-wrap">
+          <svg width="260" height="220" viewBox="0 0 260 220">
+            <!-- Current view header -->
+            <rect width="260" height="40" rx="4" fill="#eef2f7"/>
+            <text x="50" y="18" font-size="8" fill="#3949ab" text-anchor="middle" font-weight="700">Mon 10</text>
+            <rect x="30" y="22" width="40" height="14" rx="2" fill="#e8eaf6"/>
+            <text x="50" y="33" font-size="7" fill="#1a237e" text-anchor="middle" font-weight="700">TODAY</text>
+            <text x="105" y="18" font-size="8" fill="#3949ab" text-anchor="middle">Tue 11</text>
+            <text x="160" y="18" font-size="8" fill="#3949ab" text-anchor="middle">Wed 12</text>
+            <text x="215" y="18" font-size="8" fill="#3949ab" text-anchor="middle">Thu 13</text>
+            <text x="130" y="34" font-size="8" fill="#9e9e9e" text-anchor="middle">← drag header right to see past</text>
+
+            <!-- Arrow -->
+            <line x1="130" y1="46" x2="130" y2="60" stroke="#5c6bc0" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+
+            <!-- Past view header -->
+            <rect y="66" width="260" height="40" rx="4" fill="#eef2f7"/>
+            <text x="50" y="84" font-size="8" fill="#3949ab" text-anchor="middle">Mon 3</text>
+            <text x="105" y="84" font-size="8" fill="#3949ab" text-anchor="middle">Tue 4</text>
+            <text x="160" y="84" font-size="8" fill="#3949ab" text-anchor="middle">Wed 5</text>
+            <text x="215" y="84" font-size="8" fill="#3949ab" text-anchor="middle">Thu 6</text>
+            <rect y="96" width="260" height="10" rx="0" fill="#fff7f0"/>
+            <text x="130" y="104" font-size="8" fill="#e65100" text-anchor="middle" font-weight="600">Showing past 7 days · Drag header right to return to today</text>
+
+            <!-- Hint bar visual -->
+            <rect y="120" width="260" height="20" rx="4" fill="#fff7f0" stroke="#e65100" stroke-width="1"/>
+            <text x="130" y="133" font-size="8" fill="#e65100" text-anchor="middle" font-weight="600">Showing past 7 days</text>
+
+            <rect y="150" width="260" height="20" rx="4" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+            <text x="130" y="163" font-size="8" fill="#9e9e9e" text-anchor="middle">Drag timetable header left to see the past 7 days</text>
+
+            <text x="130" y="195" font-size="8" fill="#484f58" text-anchor="middle">Top = normal view hint</text>
+            <text x="130" y="207" font-size="8" fill="#484f58" text-anchor="middle">Bottom = past-week view hint</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 13 – Auto Save ══════════════ -->
+  <div class="slide" id="s13">
+    <div class="slide-header">
+      <span class="slide-icon">💾</span>
+      <h2>Auto-Save &amp; Data Persistence</h2>
+      <span class="slide-num">13 / 15</span>
+    </div>
+    <div class="slide-body center">
+      <div style="max-width:680px;text-align:left;">
+        <h3 class="section-label">How saving works</h3>
+        <p class="body-text">Every change you make — adding a ticket, moving an entry, adding a team, removing an event — triggers an automatic save. You do not need to click a Save button.</p>
+
+        <div class="steps" style="margin-top:16px;">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Change is made</strong>
+              <span>Drag a ticket, update a team name, remove an entry, etc.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>"Saving…" appears in the header</strong>
+              <span>A 1.5-second debounce timer starts. Rapid back-to-back changes are batched into a single save.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>"Saved ✓" confirms success</strong>
+              <span>This message appears briefly and then disappears. If it shows "Save failed", check your network connection and try the change again.</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:20px;margin-top:24px;">
+          <div class="callout" style="flex:1;">
+            <strong>Schedule persists across sessions.</strong> When you or another user opens TT Schedule for the same country, the previously saved schedule is restored exactly as it was.
+          </div>
+          <div class="callout" style="flex:1;">
+            <strong>ETA dates sync to AMN Portal.</strong> When a ticket is scheduled on a date, that date is written back to the ticket's ETA field in AMN Portal automatically.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 14 – Tips & Common Mistakes ══════════════ -->
+  <div class="slide" id="s14">
+    <div class="slide-header">
+      <span class="slide-icon">💡</span>
+      <h2>Tips &amp; Common Mistakes</h2>
+      <span class="slide-num">14 / 15</span>
+    </div>
+    <div class="slide-body two-col">
+      <div class="col">
+        <h3 class="section-label" style="color:#00BF00;">Best Practices</h3>
+        <ul class="points">
+          <li><div class="bullet green">✓</div>Schedule Urgent and High Value tickets first before filling other days.</li>
+          <li><div class="bullet green">✓</div>Use the map view to group nearby sites on the same day to minimise travel.</li>
+          <li><div class="bullet green">✓</div>Use the Route button to visually sense-check a team's travel plan before finalising.</li>
+          <li><div class="bullet green">✓</div>Add Travel or Prep-for-Trip events on days when the team is in transit.</li>
+          <li><div class="bullet green">✓</div>Mark Non-Working Days and Annual Leave so the timetable accurately reflects team availability.</li>
+          <li><div class="bullet green">✓</div>Check "Saved ✓" appears after major changes before closing the browser.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3 class="section-label" style="color:#f85149;">Common Mistakes to Avoid</h3>
+        <ul class="points">
+          <li><div class="bullet red">✗</div>Trying to drag a faded/scheduled ticket — it is already on the board. Find it in the timetable to move it instead.</li>
+          <li><div class="bullet red">✗</div>Closing the browser immediately after a drag — wait for "Saved ✓" to confirm the save.</li>
+          <li><div class="bullet red">✗</div>Removing the last team — the system will warn you; you must always have at least one team.</li>
+          <li><div class="bullet red">✗</div>Expecting the ticket count badge to decrease when you schedule a ticket — the count shows all open tickets, not how many are still unscheduled.</li>
+          <li><div class="bullet red">✗</div>Thinking the map shows <em>all</em> BTS sites — only sites with open tickets (and known GPS coordinates) appear as markers.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SLIDE 15 – Summary ══════════════ -->
+  <div class="slide" id="s15">
+    <div class="slide-header">
+      <span class="slide-icon">✅</span>
+      <h2>Summary</h2>
+      <span class="slide-num">15 / 15</span>
+    </div>
+    <div class="slide-body center">
+      <div style="max-width:700px;text-align:left;">
+        <h3 class="section-label" style="text-align:center;margin-bottom:24px;">What you can now do</h3>
+        <div class="agenda-grid">
+          <div class="agenda-item"><span class="ai-num">01</span>Select your country and review open tickets sorted by priority</div>
+          <div class="agenda-item"><span class="ai-num">02</span>Drag ticket cards onto the 14-day timetable for the right team</div>
+          <div class="agenda-item"><span class="ai-num">03</span>Identify sites on the map and drag markers to schedule geographically</div>
+          <div class="agenda-item"><span class="ai-num">04</span>Add event chips (leave, travel, training) for non-ticket days</div>
+          <div class="agenda-item"><span class="ai-num">05</span>Create, rename, and assign lead FEs to teams</div>
+          <div class="agenda-item"><span class="ai-num">06</span>Move entries between teams and dates using drag &amp; drop</div>
+          <div class="agenda-item"><span class="ai-num">07</span>Use the Route button to visualise a team's site visit order</div>
+          <div class="agenda-item"><span class="ai-num">08</span>Review past scheduling using the header-drag navigation</div>
+        </div>
+        <div class="callout" style="margin-top:28px;text-align:center;">
+          The schedule saves automatically. ETA dates are written back to AMN Portal on each change.<br>
+          <strong>No manual export or submission is needed.</strong>
+        </div>
+        <p style="text-align:center;font-size:13px;color:#888;margin-top:24px;">
+          Questions? Contact portal support at <a href="mailto:portalsupport@amn.com" style="color:#5c6bc0;">portalsupport@amn.com</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button id="btnFirst" title="First slide">&#171;</button>
+  <button id="btnPrev" title="Previous">&#8592;</button>
+  <div class="dot-row" id="dotRow"></div>
+  <span id="progress">1 / 15</span>
+  <button id="btnNext" title="Next">&#8594;</button>
+  <button id="btnLast" title="Last slide">&#187;</button>
+</div>
+
+<script>
+  var slides = document.querySelectorAll('.slide');
+  var total = slides.length;
+  var current = 0;
+
+  var dotRow = document.getElementById('dotRow');
+  for (var i = 0; i < total; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.dataset.idx = i;
+    d.addEventListener('click', function() { goTo(+this.dataset.idx); });
+    dotRow.appendChild(d);
+  }
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dotRow.children[current].classList.remove('active');
+    current = Math.max(0, Math.min(total - 1, n));
+    slides[current].classList.add('active');
+    dotRow.children[current].classList.add('active');
+    document.getElementById('progress').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('btnPrev').disabled = current === 0;
+    document.getElementById('btnFirst').disabled = current === 0;
+    document.getElementById('btnNext').disabled = current === total - 1;
+    document.getElementById('btnLast').disabled = current === total - 1;
+  }
+
+  document.getElementById('btnFirst').addEventListener('click', function() { goTo(0); });
+  document.getElementById('btnPrev').addEventListener('click', function() { goTo(current - 1); });
+  document.getElementById('btnNext').addEventListener('click', function() { goTo(current + 1); });
+  document.getElementById('btnLast').addEventListener('click', function() { goTo(total - 1); });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(current - 1);
+    if (e.key === 'Home') goTo(0);
+    if (e.key === 'End')  goTo(total - 1);
+  });
+
+  goTo(0);
+</script>
+</body>
+</html>
