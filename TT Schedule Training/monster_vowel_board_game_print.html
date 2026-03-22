@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:#f5f0ff;}
+
+.board-wrap{
+  width:900px;margin:0 auto;
+  background:#fdf9ff;
+  padding:24px;
+  min-height:1200px;
+  position:relative;
+}
+
+.game-title{
+  text-align:center;
+  font-family:'Fredoka One',cursive;
+  font-size:42px;
+  color:#5a3a9e;
+  margin-bottom:4px;
+  letter-spacing:2px;
+}
+.game-subtitle{
+  text-align:center;
+  font-family:'Fredoka One',cursive;
+  font-size:15px;
+  color:#8870b8;
+  margin-bottom:16px;
+  letter-spacing:1px;
+}
+
+.how-to{
+  display:flex;
+  gap:14px;
+  margin-bottom:16px;
+  background:#f0ecff;
+  border-radius:16px;
+  padding:14px 18px;
+  border:2px solid #d0c4ee;
+}
+.how-to-title{
+  font-family:'Fredoka One',cursive;
+  color:#5a3a9e;
+  font-size:15px;
+  margin-bottom:6px;
+}
+.how-step{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin-bottom:5px;
+  font-size:12px;
+  color:#4a3a6a;
+  font-weight:700;
+  line-height:1.4;
+}
+.step-num{
+  background:#7b52d8;
+  color:white;
+  border-radius:50%;
+  width:18px;height:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fredoka One',cursive;
+  font-size:11px;
+  flex-shrink:0;
+  margin-top:1px;
+}
+
+.board-area{
+  position:relative;
+  width:852px;
+  height:560px;
+  background:#eef6ff;
+  border-radius:24px;
+  border:3px solid #c0d4f0;
+}
+
+/* terrain blobs */
+.terrain{position:absolute;border-radius:50%;opacity:0.25;}
+
+.space{
+  position:absolute;
+  width:60px;height:60px;
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:2.5px solid #c0c8e0;
+  font-family:'Fredoka One',cursive;
+  font-size:10px;
+  color:#4a3a6a;
+  text-align:center;
+  background:white;
+}
+
+.space-start{background:#d8f4e0;border-color:#5ab870;}
+.space-end{background:#fff3c8;border-color:#d4a020;}
+.space-normal{background:white;border-color:#d0d8ee;}
+.space-bonus{background:#fffbe0;border-color:#e8c030;border-style:dashed;}
+.space-lose{background:#ffe8e8;border-color:#e09090;border-style:dashed;}
+
+/* monster spaces — soft pastel tints */
+.space-k{background:#d8f8ee;border-color:#20c898;border-width:3px;}
+.space-a{background:#ffe0ec;border-color:#e84888;border-width:3px;}
+.space-e{background:#d4f8e8;border-color:#12b870;border-width:3px;}
+.space-i{background:#e0e4ff;border-color:#6868e0;border-width:3px;}
+.space-o{background:#fff0d0;border-color:#e09020;border-width:3px;}
+.space-u{background:#f0e0ff;border-color:#a050d8;border-width:3px;}
+
+.path-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+
+/* cards */
+.cards-section{
+  margin-top:14px;
+  background:#f0ecff;
+  border-radius:16px;
+  padding:14px;
+  border:2px solid #d0c4ee;
+}
+.cards-title{
+  font-family:'Fredoka One',cursive;
+  color:#5a3a9e;
+  font-size:15px;
+  text-align:center;
+  margin-bottom:10px;
+}
+.cards-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  justify-content:center;
+}
+.picture-card{
+  width:92px;
+  background:white;
+  border-radius:10px;
+  padding:7px 5px 5px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+  border:2.5px solid #ccc;
+  position:relative;
+}
+.pic-img{width:60px;height:52px;display:flex;align-items:center;justify-content:center;font-size:34px;}
+.pic-word{font-family:'Fredoka One',cursive;font-size:11px;text-align:center;line-height:1.2;color:#333;}
+.pic-monster-dot{
+  position:absolute;top:-7px;right:-7px;
+  width:20px;height:20px;
+  border-radius:50%;
+  border:2px solid white;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* play helper */
+.helper{
+  margin-top:14px;
+  background:#f0ecff;
+  border-radius:16px;
+  padding:14px;
+  border:2px solid #d0c4ee;
+}
+.helper-title{font-family:'Fredoka One',cursive;color:#5a3a9e;font-size:15px;text-align:center;margin-bottom:10px;}
+
+.players-bar{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+.player-card{
+  background:white;
+  border-radius:12px;
+  padding:9px 14px;
+  border:2px solid #d0c4ee;
+  min-width:130px;
+  text-align:center;
+}
+.player-card.active{border-color:#7b52d8;background:#f4f0ff;}
+.player-name{font-family:'Fredoka One',cursive;font-size:14px;color:#3a2a5a;}
+.player-pos{font-size:11px;color:#7060a0;font-weight:700;margin-top:2px;}
+.player-score{font-family:'Fredoka One',cursive;font-size:20px;color:#e09020;margin-top:2px;}
+
+.dice-area{display:flex;justify-content:center;align-items:center;gap:16px;}
+.dice{
+  width:56px;height:56px;
+  background:white;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;
+  cursor:pointer;
+  border:3px solid #7b52d8;
+  transition:transform 0.1s;
+  user-select:none;
+  box-shadow:0 2px 8px rgba(0,0,0,0.12);
+}
+.dice:active{transform:scale(0.9) rotate(15deg);}
+.dice.rolling{animation:roll 0.4s ease;}
+@keyframes roll{0%{transform:rotate(0);}25%{transform:rotate(20deg) scale(1.1);}50%{transform:rotate(-15deg);}75%{transform:rotate(10deg);}100%{transform:rotate(0);}}
+.dice-result{font-family:'Fredoka One',cursive;font-size:16px;color:#5a3a9e;text-align:center;min-width:130px;}
+
+.player-token-on-board{
+  width:15px;height:15px;
+  border-radius:50%;
+  border:2px solid white;
+  position:absolute;
+  bottom:3px;
+  font-family:'Fredoka One',cursive;
+  font-size:7px;
+  display:flex;align-items:center;justify-content:center;
+  color:white;
+  z-index:10;
+  box-shadow:0 1px 3px rgba(0,0,0,0.3);
+}
+
+.feedback{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  background:white;
+  border:4px solid #7b52d8;
+  border-radius:24px;
+  padding:26px 34px;
+  text-align:center;
+  z-index:100;
+  display:none;
+  box-shadow:0 8px 40px rgba(0,0,0,0.25);
+  min-width:260px;
+}
+.feedback.show{display:block;animation:pop 0.3s ease;}
+@keyframes pop{from{transform:translate(-50%,-50%) scale(0.7);}to{transform:translate(-50%,-50%) scale(1);}}
+.feedback-emoji{font-size:44px;margin-bottom:8px;}
+.feedback-msg{font-family:'Fredoka One',cursive;font-size:20px;color:#3a2a5a;margin-bottom:4px;}
+.feedback-sub{font-size:13px;color:#7060a0;font-weight:700;margin-bottom:14px;}
+.feedback-btn{background:#7b52d8;color:white;border:none;border-radius:30px;padding:9px 26px;font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;}
+
+@media print{
+  body{background:white;}
+  .board-wrap{background:white;box-shadow:none;}
+  .helper,.print-btn{display:none!important;}
+  .board-area{border-color:#aaa;}
+  .how-to{background:#f8f4ff;border-color:#ccc;}
+  .cards-section{background:#f8f4ff;border-color:#ccc;}
+}
+
+.print-btn{
+  display:block;margin:14px auto 0;
+  background:#7b52d8;color:white;
+  border:none;border-radius:30px;
+  padding:10px 28px;
+  font-family:'Fredoka One',cursive;font-size:15px;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+</style>
+</head>
+<body>
+<div class="board-wrap">
+
+<div class="game-title">Monster Sound Land!</div>
+<div class="game-subtitle">A picture matching board game · Ages 4–7</div>
+
+<!-- HOW TO PLAY -->
+<div class="how-to">
+  <div style="flex:1;">
+    <div class="how-to-title">How to Play</div>
+    <div class="how-step"><span class="step-num">1</span>Roll the dice and move your token that many spaces forward.</div>
+    <div class="how-step"><span class="step-num">2</span>If you land on a monster space, pick up a picture card from the pile.</div>
+    <div class="how-step"><span class="step-num">3</span>Look at the picture — does it match that monster's sound? If YES, keep the card and score a point!</div>
+    <div class="how-step"><span class="step-num">4</span>⭐ spaces: move forward 2! &nbsp;&nbsp; 💀 spaces: move back 2!</div>
+    <div class="how-step"><span class="step-num">5</span>First to FINISH wins — or whoever has the most cards!</div>
+  </div>
+  <div style="width:2px;background:#d0c4ee;margin:0 4px;"></div>
+  <div style="width:230px;flex-shrink:0;">
+    <div class="how-to-title">Monster Key</div>
+    <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px;">
+      <div style="display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:3px;background:#20c898;flex-shrink:0;"></div><span style="font-size:12px;color:#4a3a6a;font-weight:700;">Kiko — monster noise</span></div>
+      <div style="display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:3px;background:#e84888;flex-shrink:0;"></div><span style="font-size:12px;color:#4a3a6a;font-weight:700;">Ava — long ā (cake)</span></div>
+      <div style="display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:3px;background:#12b870;flex-shrink:0;"></div><span style="font-size:12px;color:#4a3a6a;font-weight:700;">Beezo — long ē (feet)</span></div>
+      <div style="display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:3px;background:#6868e0;flex-shrink:0;"></div><span style="font-size:12px;color:#4a3a6a;font-weight:700;">Ike — long ī (kite)</span></div>
+      <div style="display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:3px;background:#e09020;flex-shrink:0;"></div><span style="font-size:12px;color:#4a3a6a;font-weight:700;">Otto — long ō (boat)</span></div>
+      <div style="display:flex;align-items:center;gap:8px;"><div style="width:14px;height:14px;border-radius:3px;background:#a050d8;flex-shrink:0;"></div><span style="font-size:12px;color:#4a3a6a;font-weight:700;">Yuki — long ū (moon)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOARD -->
+<div class="board-area" id="boardArea">
+  <div class="terrain" style="width:180px;height:180px;background:#90d890;left:-20px;top:60px;"></div>
+  <div class="terrain" style="width:140px;height:140px;background:#90b8f0;right:40px;top:10px;"></div>
+  <div class="terrain" style="width:160px;height:160px;background:#f0b890;right:-20px;bottom:40px;"></div>
+  <div class="terrain" style="width:120px;height:120px;background:#90d8d8;left:80px;bottom:10px;"></div>
+  <svg class="path-svg" id="pathSvg"></svg>
+</div>
+
+<!-- PICTURE CARDS -->
+<div class="cards-section">
+  <div class="cards-title">Picture Cards — Print, Cut &amp; Shuffle!</div>
+  <div class="cards-grid" id="cardsGrid"></div>
+</div>
+
+<!-- DIGITAL PLAY HELPER -->
+<div class="helper">
+  <div class="helper-title">Digital Play Helper</div>
+  <div class="players-bar" id="playersBar"></div>
+  <div class="dice-area">
+    <div class="dice" id="diceEl" onclick="rollDice()">🎲</div>
+    <div class="dice-result" id="diceResult">Tap the dice!</div>
+    <button onclick="nextPlayer()" style="background:#7b52d8;color:white;border:none;border-radius:20px;padding:8px 16px;font-family:'Fredoka One',cursive;font-size:13px;cursor:pointer;">Next Player ▶</button>
+  </div>
+</div>
+
+<button class="print-btn" onclick="window.print()">Print Game Board &amp; Cards</button>
+</div>
+
+<!-- Feedback popup -->
+<div class="feedback" id="feedback">
+  <div class="feedback-emoji" id="fbEmoji"></div>
+  <div class="feedback-msg" id="fbMsg"></div>
+  <div class="feedback-sub" id="fbSub"></div>
+  <button class="feedback-btn" onclick="closeFeedback()">OK!</button>
+</div>
+
+<script>
+const monsterColors={k:'#20c898',a:'#e84888',e:'#12b870',i:'#6868e0',o:'#e09020',u:'#a050d8'};
+const monsterNames={k:'Kiko',a:'Ava',e:'Beezo',i:'Ike',o:'Otto',u:'Yuki'};
+const monsters=['k','a','e','i','o','u'];
+
+const COLS=13;
+const ROW_Y=[50,220,395];
+
+function spaceX(row,col){
+  const start=18,end=774,step=(end-start)/(COLS-1);
+  return row%2===0 ? start+col*step : end-col*step;
+}
+
+const spaces=[];
+for(let c=0;c<COLS;c++) spaces.push({row:0,col:c,x:spaceX(0,c),y:ROW_Y[0]});
+for(let c=0;c<COLS;c++) spaces.push({row:1,col:c,x:spaceX(1,c),y:ROW_Y[1]});
+for(let c=0;c<COLS;c++) spaces.push({row:2,col:c,x:spaceX(2,c),y:ROW_Y[2]});
+
+const total=spaces.length;
+spaces[0].type='start';
+spaces[total-1].type='end';
+
+[3,7,11,14,18,22,25,29,33].forEach((p,i)=>{
+  if(spaces[p]){spaces[p].type='monster';spaces[p].monster=monsters[i%monsters.length];}
+});
+[5,16,27].forEach(p=>{if(spaces[p]&&!spaces[p].type)spaces[p].type='bonus';});
+[9,20,31].forEach(p=>{if(spaces[p]&&!spaces[p].type)spaces[p].type='lose';});
+spaces.forEach(s=>{if(!s.type)s.type='normal';});
+
+// Path lines
+const svg=document.getElementById('pathSvg');
+for(let i=0;i<spaces.length-1;i++){
+  const a=spaces[i],b=spaces[i+1];
+  if(a.row!==b.row) continue;
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',a.x+30);line.setAttribute('y1',a.y+30);
+  line.setAttribute('x2',b.x+30);line.setAttribute('y2',b.y+30);
+  line.setAttribute('stroke','#b0b8d8');
+  line.setAttribute('stroke-width','2.5');
+  line.setAttribute('stroke-dasharray','5 4');
+  svg.appendChild(line);
+}
+for(let r=0;r<2;r++){
+  const last=spaces[(r+1)*COLS-1];
+  const next=spaces[(r+1)*COLS];
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+  const x1=last.x+30,y1=last.y+60,x2=next.x+30,y2=next.y;
+  path.setAttribute('d',`M${x1},${y1} Q${x1},${(y1+y2)/2} ${x2},${y2}`);
+  path.setAttribute('stroke','#c0a8e8');
+  path.setAttribute('stroke-width','2.5');
+  path.setAttribute('stroke-dasharray','7 4');
+  path.setAttribute('fill','none');
+  svg.appendChild(path);
+}
+
+function getMonsterSVG(m){
+  if(m==='k') return `<ellipse cx="80" cy="105" rx="42" ry="38" fill="#0b9e6e"/><ellipse cx="80" cy="72" rx="40" ry="36" fill="#0bb87e"/><ellipse cx="50" cy="44" rx="10" ry="14" fill="#09a06d" transform="rotate(-15 50 44)"/><ellipse cx="110" cy="44" rx="10" ry="14" fill="#09a06d" transform="rotate(15 110 44)"/><ellipse cx="66" cy="68" rx="11" ry="12" fill="white"/><ellipse cx="94" cy="68" rx="11" ry="12" fill="white"/><circle cx="68" cy="69" r="6" fill="#0a4030"/><circle cx="96" cy="69" r="6" fill="#0a4030"/><circle cx="70" cy="67" r="2" fill="white"/><circle cx="98" cy="67" r="2" fill="white"/><path d="M62 88 Q80 100 98 88" fill="white" stroke="#07714e" stroke-width="2"/><path d="M66 90 Q80 100 94 90" fill="#ff8a65"/>`;
+  if(m==='a') return `<ellipse cx="80" cy="108" rx="40" ry="35" fill="#e8613a"/><ellipse cx="80" cy="72" rx="42" ry="38" fill="#f07050"/><polygon points="52,38 44,14 62,32" fill="#e8613a"/><polygon points="108,38 116,14 98,32" fill="#e8613a"/><ellipse cx="66" cy="66" rx="13" ry="13" fill="white"/><ellipse cx="94" cy="66" rx="13" ry="13" fill="white"/><circle cx="68" cy="67" r="7" fill="#1a0800"/><circle cx="96" cy="67" r="7" fill="#1a0800"/><circle cx="70" cy="64" r="2.5" fill="white"/><circle cx="98" cy="64" r="2.5" fill="white"/><path d="M57 84 Q80 110 103 84" fill="#2a0800"/><path d="M60 87 Q80 108 100 87" fill="#e8300a"/><ellipse cx="80" cy="102" rx="14" ry="8" fill="#ff5540"/>`;
+  if(m==='e') return `<ellipse cx="62" cy="66" rx="26" ry="26" fill="#5cc030"/><ellipse cx="98" cy="66" rx="26" ry="26" fill="#5cc030"/><ellipse cx="80" cy="60" rx="30" ry="28" fill="#6ed040"/><line x1="68" y1="16" x2="58" y2="4" stroke="#5cc030" stroke-width="3" stroke-linecap="round"/><circle cx="57" cy="3" r="6" fill="#20c898"/><line x1="92" y1="16" x2="102" y2="4" stroke="#5cc030" stroke-width="3" stroke-linecap="round"/><circle cx="103" cy="3" r="6" fill="#20c898"/><ellipse cx="66" cy="60" rx="12" ry="13" fill="white"/><ellipse cx="94" cy="60" rx="12" ry="13" fill="white"/><circle cx="68" cy="61" r="7" fill="#1d1040"/><circle cx="96" cy="61" r="7" fill="#1d1040"/><circle cx="70" cy="58" r="2.5" fill="white"/><circle cx="98" cy="58" r="2.5" fill="white"/><path d="M58 78 Q80 92 102 78" fill="white"/><path d="M61 80 Q80 92 99 80" fill="#ff88aa"/>`;
+  if(m==='i') return `<ellipse cx="80" cy="110" rx="38" ry="32" fill="#f0a020"/><polygon points="60,50 54,22 68,46" fill="#ffd060"/><polygon points="75,46 70,16 82,44" fill="#ffd060"/><polygon points="90,50 92,18 100,48" fill="#ffd060"/><ellipse cx="80" cy="72" rx="40" ry="34" fill="#f0b030"/><ellipse cx="66" cy="68" rx="12" ry="12" fill="white"/><ellipse cx="94" cy="68" rx="12" ry="12" fill="white"/><circle cx="68" cy="69" r="6" fill="#1a0e00"/><circle cx="96" cy="69" r="6" fill="#1a0e00"/><circle cx="70" cy="67" r="2" fill="white"/><circle cx="98" cy="67" r="2" fill="white"/><path d="M63 86 L68 84 L80 90 L92 84 L97 86" fill="none" stroke="#8b5e00" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  if(m==='o') return `<ellipse cx="80" cy="116" rx="42" ry="30" fill="#e07010"/><ellipse cx="80" cy="68" rx="36" ry="34" fill="#f08820"/><ellipse cx="44" cy="68" rx="14" ry="18" fill="#e07010"/><ellipse cx="116" cy="68" rx="14" ry="18" fill="#e07010"/><ellipse cx="44" cy="68" rx="8" ry="12" fill="#f09838"/><ellipse cx="116" cy="68" rx="8" ry="12" fill="#f09838"/><ellipse cx="66" cy="62" rx="12" ry="11" fill="white"/><ellipse cx="94" cy="62" rx="12" ry="11" fill="white"/><circle cx="67" cy="63" r="6" fill="#1a0e00"/><circle cx="95" cy="63" r="6" fill="#1a0e00"/><circle cx="69" cy="61" r="2" fill="white"/><circle cx="97" cy="61" r="2" fill="white"/><ellipse cx="80" cy="82" rx="14" ry="15" fill="#1a0e00"/><ellipse cx="80" cy="84" rx="10" ry="11" fill="#c83000"/>`;
+  if(m==='u') return `<ellipse cx="80" cy="112" rx="38" ry="28" fill="#8030c8"/><ellipse cx="80" cy="70" rx="40" ry="38" fill="#9040d8"/><circle cx="80" cy="40" r="10" fill="#e0b0ff"/><circle cx="80" cy="40" r="6" fill="#ffffff"/><line x1="80" y1="36" x2="80" y2="46" stroke="#7030b8" stroke-width="3" stroke-linecap="round"/><ellipse cx="66" cy="66" rx="13" ry="11" fill="white"/><ellipse cx="94" cy="66" rx="13" ry="11" fill="white"/><circle cx="67" cy="67" r="7" fill="#180828"/><circle cx="95" cy="67" r="7" fill="#180828"/><circle cx="70" cy="64" r="2.5" fill="white"/><circle cx="98" cy="64" r="2.5" fill="white"/><ellipse cx="80" cy="86" rx="10" ry="12" fill="#1a0428"/><ellipse cx="80" cy="88" rx="7" ry="9" fill="#a020c8"/>`;
+  return '';
+}
+
+// Render spaces
+const boardArea=document.getElementById('boardArea');
+spaces.forEach((s,i)=>{
+  const div=document.createElement('div');
+  div.className='space';
+  div.id='space_'+i;
+  div.style.left=s.x+'px';
+  div.style.top=s.y+'px';
+
+  if(s.type==='start'){
+    div.classList.add('space-start');
+    div.innerHTML='<span style="font-size:20px;">🏁</span><span style="font-size:9px;margin-top:2px;color:#2a7a40;font-weight:800;">START</span>';
+  } else if(s.type==='end'){
+    div.classList.add('space-end');
+    div.innerHTML='<span style="font-size:20px;">🏆</span><span style="font-size:9px;margin-top:2px;color:#8a6010;font-weight:800;">FINISH</span>';
+  } else if(s.type==='monster'){
+    div.classList.add('space-monster','space-'+s.monster);
+    div.innerHTML='<svg width="42" height="42" viewBox="0 0 160 160">'+getMonsterSVG(s.monster)+'</svg>';
+  } else if(s.type==='bonus'){
+    div.classList.add('space-bonus');
+    div.innerHTML='<span style="font-size:20px;">⭐</span><span style="font-size:8px;color:#8a6010;font-weight:800;">+2 spaces</span>';
+  } else if(s.type==='lose'){
+    div.classList.add('space-lose');
+    div.innerHTML='<span style="font-size:20px;">💀</span><span style="font-size:8px;color:#a04040;font-weight:800;">-2 spaces</span>';
+  } else {
+    div.classList.add('space-normal');
+    div.innerHTML='<span style="font-size:12px;color:#9090b0;">'+i+'</span>';
+  }
+  boardArea.appendChild(div);
+});
+
+// Picture cards
+const cards=[
+  {word:'Key',emoji:'🔑',monster:'k'},{word:'King',emoji:'👑',monster:'k'},{word:'Kite',emoji:'🪁',monster:'k'},{word:'Koala',emoji:'🐨',monster:'k'},
+  {word:'Cake',emoji:'🎂',monster:'a'},{word:'Rain',emoji:'🌧️',monster:'a'},{word:'Train',emoji:'🚂',monster:'a'},{word:'Snail',emoji:'🐌',monster:'a'},
+  {word:'Tree',emoji:'🌳',monster:'e'},{word:'Bee',emoji:'🐝',monster:'e'},{word:'Feet',emoji:'🦶',monster:'e'},{word:'Sheep',emoji:'🐑',monster:'e'},
+  {word:'Kite',emoji:'🪁',monster:'i'},{word:'Fire',emoji:'🔥',monster:'i'},{word:'Tiger',emoji:'🐯',monster:'i'},{word:'Pie',emoji:'🥧',monster:'i'},
+  {word:'Boat',emoji:'⛵',monster:'o'},{word:'Snow',emoji:'❄️',monster:'o'},{word:'Toad',emoji:'🐸',monster:'o'},{word:'Bone',emoji:'🦴',monster:'o'},
+  {word:'Moon',emoji:'🌙',monster:'u'},{word:'Tune',emoji:'🎵',monster:'u'},{word:'Cube',emoji:'🧊',monster:'u'},{word:'Glue',emoji:'🔵',monster:'u'},
+];
+
+const cardsGrid=document.getElementById('cardsGrid');
+cards.forEach(c=>{
+  const div=document.createElement('div');
+  div.className='picture-card';
+  div.style.borderColor=monsterColors[c.monster];
+  div.innerHTML=`
+    <div class="pic-monster-dot" style="background:${monsterColors[c.monster]};">
+      <svg width="14" height="14" viewBox="0 0 160 160" style="border-radius:50%;">${getMonsterSVG(c.monster)}</svg>
+    </div>
+    <div class="pic-img">${c.emoji}</div>
+    <div class="pic-word">${c.word}</div>
+  `;
+  cardsGrid.appendChild(div);
+});
+
+// Players
+const PLAYER_COLORS=['#e04040','#2080d0','#20a040','#d08000'];
+const PLAYER_EMOJI=['🟥','🟦','🟩','🟨'];
+let players=[
+  {name:'Player 1',pos:0,score:0,color:PLAYER_COLORS[0],emoji:PLAYER_EMOJI[0]},
+  {name:'Player 2',pos:0,score:0,color:PLAYER_COLORS[1],emoji:PLAYER_EMOJI[1]},
+];
+let currentPlayer=0,diceRolled=false;
+
+function renderPlayers(){
+  const bar=document.getElementById('playersBar');
+  bar.innerHTML='';
+  players.forEach((p,i)=>{
+    const div=document.createElement('div');
+    div.className='player-card'+(i===currentPlayer?' active':'');
+    div.innerHTML=`<div class="player-name">${p.emoji} ${p.name}</div><div class="player-pos">Space ${p.pos}</div><div class="player-score">${p.score} ⭐</div>`;
+    bar.appendChild(div);
+  });
+  document.querySelectorAll('.player-token-on-board').forEach(t=>t.remove());
+  players.forEach((p,i)=>{
+    const sp=document.getElementById('space_'+p.pos);
+    if(sp){
+      const tok=document.createElement('div');
+      tok.className='player-token-on-board';
+      tok.style.background=p.color;
+      tok.style.left=(3+i*17)+'px';
+      tok.textContent=i+1;
+      sp.appendChild(tok);
+    }
+  });
+}
+
+function rollDice(){
+  if(diceRolled) return;
+  const dice=document.getElementById('diceEl');
+  dice.classList.add('rolling');
+  setTimeout(()=>dice.classList.remove('rolling'),400);
+  const faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
+  const roll=Math.floor(Math.random()*6)+1;
+  dice.textContent=faces[roll-1];
+  const p=players[currentPlayer];
+  let newPos=Math.min(p.pos+roll,spaces.length-1);
+  const sp=spaces[newPos];
+  let msg='',sub='',emoji='🎲';
+  if(sp.type==='bonus'){newPos=Math.min(newPos+2,spaces.length-1);msg='⭐ Bonus! Move forward 2!';sub='Lucky!';emoji='⭐';}
+  else if(sp.type==='lose'){newPos=Math.max(newPos-2,0);msg='Oops! Move back 2!';sub='Better luck next time!';emoji='💀';}
+  else if(sp.type==='monster'){msg='Pick a picture card!';sub='Does it match '+monsterNames[sp.monster]+'?';emoji='🃏';players[currentPlayer].score++;}
+  else if(sp.type==='end'){msg='You reached the finish!';sub=p.name+' wins!';emoji='🏆';}
+  p.pos=newPos;
+  document.getElementById('diceResult').textContent='Rolled '+roll+'! → Space '+newPos;
+  renderPlayers();
+  diceRolled=true;
+  if(msg) setTimeout(()=>showFeedback(emoji,msg,sub),400);
+}
+
+function showFeedback(emoji,msg,sub){
+  document.getElementById('fbEmoji').textContent=emoji;
+  document.getElementById('fbMsg').textContent=msg;
+  document.getElementById('fbSub').textContent=sub;
+  document.getElementById('feedback').classList.add('show');
+}
+function closeFeedback(){document.getElementById('feedback').classList.remove('show');}
+function nextPlayer(){
+  currentPlayer=(currentPlayer+1)%players.length;
+  diceRolled=false;
+  document.getElementById('diceEl').textContent='🎲';
+  document.getElementById('diceResult').textContent=players[currentPlayer].name+"'s turn!";
+  renderPlayers();
+}
+
+renderPlayers();
+</script>
+</body>
+</html>
