@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMN App — New Features Presentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --amn-yellow: #FFD600;
+    --amn-dark: #1a1a2e;
+    --amn-darker: #0f0f1a;
+    --amn-accent: #3a86ff;
+    --amn-green: #2ecc71;
+    --amn-red: #e74c3c;
+    --amn-orange: #f39c12;
+    --amn-text: #e0e0e0;
+    --amn-muted: #8a8a9a;
+    --slide-max-w: 1100px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--amn-darker);
+    color: var(--amn-text);
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .deck { position: relative; width: 100%; height: 100vh; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    padding: 40px 80px 80px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .45s ease;
+    overflow-y: auto;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide.section-divider,
+  .slide.title-slide { justify-content: center; overflow-y: hidden; }
+
+  h1 { font-size: 2.8rem; font-weight: 700; line-height: 1.2; margin-bottom: .3em; }
+  h2 { font-size: 1.8rem; font-weight: 600; margin-bottom: .5em; color: var(--amn-yellow); }
+  h3 { font-size: 1.15rem; font-weight: 500; margin-bottom: .4em; color: var(--amn-yellow); }
+  p, li { font-size: 1.05rem; line-height: 1.6; }
+  ul { list-style: none; padding: 0; }
+  ul li { padding-left: 1.6em; position: relative; margin-bottom: .45em; }
+  ul li::before {
+    content: '▸'; position: absolute; left: 0;
+    color: var(--amn-yellow); font-weight: 700;
+  }
+
+  .highlight { color: var(--amn-yellow); font-weight: 600; }
+  .accent   { color: var(--amn-accent); }
+  .green    { color: var(--amn-green); }
+  .red      { color: var(--amn-red); }
+  .muted    { color: var(--amn-muted); font-size: .95rem; }
+
+  .content { max-width: var(--slide-max-w); width: 100%; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
+
+  .card {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; padding: 22px;
+  }
+  .card h3 { margin-top: 0; }
+
+  .badge {
+    display: inline-block; padding: 4px 14px;
+    border-radius: 20px; font-size: .85rem; font-weight: 600;
+    margin-right: 6px; margin-bottom: 6px;
+  }
+  .badge-yellow { background: var(--amn-yellow); color: var(--amn-dark); }
+  .badge-green  { background: var(--amn-green); color: #fff; }
+  .badge-blue   { background: var(--amn-accent); color: #fff; }
+  .badge-red    { background: var(--amn-red); color: #fff; }
+  .badge-orange { background: var(--amn-orange); color: #fff; }
+
+  .screenshot-placeholder {
+    width: 100%;
+    border-radius: 12px; display: flex;
+    align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+  .screenshot-placeholder img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain; border-radius: 8px;
+  }
+  .screenshot-placeholder video {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain; border-radius: 8px;
+  }
+
+  /* Phone screenshots: constrain height so tall images don't overflow */
+  .phone-screenshot .screenshot-placeholder {
+    max-height: calc(100vh - 140px);
+  }
+  .phone-screenshot .screenshot-placeholder img {
+    max-height: calc(100vh - 160px);
+    width: auto;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,.4));
+  }
+
+  /* Wide screenshots (browser/PDF): full width with subtle shadow */
+  .wide-screenshot .screenshot-placeholder img {
+    width: 100%;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,.4));
+    border-radius: 6px;
+  }
+
+  .compare-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  .compare-table th, .compare-table td {
+    padding: 14px 20px; text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    font-size: 1.05rem;
+  }
+  .compare-table th {
+    font-weight: 600; color: var(--amn-yellow);
+    border-bottom: 2px solid rgba(255,214,0,.3);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .flow {
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap; margin: 20px 0;
+  }
+  .flow-step {
+    background: rgba(255,255,255,.08); border-radius: 10px;
+    padding: 14px 22px; font-weight: 500; text-align: center;
+    min-width: 120px; border: 1px solid rgba(255,255,255,.1);
+  }
+  .flow-step.active-step {
+    background: rgba(255,214,0,.15);
+    border-color: var(--amn-yellow);
+    color: var(--amn-yellow);
+  }
+  .flow-arrow { color: var(--amn-muted); font-size: 1.4rem; }
+
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 40px;
+    background: rgba(15,15,26,.92); backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255,255,255,.06);
+    z-index: 100;
+  }
+  .nav-bar button {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+    color: var(--amn-text); padding: 10px 24px; border-radius: 8px;
+    cursor: pointer; font-size: .95rem; font-family: inherit;
+    transition: background .2s;
+  }
+  .nav-bar button:hover { background: rgba(255,214,0,.15); }
+  .nav-bar button:disabled { opacity: .3; cursor: default; }
+  .slide-counter { font-size: .9rem; color: var(--amn-muted); }
+
+  .progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: var(--amn-yellow); z-index: 100;
+    transition: width .35s ease;
+  }
+
+  .title-slide h1 { font-size: 3.2rem; }
+  .title-slide .subtitle {
+    font-size: 1.3rem; color: var(--amn-muted);
+    margin-top: .4em; font-weight: 300;
+  }
+
+  .section-divider { text-align: center; }
+  .section-divider .section-number {
+    font-size: 5rem; font-weight: 700;
+    color: rgba(255,214,0,.15); line-height: 1;
+  }
+  .section-divider h2 { font-size: 2.4rem; margin-top: -.3em; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .animate { animation: fadeInUp .5s ease forwards; }
+  .slide.active .animate.d1 { animation-delay: .1s; opacity: 0; }
+  .slide.active .animate.d2 { animation-delay: .25s; opacity: 0; }
+  .slide.active .animate.d3 { animation-delay: .4s; opacity: 0; }
+  .slide.active .animate.d4 { animation-delay: .55s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 1 — Title
+     ═══════════════════════════════════════════ -->
+<div class="slide title-slide active" data-slide="1">
+  <div class="content" style="text-align:center;">
+    <div class="animate">
+      <span class="badge badge-yellow">NEW RELEASE</span>
+    </div>
+    <h1 class="animate d1">AMN Field App</h1>
+    <p class="subtitle animate d2">New Tools &amp; Features for Field Teams</p>
+    <p class="muted animate d3" style="margin-top:30px;">
+      Drive Test Tool &bull; Field Survey Tool &bull; Auto Clock-In &bull; Backend Portal
+    </p>
+    <div class="screenshot-placeholder animate d4" style="max-width:500px;margin:40px auto 0;aspect-ratio:auto;height:60px;border:none;background:none;">
+      <p class="muted" style="font-size:.85rem;">Use arrow keys or buttons to navigate</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 2 — Introduction / Agenda
+     ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="2">
+  <div class="content">
+    <h2 class="animate">What We'll Cover Today</h2>
+    <p class="animate d1" style="margin-bottom:30px;">
+      This presentation walks through the new tools and features added to the
+      AMN Field App, designed to make your day-to-day work faster, easier, and
+      more reliable.
+    </p>
+    <div class="three-col animate d2" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <h3 style="display:flex;align-items:center;gap:10px;">
+          <span class="badge badge-yellow" style="margin:0;">01</span> Drive Test Tool
+        </h3>
+        <p>A new tool for automated signal coverage testing. Drive around a cell site
+           while the app logs signal strength and GPS position, building a live coverage map.</p>
+      </div>
+      <div class="card">
+        <h3 style="display:flex;align-items:center;gap:10px;">
+          <span class="badge badge-yellow" style="margin:0;">02</span> Field Survey Tool
+        </h3>
+        <p>The paper survey form is going digital. The same fields you know, now captured
+           on your phone with GPS, photos, Snyper import, and one-tap submission.</p>
+      </div>
+      <div class="card">
+        <h3 style="display:flex;align-items:center;gap:10px;">
+          <span class="badge badge-yellow" style="margin:0;">03</span> Backend Portal
+        </h3>
+        <p>A new section on the AMN Portal where managers can view submitted surveys,
+           review all the data, and download PDF reports.</p>
+      </div>
+      <div class="card">
+        <h3 style="display:flex;align-items:center;gap:10px;">
+          <span class="badge badge-yellow" style="margin:0;">04</span> Auto Clock-In
+        </h3>
+        <p>Field engineers are now automatically clocked in when they log into the app
+           — no more forgotten clock-ins.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 3 — Section: Drive Test Tool
+     ═══════════════════════════════════════════ -->
+<div class="slide section-divider" data-slide="3">
+  <div class="content">
+    <div class="section-number animate">01</div>
+    <h2 class="animate d1">Drive Test Tool</h2>
+    <p class="muted animate d2">Automated signal coverage testing while driving around a site</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 4 — Drive Test: Overview
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="4">
+  <div class="content">
+    <h2 class="animate">What Is a Drive Test?</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          A drive test is a <span class="highlight">signal coverage survey</span> performed by driving
+          around a cell tower site. This replaces the need for the
+          <span class="highlight">GNetTrack Pro</span> app — the same logging is now built directly
+          into the AMN Field App, capturing signal strength and GPS position
+          to build a coverage map showing where the signal is strong, weak, or absent.
+        </p>
+        <ul>
+          <li><strong>📡 Signal Logging</strong> — captures strength, quality, cell ID, and network type (2G–5G) every 10 seconds</li>
+          <li><strong>📍 GPS Tracking</strong> — records precise location, altitude, and speed alongside every reading</li>
+          <li><strong>🗺️ Live Map</strong> — colour-coded dots show coverage quality in real time as you drive</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="4.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 5 — Drive Test: Setup
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="5">
+  <div class="content">
+    <h2 class="animate">Starting a Drive Test</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Before driving, the engineer sets up the test at the tower site:
+        </p>
+        <ul>
+          <li><strong>Select or type the site name</strong></li>
+          <li><strong>Mark your location</strong> — stand next to the tower and tap to capture your GPS position</li>
+          <li><strong>Scan for available cells</strong> — the phone detects nearby towers</li>
+          <li><strong>Select the target cell</strong> — the specific cell you are testing</li>
+        </ul>
+        <p style="margin-top:20px;">
+          Once set up, tap <span class="highlight">Start</span> and begin driving. The app runs
+          in the background, logging continuously.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="5.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 6 — Drive Test: Live Dashboard
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="6">
+  <div class="content">
+    <h2 class="animate">Live Dashboard</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          While the test is running, the dashboard shows
+          <span class="highlight">real-time metrics</span>:
+        </p>
+        <ul>
+          <li>Colour-coded map — green (strong) to red (weak)</li>
+          <li>Total data points collected</li>
+          <li>Target cell match count</li>
+          <li>Maximum signal strength recorded</li>
+          <li>Current speed</li>
+          <li>Signal strength chart over time</li>
+          <li>Nearby cells detected</li>
+        </ul>
+        <p style="margin-top:15px;">
+          The dashboard also shows <span class="highlight">7 validation criteria</span> with
+          live pass/fail indicators so you know if you have enough data before stopping.
+        </p>
+        <p style="margin-top:15px;">
+          <strong style="color:var(--amn-orange);">Important:</strong> While a drive test is running,
+          the app stays on the dashboard screen — <span class="highlight">you cannot navigate to other
+          screens</span> until you stop the test.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="6.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 7 — Drive Test: Validation & Export
+     ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="7">
+  <div class="content">
+    <h2 class="animate">Validation &amp; Export</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <h3>Automatic Validation</h3>
+        <p style="margin-bottom:15px;">The app checks 7 criteria — matching the <span class="highlight">ACS criteria</span> — to confirm the drive test is complete:</p>
+        <table class="compare-table" style="font-size:.95rem;">
+          <tr><td>Minimum 100 data points</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>At least 60 target-cell readings</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Maximum signal ≥ –55 dBm</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Closest approach within 2 km</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Coverage extent ≥ 1 km</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Signal at range (>600 m)</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Data is recent (within 4 days)</td><td class="green">✓ / ✗</td></tr>
+        </table>
+      </div>
+      <div class="animate d2">
+        <h3>KML Export</h3>
+        <p style="margin-bottom:15px;">
+          After stopping the test, results can be <span class="highlight">exported as a KML file</span>
+          — compatible with Google Earth and the ACS system.
+        </p>
+        <div class="screenshot-placeholder">
+          <img src="7.png">
+        </div>
+        <p class="muted" style="margin-top:12px;">
+          Signal readings are colour-coded: green (strong), amber, orange, red (weak).
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 8 — Section: Field Survey Tool
+     ═══════════════════════════════════════════ -->
+<div class="slide section-divider" data-slide="8">
+  <div class="content">
+    <div class="section-number animate">02</div>
+    <h2 class="animate d1">Field Survey Tool</h2>
+    <p class="muted animate d2">A complete digital replacement for the paper survey form</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 9 — From Paper to Digital
+     ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="9">
+  <div class="content">
+    <h2 class="animate">From Paper to Digital</h2>
+    <p class="animate d1" style="margin-bottom:30px;">
+      Until now, site surveys have relied on <span class="highlight">printed paper forms</span>,
+      manual GPS readings, and separate file uploads. This process is slow, error-prone,
+      and makes it difficult to review surveys centrally.
+    </p>
+    <div class="two-col animate d2">
+      <div class="card">
+        <h3 style="color:var(--amn-red);">Paper Process (Before)</h3>
+        <ul>
+          <li>Multi-page printed survey forms</li>
+          <li>Handwritten GPS coordinates</li>
+          <li>Photos taken separately, emailed or uploaded later</li>
+          <li>Snyper CSV files transferred manually via USB</li>
+          <li>Survey results typed into spreadsheets</li>
+          <li>No central visibility until data is collated</li>
+          <li>Easy to lose forms or misread handwriting</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--amn-green);">Digital Process (Now)</h3>
+        <ul>
+          <li>All fields captured in the app on-site</li>
+          <li>GPS coordinates captured with one tap</li>
+          <li>Photos taken and attached directly in the form</li>
+          <li>Snyper data imported from USB in the app</li>
+          <li>One-tap submission to the backend portal</li>
+          <li>Surveys visible instantly to managers</li>
+          <li>Data integrity verified automatically</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 10 — Field Survey: The Electronic Form
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="10">
+  <div class="content">
+    <h2 class="animate">The Electronic Form</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:15px;">
+          The digital form mirrors every section of the paper form, organised into
+          <span class="highlight">collapsible sections</span> so engineers can focus on one area at a time.
+        </p>
+        <h3>Survey Information</h3>
+        <ul>
+          <li>Village name &amp; ID, area, region, territory</li>
+          <li>Population &amp; demographics</li>
+          <li>Survey date, team &amp; 3 local contacts</li>
+          <li>Village economic activities</li>
+        </ul>
+        <h3 style="margin-top:14px;">Access &amp; Environment</h3>
+        <ul>
+          <li>Road &amp; river access, vehicle accessibility</li>
+          <li>Health, safety &amp; environmental factors</li>
+        </ul>
+        <h3 style="margin-top:14px;">Candidate Sites</h3>
+        <ul>
+          <li>Multiple candidate locations with landlord details</li>
+          <li>Distances to landmarks, permitting %</li>
+          <li>Mark preferred candidate</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="10.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 11 — Field Survey: GPS Location Markers
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="11">
+  <div class="content">
+    <h2 class="animate">GPS Location Markers</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          No more writing down coordinates by hand. The app captures
+          <span class="highlight">precise GPS readings</span> with a single tap at multiple points during the survey.
+        </p>
+        <ul>
+          <li><strong>Village header location</strong> — centre of the village</li>
+          <li><strong>Per-candidate site</strong> — each proposed tower location</li>
+          <li><strong>Signal reading locations</strong> — where measurements were taken</li>
+        </ul>
+        <p style="margin-top:20px;">
+          Coordinates include <span class="highlight">latitude, longitude, and altitude</span>,
+          captured to 6 decimal places using the device's high-accuracy GPS.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="11.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 12 — Field Survey: Snyper Device Upload
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="12">
+  <div class="content">
+    <h2 class="animate">Snyper Device Upload</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Signal readings from the <span class="highlight">Snyper RF scanner</span> can be imported
+          directly into the survey via USB — no laptop required.
+        </p>
+        <ul>
+          <li>Connect the Snyper device to the phone via a <span class="highlight">USB OTG adapter</span></li>
+          <li>Browse the device's files from within the app</li>
+          <li>Select the CSV export file for each direction</li>
+          <li>Signal data is parsed and populated automatically</li>
+        </ul>
+        <p style="margin-top:20px;">
+          The app reads <span class="highlight">2G, 3G, 4G, and 5G</span> signal data including
+          dBm, RSSI, MNO, band, cell ID, and more — exactly what would previously
+          be transcribed by hand.
+        </p>
+        <p class="muted" style="margin-top:12px;">
+          Snyper CSV files are also uploaded to the server alongside the survey for reference.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <video src="12.mp4" controls preload="metadata" style="max-height:calc(100vh - 200px);"></video>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 13 — Field Survey: Photos
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="13">
+  <div class="content">
+    <h2 class="animate">Site Photos</h2>
+    <p class="animate d1" style="margin-bottom:25px;">
+      Photos are taken <span class="highlight">directly within the survey</span> and automatically
+      attached — no separate email or upload step.
+    </p>
+    <div class="three-col animate d2" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <h3>Photo Categories</h3>
+        <ul>
+          <li>General pictures of the village</li>
+          <li>Road access pictures</li>
+          <li>Panoramic pictures of candidate site</li>
+          <li>Site pictures from each corner</li>
+          <li>Site pictures from near</li>
+        </ul>
+        <p style="margin-top:14px;" class="muted">
+          Multiple photos per category. Use the camera or pick from the gallery.
+        </p>
+      </div>
+      <div>
+        <div class="screenshot-placeholder">
+          <img src="13.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 14 — Field Survey: Pass / Fail Verdict
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="14">
+  <div class="content">
+    <h2 class="animate">Survey Verdict — Pass or Fail</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          At the end of the survey, the field engineer records their
+          <span class="highlight">on-site assessment</span> of whether the site is suitable.
+        </p>
+        <ul>
+          <li>Select <span class="green"><strong>PASS</strong></span> or <span class="red"><strong>FAIL</strong></span></li>
+          <li>Provide a <strong>mandatory comment</strong> explaining the verdict</li>
+          <li>Both are required before the survey can be submitted</li>
+        </ul>
+        <p style="margin-top:20px;">
+          This verdict is the surveyor's professional judgement from the field —
+          it is visible to reviewers on the backend portal alongside all the
+          supporting data.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="14.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 15 — Field Survey: Signature & Submission
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="15">
+  <div class="content">
+    <h2 class="animate">Signature &amp; Submission</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          When the surveyor is ready, they tap <strong>Submit</strong>. The app checks that
+          all required fields are complete, then presents a
+          <span class="highlight">signature capture</span> screen.
+        </p>
+        <div class="flow" style="margin:25px 0;">
+          <div class="flow-step">Complete form</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">Tap Submit</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step active-step">Sign</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">Upload</div>
+        </div>
+        <ul>
+          <li>Signature drawn on-screen with finger</li>
+          <li>Confirms "all data entered is true and accurate"</li>
+          <li>Survey, photos, signature &amp; Snyper files uploaded together</li>
+          <li>Data integrity verified via SHA-256 checksums</li>
+          <li>Survey appears immediately on the backend portal</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="15.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 16 — Field Survey: Workflow Summary
+     ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="16">
+  <div class="content">
+    <h2 class="animate">Field Survey Workflow</h2>
+    <div class="flow animate d1" style="justify-content:center; margin: 30px 0;">
+      <div class="flow-step">Create New Survey</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Fill Form Sections</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Capture GPS</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Import Snyper</div>
+    </div>
+    <div class="flow animate d2" style="justify-content:center; margin: 0 0 30px;">
+      <div class="flow-step">Take Photos</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Set Verdict</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step active-step">Sign &amp; Submit</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step" style="border-color:var(--amn-green);color:var(--amn-green);">Visible on Portal</div>
+    </div>
+    <div class="two-col animate d3">
+      <div class="card">
+        <h3>Auto-Save</h3>
+        <p>The app <span class="highlight">automatically saves your progress</span> as you type.
+           If you're interrupted — a phone call, low battery, or need to travel — your work is
+           preserved as a draft. Come back any time to finish.</p>
+      </div>
+      <div class="card">
+        <h3>Works Offline</h3>
+        <p>All form data and photos are <span class="highlight">stored locally on the device</span>.
+           You can complete an entire survey without network coverage and submit when you're
+           back online.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 17 — Section: Backend Portal
+     ═══════════════════════════════════════════ -->
+<div class="slide section-divider" data-slide="17">
+  <div class="content">
+    <div class="section-number animate">03</div>
+    <h2 class="animate d1">Backend Portal</h2>
+    <p class="muted animate d2">Centrally view and review submitted field surveys</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 18 — Backend: Survey Dashboard
+     ═══════════════════════════════════════════ -->
+<div class="slide wide-screenshot" data-slide="18">
+  <div class="content">
+    <h2 class="animate">Survey Dashboard</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Submitted surveys appear immediately on the
+          <span class="highlight">AMN Portal</span>, giving managers and reviewers
+          instant visibility.
+        </p>
+        <h3>Dashboard Features</h3>
+        <ul>
+          <li>Card grid of all submitted surveys</li>
+          <li>Search by village name, ID, territory, or submitter</li>
+          <li>Sort by date or alphabetically</li>
+          <li>Filter by country or territory</li>
+          <li>Summary stats — total surveys, countries, this month's submissions</li>
+          <li>Integrity verification badge on each card</li>
+          <li>Surveyor's verdict (Pass/Fail) shown on each card</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="18.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 19 — Backend: Survey Detail View
+     ═══════════════════════════════════════════ -->
+<div class="slide wide-screenshot" data-slide="19">
+  <div class="content">
+    <h2 class="animate">Detailed Survey View</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:15px;">
+          Clicking a survey card opens a <span class="highlight">full detail view</span> with every
+          section of the submitted form, all photos, and signal readings.
+        </p>
+        <h3>Survey Data</h3>
+        <ul>
+          <li>Village &amp; location, demographics &amp; activities</li>
+          <li>Access &amp; environment details</li>
+          <li>Candidate sites with distances &amp; contacts</li>
+        </ul>
+        <h3 style="margin-top:14px;">Signal &amp; Media</h3>
+        <ul>
+          <li>Signal readings table grouped by technology (2G–5G)</li>
+          <li>All photos in gallery view with signature</li>
+          <li>Snyper files available for download</li>
+        </ul>
+        <h3 style="margin-top:14px;">Review &amp; Export</h3>
+        <ul>
+          <li>Surveyor's Pass/Fail verdict &amp; comment</li>
+          <li>Data integrity verification status</li>
+          <li>Download as branded PDF report</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="19.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 20 — Backend: PDF Export
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="20">
+  <div class="content">
+    <h2 class="animate">PDF Report Export</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Any survey can be <span class="highlight">downloaded as a professional PDF report</span>
+          directly from the portal — ideal for sharing with stakeholders
+          and for inclusion into <span class="highlight">As Built documents</span>.
+        </p>
+        <h3>PDF Contents</h3>
+        <ul>
+          <li>AMN-branded cover page</li>
+          <li>All survey sections and data</li>
+          <li>Embedded site photos</li>
+          <li>Signal reading tables (colour-coded by technology)</li>
+          <li>Surveyor's signature</li>
+          <li>Integrity verification notice</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="20.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 21 — Section: Auto Clock-In
+     ═══════════════════════════════════════════ -->
+<div class="slide section-divider" data-slide="21">
+  <div class="content">
+    <div class="section-number animate">04</div>
+    <h2 class="animate d1">Auto Clock-In</h2>
+    <p class="muted animate d2">Automatically clocked in when you log into the app</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 22 — Auto Clock-In: How It Works
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="22">
+  <div class="content">
+    <h2 class="animate">Auto Clock-In</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Field engineers are now <span class="highlight">automatically clocked in</span> as soon as they
+          log into the app — no extra steps needed.
+        </p>
+        <div class="flow" style="margin:25px 0;">
+          <div class="flow-step">Log In</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step active-step">Auto Clock-In</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">Location Tracking Starts</div>
+        </div>
+        <h3>How It Works</h3>
+        <ul>
+          <li>On first login, a <strong>one-time consent</strong> screen explains that location will be tracked while clocked in</li>
+          <li>Once accepted, future logins clock you in automatically</li>
+          <li>A <span class="green">green status bar</span> confirms you are clocked in</li>
+          <li>You can still manually clock out at any time</li>
+          <li>Location is tracked periodically for workforce management</li>
+        </ul>
+        <p class="muted" style="margin-top:15px;">
+          Only field engineers are auto-clocked in — other user types are unaffected.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="22.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 23 — Summary
+     ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="23">
+  <div class="content" style="text-align:center;">
+    <h2 class="animate">Summary</h2>
+    <div class="three-col animate d1" style="margin-top:30px; grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <h3>Drive Test Tool</h3>
+        <p>Automated signal coverage survey with continuous logging,
+           live colour-coded map, real-time validation,
+           and KML export for analysis.</p>
+        <div style="margin-top:14px;">
+          <span class="badge badge-green">Live Map</span>
+          <span class="badge badge-blue">2G–5G</span>
+          <span class="badge badge-yellow">Validation</span>
+          <span class="badge badge-orange">KML Export</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Field Survey Tool</h3>
+        <p>Complete digital replacement for the paper survey form.
+           GPS, photos, Snyper import, pass/fail verdict, signature,
+           and one-tap submission to the portal.</p>
+        <div style="margin-top:14px;">
+          <span class="badge badge-green">GPS</span>
+          <span class="badge badge-blue">Snyper USB</span>
+          <span class="badge badge-yellow">Photos</span>
+          <span class="badge badge-orange">Offline</span>
+        </div>
+      </div>
+    </div>
+    <div class="three-col animate d2" style="margin-top:20px; grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <h3>Backend Portal</h3>
+        <p>All submitted surveys visible instantly. Search, filter,
+           review in detail, and download professional PDF reports.</p>
+        <div style="margin-top:14px;">
+          <span class="badge badge-green">Search</span>
+          <span class="badge badge-blue">Detail View</span>
+          <span class="badge badge-yellow">PDF Export</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Auto Clock-In</h3>
+        <p>Field engineers are automatically clocked in on login
+           after a one-time consent. No forgotten clock-ins.</p>
+        <div style="margin-top:14px;">
+          <span class="badge badge-green">Automatic</span>
+          <span class="badge badge-blue">One-Time Consent</span>
+        </div>
+      </div>
+    </div>
+    <p class="muted animate d3" style="margin-top:35px;">
+      Africa Mobile Networks &bull; Field App Update
+    </p>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<div class="nav-bar">
+  <button id="prevBtn" onclick="go(-1)">← Previous</button>
+  <span class="slide-counter" id="counter">1 / 23</span>
+  <button id="nextBtn" onclick="go(1)">Next →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  let cur = 0;
+
+  function show(i) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[i].classList.add('active');
+    document.getElementById('counter').textContent = `${i+1} / ${total}`;
+    document.getElementById('prevBtn').disabled = (i === 0);
+    document.getElementById('nextBtn').disabled = (i === total - 1);
+    document.getElementById('progressBar').style.width = `${((i+1)/total)*100}%`;
+  }
+
+  function go(d) {
+    const next = cur + d;
+    if (next >= 0 && next < total) { cur = next; show(cur); }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
+    if (e.key === 'Home')       { cur = 0; show(cur); }
+    if (e.key === 'End')        { cur = total-1; show(cur); }
+  });
+
+  show(0);
+</script>
+</body>
+</html>
