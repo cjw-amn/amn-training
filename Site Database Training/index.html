@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The New Sites Page — Operations Briefing</title>
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --card: #ffffff;
+    --accent: #0ea5e9; --accent-2: #22c55e; --warn: #f59e0b; --danger: #ef4444;
+    --text: #0f172a; --soft: #475569; --muted: #94a3b8; --border: #e2e8f0;
+    --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; color: var(--text); }
+  .deck { height: 100%; overflow: hidden; position: relative; }
+  .slide { position: absolute; inset: 0; display: none; padding: 48px 64px 64px;
+    background: var(--card); overflow: auto; }
+  .slide.active { display: block; }
+  .slide.dark { background: linear-gradient(135deg, #0f172a 0%, #134e4a 100%); color: #fff; }
+  .slide.dark h1, .slide.dark h2 { color: #fff; }
+  .slide.dark .sub { color: rgba(255,255,255,.7); }
+  h1 { font-size: 42px; margin: 0 0 8px; letter-spacing: -.02em; }
+  h2 { font-size: 28px; margin: 0 0 6px; letter-spacing: -.01em; color: var(--text); }
+  h3 { font-size: 17px; margin: 18px 0 6px; }
+  .sub { color: var(--soft); font-size: 17px; margin-bottom: 22px; }
+  .kicker { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; font-weight: 700;
+    color: var(--accent); margin-bottom: 10px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  .cols-31 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
+  .cols-13 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 28px; align-items: start; }
+  .shot { width: 100%; border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: 0 8px 28px rgba(15,23,42,.14); display: block; }
+  /* Height-capped screenshot so image-heavy slides fit one screen. */
+  .shot.fit { width: auto; max-width: 100%; max-height: 46vh; margin: 0 auto; }
+  .shot-caption { font-size: 12.5px; color: var(--muted); margin-top: 6px; text-align: center; }
+  ul { margin: 8px 0; padding-left: 22px; } li { margin: 7px 0; }
+  .pill { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 700; }
+  .pill.old { background: #fee2e2; color: #b91c1c; }
+  .pill.new { background: #dcfce7; color: #15803d; }
+  .pill.flag { background: #e0f2fe; color: #0369a1; }
+  code { font-family: var(--mono); font-size: 13px; background: #f1f5f9; padding: 1px 6px; border-radius: 4px; }
+  .dark code { background: rgba(255,255,255,.12); color: #a5f3fc; }
+  table.cmp { width: 100%; border-collapse: collapse; font-size: 14.5px; margin-top: 10px; }
+  table.cmp th { text-align: left; padding: 10px 14px; background: #f8fafc; border-bottom: 2px solid var(--border);
+    font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--soft); }
+  table.cmp td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.cmp td:first-child { font-weight: 600; width: 22%; }
+  .callout { border-left: 4px solid var(--accent); background: #f0f9ff; padding: 12px 16px;
+    border-radius: 0 8px 8px 0; margin: 14px 0; font-size: 15px; }
+  .callout.green { border-color: var(--accent-2); background: #f0fdf4; }
+  .callout.amber { border-color: var(--warn); background: #fffbeb; }
+  .callout.red { border-color: var(--danger); background: #fef2f2; }
+  .step { display: flex; gap: 14px; margin: 12px 0; align-items: flex-start; }
+  .step .n { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--accent);
+    color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .footer-nav { position: fixed; bottom: 16px; right: 22px; z-index: 50; display: flex; gap: 8px; align-items: center;
+    background: rgba(15,23,42,.85); color: #fff; padding: 7px 14px; border-radius: 999px; font-size: 13px; }
+  .footer-nav button { background: none; border: 1px solid rgba(255,255,255,.35); color: #fff; border-radius: 6px;
+    padding: 2px 11px; cursor: pointer; font-size: 14px; }
+  .footer-nav button:hover { background: rgba(255,255,255,.15); }
+  .slide-num { font-variant-numeric: tabular-nums; color: rgba(255,255,255,.7); }
+  .hero-list { font-size: 19px; line-height: 1.8; }
+  .badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 26px; }
+  .badge-card { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px; padding: 16px 18px; }
+  .badge-card .t { font-weight: 700; font-size: 15px; margin-bottom: 4px; color: #7dd3fc; }
+  .badge-card .d { font-size: 13.5px; color: rgba(255,255,255,.75); }
+  @media print {
+    .deck { overflow: visible; height: auto; }
+    .slide { display: block !important; position: relative; page-break-after: always; min-height: 100vh; }
+    .footer-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- ───────────────────────── Slide 1: Title ───────────────────────── -->
+<section class="slide dark active">
+  <div style="max-width:900px; margin: 8vh auto 0;">
+    <div class="kicker" style="color:#7dd3fc;">Operations Briefing</div>
+    <h1>The New Sites Page</h1>
+    <div class="sub" style="font-size:21px;">Moving from per-cell definitions on <code>/bts</code> to a site-first model on <code>/sites</code></div>
+    <div class="badge-grid">
+      <div class="badge-card"><div class="t">One record per site</div><div class="d">Cells are generated from the site's sector &amp; technology matrix — no more typing every cell by hand.</div></div>
+      <div class="badge-card"><div class="t">Lifecycle built in</div><div class="d">Pending → Live → Deinstalled, with planned changes, go-live checks and a full activity trail.</div></div>
+      <div class="badge-card"><div class="t">Safe cutover</div><div class="d">A single switch decides which page is editable. Until it's flipped, nothing changes for you.</div></div>
+    </div>
+    <div style="margin-top:6vh; font-size:13px; color:rgba(255,255,255,.55);">Use ← → arrow keys, or the buttons bottom-right. Press P for print view.</div>
+  </div>
+</section>
+
+<!-- ─────────────────── Slide 2: Why are we changing? ─────────────────── -->
+<section class="slide">
+  <div class="kicker">Background</div>
+  <h2>Why are we changing?</h2>
+  <div class="sub">Today every cell is defined separately — the site only exists implicitly, in the cell names.</div>
+  <div class="cols">
+    <div>
+      <h3><span class="pill old">Today — /bts</span></h3>
+      <ul>
+        <li>A 3-sector 2G+4G site means typing <strong>six separate cell rows</strong>, repeating the same site data (location, backhaul, hub, country…) six times.</li>
+        <li>Cell names like <code>MCB0001_Bouemba-4l</code> are built <strong>by hand</strong> — one typo and the cell never matches its KPI data.</li>
+        <li>No single place shows what a site <em>should</em> look like vs what's actually configured.</li>
+        <li>Site-wide changes (new backhaul, BSC move) must be re-typed on every cell.</li>
+      </ul>
+    </div>
+    <div>
+      <h3><span class="pill new">New — /sites</span></h3>
+      <ul>
+        <li><strong>One site record</strong> holds the shared data. You tick which techs run in which sectors — cells are created automatically with correct names.</li>
+        <li>Site edits can be <strong>propagated</strong> to all cells — immediately, or queued as a planned change for the field visit.</li>
+        <li>Status, pending work, RAN parameters, IP plan, audit history — all on one screen per site.</li>
+        <li>Built-in checks stop bad data: duplicate Cell IDs, duplicate IPs, wrong country, missing go-live fields.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">The cells themselves don't change — they still live in the same database the monitor, KPI and ticketing systems read. What changes is <strong>how they're created and maintained</strong>.</div>
+</section>
+
+<!-- ─────────────────── Slide 3: The current method ─────────────────── -->
+<section class="slide">
+  <div class="kicker">The current method</div>
+  <h2>Cell definition on /bts <span class="pill old">today</span></h2>
+  <div class="sub">Each row is one cell. All fields are typed manually, per cell.</div>
+  <div class="cols">
+    <div>
+      <img class="shot fit" src="presentation-shots/01-bts-list-legacy.png" alt="Legacy /bts cell list">
+      <div class="shot-caption">One row per cell — ~11,600 rows across the network.</div>
+    </div>
+    <div>
+      <img class="shot fit" src="presentation-shots/02-bts-edit-form-legacy.png" alt="Legacy /bts edit form">
+      <div class="shot-caption">Editing a cell — ~20 fields, typed per cell.</div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:14px;">Most fields are identical across a site's cells but typed separately for each · consistency <em>between</em> cells is up to you · going live = typing a Live Date, with no check that the cell is complete.</div>
+</section>
+
+<!-- ─────────────────── Slide 4: The new sites list ─────────────────── -->
+<section class="slide">
+  <div class="kicker">The new method</div>
+  <h2>The /sites page <span class="pill new">new</span></h2>
+  <div class="sub">One row per site. Status, pending-work badges and attention pills at a glance.</div>
+  <div class="cols-31">
+    <div>
+      <img class="shot fit" style="max-height:56vh;" src="presentation-shots/04-sites-list.png" alt="New /sites list">
+      <div class="shot-caption">~6,000 sites with live status (Pending / Live / Deinstalled / Awaiting RAN), filters and search.</div>
+    </div>
+    <div>
+      <ul style="font-size:14.5px;">
+        <li><strong>Status pills</strong> reflect reality: ARN sites recompute from current RAN state, pending changes show as badges.</li>
+        <li>Click any row to open the <strong>site drawer</strong> — everything about the site in one place.</li>
+        <li>SSCO / RAN / ARN tools are one click away on each row.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────── Slide 5: Creating a site ─────────────────── -->
+<section class="slide">
+  <div class="kicker">Workflow 1 — new site</div>
+  <h2>Creating a site</h2>
+  <div class="sub">Define the site once. Cells are generated from the sector/tech matrix.</div>
+  <div class="cols">
+    <div>
+      <img class="shot" src="presentation-shots/06-new-site-filled.png" alt="New site form filled in">
+      <div class="shot-caption">The New Site form — key, name, hardware type, sectors &amp; techs.</div>
+    </div>
+    <div>
+      <div class="step"><div class="n">1</div><div><strong>Site Key</strong> — 3-letter network + 4 digits (e.g. <code>MCB0123</code>). Reserved forever once used.</div></div>
+      <div class="step"><div class="n">2</div><div><strong>Tick the techs per sector</strong> — e.g. S1: 2G+4G. Cell names like <code>_‑1</code> / <code>‑2l</code> are built for you, always correct.</div></div>
+      <div class="step"><div class="n">3</div><div><strong>Country auto-fills</strong> from the site key prefix (MCB → MTN Congo Brazzaville). No more mismatched countries.</div></div>
+      <div class="step"><div class="n">4</div><div><strong>IP plan</strong> — generate per-sector IPs from the network's master subnet, or type them. The system blocks duplicates.</div></div>
+      <div class="step"><div class="n">5</div><div><strong>Save</strong> — the site is created with its cells in <span class="pill flag">Pending</span> state, ready to complete before go-live.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────── Slide 6: The site drawer ─────────────────── -->
+<section class="slide">
+  <div class="kicker">Workflow 2 — day to day</div>
+  <h2>The site drawer</h2>
+  <div class="sub">Overview, Cells, RAN, XGA conflicts, Activity and Map — per site.</div>
+  <div class="cols">
+    <div>
+      <img class="shot" src="presentation-shots/07-site-drawer-overview.png" alt="Site drawer overview tab">
+      <div class="shot-caption">Overview — the shared site data, dates, IP plan and status.</div>
+    </div>
+    <div>
+      <img class="shot" src="presentation-shots/08-site-drawer-cells.png" alt="Site drawer cells tab">
+      <div class="shot-caption">Cells — every cell with its state and per-cell actions (Set Live / Retire / Delete).</div>
+    </div>
+  </div>
+  <div class="callout green">Editing a shared field (backhaul, BSC, coordinates…) prompts you to <strong>propagate</strong> it: apply to all live cells <em>now</em>, or queue it as a <strong>planned change</strong> that goes live with the field visit.</div>
+</section>
+
+<!-- ─────────────────── Slide 7: Going live ─────────────────── -->
+<section class="slide">
+  <div class="kicker">Workflow 3 — go-live</div>
+  <h2>Going live — with a safety gate</h2>
+  <div class="sub">A cell can only be set live when it carries everything the portal needs downstream.</div>
+  <div class="cols-31">
+    <div>
+      <img class="shot" src="presentation-shots/09-set-live-gate.png" alt="Set-live gate showing missing fields">
+      <div class="shot-caption">Set Live on an incomplete cell — the gate lists exactly what's missing.</div>
+    </div>
+    <div>
+      <h3>The go-live checklist</h3>
+      <ul style="font-size:14.5px;">
+        <li><strong>Cell ID + BSC</strong> — KPI data won't match without them</li>
+        <li><strong>Country</strong> — must agree with the site key prefix</li>
+        <li><strong>BTS IP</strong> — monitoring &amp; IP derivation</li>
+        <li><strong>Backhaul, coordinates, tower height</strong></li>
+        <li><strong>Population</strong> (2G cells)</li>
+      </ul>
+      <div class="callout amber" style="font-size:13.5px;">The same checklist applies <em>everywhere</em> — the Set Live button, site saves and CSV imports. There is no back door. Fill the gaps on the site form and save; the values propagate to the cells.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────── Slide 8: Cell editing & lifecycle ─────────────────── -->
+<section class="slide">
+  <div class="kicker">Workflow 4 — changes &amp; lifecycle</div>
+  <h2>Editing cells — always at the site level</h2>
+  <div class="sub">There is no per-cell edit form any more. You change the <em>site</em>, and the values flow down to its cells.</div>
+  <div class="cols-13">
+    <div>
+      <h3>How a change reaches the cells</h3>
+      <ul style="font-size:14.5px;">
+        <li>Edit the field on the <strong>site form</strong> (backhaul, BSC, coordinates, tower, population, per-cell Cell IDs in the tech grid, IPs in the IP plan).</li>
+        <li>On save you choose: <strong>Apply Immediately</strong> (live cells updated now) or <strong>Save as Pending</strong> (a planned change queued per cell, activated by ACS at the field visit).</li>
+        <li>Pending skeleton cells are healed automatically on every site save — fill the gaps once, at the top.</li>
+      </ul>
+      <h3>Per-cell actions &amp; lifecycle</h3>
+      <ul style="font-size:14.5px;">
+        <li><span class="pill flag">Pending</span> → <strong>Set Live</strong> · <span class="pill new">Live</span> → <strong>Retire</strong> → <span class="pill old">Deinstalled</span></li>
+        <li><strong>Delete</strong> = pending cells created in error only. Live cells must be retired; deinstalled cells are history and are never deleted — the site key stays reserved.</li>
+      </ul>
+    </div>
+    <div>
+      <img class="shot" src="presentation-shots/10-propagate-prompt.png" alt="Propagate changes prompt">
+      <div class="shot-caption">Saving a site change — choose <strong>Apply Immediately</strong> or <strong>Save as Pending</strong> (planned change); the prompt lists exactly which fields will flow to the cells.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────── Slide 9: A real site ─────────────────── -->
+<section class="slide">
+  <div class="kicker">In practice</div>
+  <h2>A real multi-sector site</h2>
+  <div class="sub">Production data in the new drawer.</div>
+  <div class="cols">
+    <div>
+      <img class="shot" src="presentation-shots/11-real-site-drawer.png" alt="Real site drawer overview">
+      <div class="shot-caption">Overview of a live multi-sector site.</div>
+    </div>
+    <div>
+      <img class="shot" src="presentation-shots/12-real-site-cells.png" alt="Real site cells with history">
+      <div class="shot-caption">Cells tab — live cells, deinstall history, planned changes.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────── Slide 10: Bulk via CSV ─────────────────── -->
+<section class="slide">
+  <div class="kicker">Workflow 5 — bulk</div>
+  <h2>Bulk changes via CSV</h2>
+  <div class="sub">Download → edit in Excel → upload → validate → commit. Same rules as the editor.</div>
+  <div class="cols-31">
+    <div>
+      <img class="shot fit" style="max-height:52vh;" src="presentation-shots/13b-csv-error-grid.png" alt="CSV validate preview with errors highlighted">
+      <div class="shot-caption">The validation preview — <strong>2 errors, 2 warnings</strong>: invalid <code>sectorCount</code> (red) and a duplicate S1 2G Cell&nbsp;ID. Fix in place → <strong>Re-check</strong> → <strong>Commit</strong> unlocks when clean.</div>
+    </div>
+    <div>
+      <ul style="font-size:14.5px;">
+        <li>One row per site; sector/tech columns define the cells.</li>
+        <li>Rows with an <code>_id</code> update; without one, create.</li>
+        <li>Errors highlight the exact <em>column</em> at fault — nothing commits until clean.</li>
+        <li><strong>Auto-IP</strong> can fill blank sector IPs from the master subnet.</li>
+        <li>Retire cells by filling the <code>StopDate</code> column.</li>
+        <li>Apply as <strong>Effective immediately</strong> or <strong>Pending change</strong> — same choice as the editor.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">A CSV import goes through <strong>exactly the same checks</strong> as the on-screen editor — duplicate Cell IDs, duplicate IPs, go-live gate, country prefix rules.</div>
+</section>
+
+<!-- ─────────────────── Slide 11: The cutover switch ─────────────────── -->
+<section class="slide">
+  <div class="kicker">Rollout</div>
+  <h2>One switch, one editor <span class="pill flag">siteModelActive</span></h2>
+  <div class="sub">Exactly one page is editable at any time — enforced on screen <em>and</em> in the API.</div>
+  <div class="cols">
+    <div>
+      <img class="shot" src="presentation-shots/03-sites-readonly-banner.png" alt="/sites read-only while flag off">
+      <div class="shot-caption"><strong>Today (switch OFF):</strong> /sites is read-only — browse it, get familiar; /bts still owns editing.</div>
+    </div>
+    <div>
+      <img class="shot" src="presentation-shots/14-bts-locked-banner.png" alt="/bts locked when flag on">
+      <div class="shot-caption"><strong>After cutover (switch ON):</strong> /bts becomes read-only; all editing moves to /sites.</div>
+    </div>
+  </div>
+  <div class="callout green">The switch flips without a restart and can be flipped back. Both pages always show the same underlying cells, so nothing is lost either way.</div>
+</section>
+
+<!-- ─────────────────── Slide 12: Side-by-side ─────────────────── -->
+<section class="slide">
+  <div class="kicker">Summary</div>
+  <h2>Old vs new at a glance</h2>
+  <table class="cmp">
+    <tr><th>Task</th><th><span class="pill old">/bts today</span></th><th><span class="pill new">/sites</span></th></tr>
+    <tr><td>New 3-sector 2G+4G site</td><td>Type 6 cells by hand, repeat shared fields 6×, build names manually</td><td>One form: tick techs per sector — 6 correctly-named cells generated</td></tr>
+    <tr><td>Change site backhaul</td><td>Edit every cell individually</td><td>Edit once → propagate to all cells (now, or as planned change)</td></tr>
+    <tr><td>Go-live</td><td>Type a Live Date — no completeness check</td><td>Set Live button with a hard checklist (Cell ID, BSC, IP, country…)</td></tr>
+    <tr><td>Duplicate Cell ID / IP</td><td>Possible — found later when KPIs misbehave</td><td>Blocked at entry, on every path including CSV</td></tr>
+    <tr><td>Planned engineering change</td><td>Tracked outside the system</td><td>Queued pending copy per cell; ACS stamps it live at the visit</td></tr>
+    <tr><td>Site history</td><td>Scattered across cell rows</td><td>Activity tab: who changed what, when — per site</td></tr>
+    <tr><td>Bulk edits</td><td>BTS CSV (cell-per-row, minimal checks)</td><td>Site CSV with full validation preview before commit</td></tr>
+    <tr><td>Removing mistakes</td><td>Cells deletable (history at risk)</td><td>Only pending cells/sites deletable — live history is permanent</td></tr>
+  </table>
+</section>
+
+<!-- ─────────────────── Slide 13: What this means for you ─────────────────── -->
+<section class="slide dark">
+  <div style="max-width:880px; margin: 6vh auto 0;">
+    <div class="kicker" style="color:#7dd3fc;">Next steps</div>
+    <h2 style="color:#fff;">What this means for Operations</h2>
+    <ul class="hero-list" style="color:rgba(255,255,255,.9);">
+      <li><strong>Now:</strong> /sites is live in read-only — open it, find your sites, get comfortable. Nothing about your current workflow changes yet.</li>
+      <li><strong>At cutover:</strong> new sites, cell changes and go-lives move to /sites. /bts stays available read-only for reference.</li>
+      <li><strong>Your data is safer:</strong> the system now refuses the mistakes we used to have to find later — duplicate IDs/IPs, incomplete go-lives, wrong countries.</li>
+      <li><strong>Questions / feedback:</strong> raise with the portal team — the switch can be flipped back at any time during bedding-in.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<div class="footer-nav">
+  <button id="prevBtn" title="Previous (←)">←</button>
+  <span class="slide-num"><span id="cur">1</span> / <span id="tot">13</span></span>
+  <button id="nextBtn" title="Next (→)">→</button>
+</div>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var idx = 0;
+  document.getElementById('tot').textContent = slides.length;
+  function show(i) {
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function (s, j) { s.classList.toggle('active', j === idx); });
+    document.getElementById('cur').textContent = idx + 1;
+  }
+  document.getElementById('prevBtn').addEventListener('click', function () { show(idx - 1); });
+  document.getElementById('nextBtn').addEventListener('click', function () { show(idx + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') show(idx + 1);
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(idx - 1);
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'p' || e.key === 'P') window.print();
+  });
+  // Hide images that failed to load (screenshot not captured) so the deck
+  // still presents cleanly without them.
+  document.querySelectorAll('img.shot').forEach(function (img) {
+    img.addEventListener('error', function () {
+      img.style.display = 'none';
+      var cap = img.nextElementSibling;
+      if (cap && cap.classList.contains('shot-caption')) cap.textContent += ' (screenshot pending)';
+    });
+  });
+})();
+</script>
+</body>
+</html>
