@@ -184,23 +184,22 @@
   <div class="kicker">Behind the IP plan</div>
   <h2>The IP Config page</h2>
   <div class="sub">Where the site IP plan gets its addresses — set once per system, then used by every allocation.</div>
-  <div class="cols">
+  <div class="cols-31">
     <div>
-      <h3>Master Subnets <span class="pill flag">where</span></h3>
-      <div class="sub" style="font-size:14.5px; margin:2px 0 6px;">The pool a new site is allocated from.</div>
-      <ul style="font-size:14.5px;">
-        <li>Keyed by <strong>Network</strong> (site-key prefix) <strong>+ Backhaul</strong> — e.g. <code>MNG</code> + <code>Gilat</code> → <code>193.21.0.0/16</code>.</li>
-        <li>More than one subnet per Network + Backhaul is allowed; the operator picks which at allocation time.</li>
-      </ul>
+      <img class="shot" src="presentation-shots/15-ip-config.png" alt="IP Configuration page — master subnets and cell-map configs">
+      <div class="shot-caption">Master Subnets and Cell-Map Configs for the active system (IP values blurred).</div>
     </div>
     <div>
+      <h3>Master Subnets <span class="pill flag">where</span></h3>
+      <ul style="font-size:14px; margin-top:4px;">
+        <li>The pool a new site is allocated from — keyed by <strong>Network</strong> (site-key prefix) <strong>+ Backhaul</strong>.</li>
+        <li>More than one per combo is allowed; the operator picks which at allocation time.</li>
+      </ul>
       <h3>Cell-Map Configs <span class="pill flag">how</span></h3>
-      <div class="sub" style="font-size:14.5px; margin:2px 0 6px;">The addressing scheme applied inside that subnet.</div>
-      <ul style="font-size:14.5px;">
-        <li>Picked automatically by which subnet a site falls inside (CIDR containment).</li>
-        <li>Set the per-block host layout: <strong>BTS / EMC / CCTV</strong> offsets and the cell mask (e.g. <code>/29</code>).</li>
-        <li><strong>VLAN_99 / VLAN_67</strong> shift EMC / CCTV into their VLAN regions; <code>0</code> = flat (e.g. Starlink).</li>
-        <li>A locked <span class="pill flag">Default</span> scheme is the catch-all fallback and always stays last.</li>
+      <ul style="font-size:14px; margin-top:4px;">
+        <li>The addressing scheme, chosen automatically by <strong>CIDR containment</strong> of the subnet.</li>
+        <li>Sets the per-block <strong>BTS / EMC / CCTV</strong> offsets and cell mask (e.g. <code>/29</code>); <strong>VLAN_99 / VLAN_67</strong> shift EMC / CCTV into VLAN regions (<code>0</code> = flat, e.g. Starlink).</li>
+        <li>A locked <span class="pill flag">Default</span> fallback always stays last.</li>
       </ul>
     </div>
   </div>
