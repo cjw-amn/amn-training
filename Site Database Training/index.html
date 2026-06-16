@@ -118,6 +118,7 @@
     </div>
   </div>
   <div class="callout">The cells themselves don't change — they still live in the same database the monitor, KPI and ticketing systems read. What changes is <strong>how they're created and maintained</strong>.</div>
+  <div class="callout green">Bigger picture: with one authoritative record per site, this work lets us bring the <strong>Master Site Database into the Portal</strong> — maintained alongside the live network data, instead of in a separate document kept outside the system.</div>
 </section>
 
 <!-- ─────────────────── Slide 3: The current method ─────────────────── -->
@@ -178,7 +179,35 @@
   </div>
 </section>
 
-<!-- ─────────────────── Slide 6: The site drawer ─────────────────── -->
+<!-- ─────────────────── Slide 6: The IP Config page ─────────────────── -->
+<section class="slide">
+  <div class="kicker">Behind the IP plan</div>
+  <h2>The IP Config page</h2>
+  <div class="sub">Where the site IP plan gets its addresses — set once per system, then used by every allocation.</div>
+  <div class="cols">
+    <div>
+      <h3>Master Subnets <span class="pill flag">where</span></h3>
+      <div class="sub" style="font-size:14.5px; margin:2px 0 6px;">The pool a new site is allocated from.</div>
+      <ul style="font-size:14.5px;">
+        <li>Keyed by <strong>Network</strong> (site-key prefix) <strong>+ Backhaul</strong> — e.g. <code>MNG</code> + <code>Gilat</code> → <code>193.21.0.0/16</code>.</li>
+        <li>More than one subnet per Network + Backhaul is allowed; the operator picks which at allocation time.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Cell-Map Configs <span class="pill flag">how</span></h3>
+      <div class="sub" style="font-size:14.5px; margin:2px 0 6px;">The addressing scheme applied inside that subnet.</div>
+      <ul style="font-size:14.5px;">
+        <li>Picked automatically by which subnet a site falls inside (CIDR containment).</li>
+        <li>Set the per-block host layout: <strong>BTS / EMC / CCTV</strong> offsets and the cell mask (e.g. <code>/29</code>).</li>
+        <li><strong>VLAN_99 / VLAN_67</strong> shift EMC / CCTV into their VLAN regions; <code>0</code> = flat (e.g. Starlink).</li>
+        <li>A locked <span class="pill flag">Default</span> scheme is the catch-all fallback and always stays last.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">This is what powers <strong>Generate IP plan</strong> on the site form (and <strong>Auto-IP</strong> on CSV import) — and it highlights any overlapping subnets or CIDRs live as you type. Admin-only; changes apply to the current system (Production or Test).</div>
+</section>
+
+<!-- ─────────────────── Slide 7: The site drawer ─────────────────── -->
 <section class="slide">
   <div class="kicker">Workflow 2 — day to day</div>
   <h2>The site drawer</h2>
@@ -196,7 +225,7 @@
   <div class="callout green">Editing a shared field (backhaul, BSC, coordinates…) prompts you to <strong>propagate</strong> it: apply to all live cells <em>now</em>, or queue it as a <strong>planned change</strong> that goes live with the field visit.</div>
 </section>
 
-<!-- ─────────────────── Slide 7: Going live ─────────────────── -->
+<!-- ─────────────────── Slide 8: Going live ─────────────────── -->
 <section class="slide">
   <div class="kicker">Workflow 3 — go-live</div>
   <h2>Going live — with a safety gate</h2>
@@ -220,7 +249,7 @@
   </div>
 </section>
 
-<!-- ─────────────────── Slide 8: Cell editing & lifecycle ─────────────────── -->
+<!-- ─────────────────── Slide 9: Cell editing & lifecycle ─────────────────── -->
 <section class="slide">
   <div class="kicker">Workflow 4 — changes &amp; lifecycle</div>
   <h2>Editing cells — always at the site level</h2>
@@ -246,7 +275,7 @@
   </div>
 </section>
 
-<!-- ─────────────────── Slide 9: A real site ─────────────────── -->
+<!-- ─────────────────── Slide 10: A real site ─────────────────── -->
 <section class="slide">
   <div class="kicker">In practice</div>
   <h2>A real multi-sector site</h2>
@@ -263,7 +292,7 @@
   </div>
 </section>
 
-<!-- ─────────────────── Slide 10: Bulk via CSV ─────────────────── -->
+<!-- ─────────────────── Slide 11: Bulk via CSV ─────────────────── -->
 <section class="slide">
   <div class="kicker">Workflow 5 — bulk</div>
   <h2>Bulk changes via CSV</h2>
@@ -287,7 +316,7 @@
   <div class="callout">A CSV import goes through <strong>exactly the same checks</strong> as the on-screen editor — duplicate Cell IDs, duplicate IPs, go-live gate, country prefix rules.</div>
 </section>
 
-<!-- ─────────────────── Slide 11: The cutover switch ─────────────────── -->
+<!-- ─────────────────── Slide 12: The cutover switch ─────────────────── -->
 <section class="slide">
   <div class="kicker">Rollout</div>
   <h2>One switch, one editor <span class="pill flag">siteModelActive</span></h2>
@@ -305,7 +334,7 @@
   <div class="callout green">The switch flips without a restart and can be flipped back. Both pages always show the same underlying cells, so nothing is lost either way.</div>
 </section>
 
-<!-- ─────────────────── Slide 12: Side-by-side ─────────────────── -->
+<!-- ─────────────────── Slide 13: Side-by-side ─────────────────── -->
 <section class="slide">
   <div class="kicker">Summary</div>
   <h2>Old vs new at a glance</h2>
@@ -322,7 +351,7 @@
   </table>
 </section>
 
-<!-- ─────────────────── Slide 13: What this means for you ─────────────────── -->
+<!-- ─────────────────── Slide 14: What this means for you ─────────────────── -->
 <section class="slide dark">
   <div style="max-width:880px; margin: 6vh auto 0;">
     <div class="kicker" style="color:#7dd3fc;">Next steps</div>
