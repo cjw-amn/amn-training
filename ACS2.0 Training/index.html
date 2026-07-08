@@ -1,475 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ACS 2.0 — Field Engineer Training</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
   :root {
-    --paper:#f5f7fa; --surface:#ffffff; --surface2:#eef1f5;
-    --ink:#0f1620; --text:#1f2a37; --dim:#5b6b7c; --faint:#8a99a8;
-    --border:#dbe1e8; --border2:#c9d2dc;
-    --signal:#1f6feb; --signal-soft:#e4edfd;
-    --pass:#1a7f37; --pass-soft:#e2f2e6;
-    --fail:#d1242f; --fail-soft:#fbe4e5;
-    --hold:#9a6700; --hold-soft:#f8efd8;
-    --shadow:0 1px 2px rgba(15,22,32,.06), 0 8px 28px rgba(15,22,32,.08);
-    --radius:12px;
-    --mono:ui-monospace,"Cascadia Code","Segoe UI Mono",Consolas,monospace;
-    --sans:system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper:#0d1117; --surface:#161b22; --surface2:#1c2431;
-      --ink:#e6edf3; --text:#cdd6df; --dim:#8b98a5; --faint:#6a7783;
-      --border:#293441; --border2:#37424f;
-      --signal:#4b96ff; --signal-soft:#152238;
-      --pass:#3fb950; --pass-soft:#132a1a;
-      --fail:#f85149; --fail-soft:#2c1618;
-      --hold:#d29922; --hold-soft:#2a2113;
-      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.45);
-    }
-  }
-  :root[data-theme="light"] {
-    --paper:#f5f7fa; --surface:#ffffff; --surface2:#eef1f5;
-    --ink:#0f1620; --text:#1f2a37; --dim:#5b6b7c; --faint:#8a99a8;
-    --border:#dbe1e8; --border2:#c9d2dc;
-    --signal:#1f6feb; --signal-soft:#e4edfd;
-    --pass:#1a7f37; --pass-soft:#e2f2e6;
-    --fail:#d1242f; --fail-soft:#fbe4e5;
-    --hold:#9a6700; --hold-soft:#f8efd8;
-    --shadow:0 1px 2px rgba(15,22,32,.06), 0 8px 28px rgba(15,22,32,.08);
-  }
-  :root[data-theme="dark"] {
-    --paper:#0d1117; --surface:#161b22; --surface2:#1c2431;
-    --ink:#e6edf3; --text:#cdd6df; --dim:#8b98a5; --faint:#6a7783;
-    --border:#293441; --border2:#37424f;
-    --signal:#4b96ff; --signal-soft:#152238;
-    --pass:#3fb950; --pass-soft:#132a1a;
-    --fail:#f85149; --fail-soft:#2c1618;
-    --hold:#d29922; --hold-soft:#2a2113;
-    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 34px rgba(0,0,0,.45);
+    --amn-yellow: #FFD600;
+    --amn-dark: #1a1a2e;
+    --amn-darker: #0f0f1a;
+    --amn-accent: #3a86ff;
+    --amn-green: #2ecc71;
+    --amn-red: #e74c3c;
+    --amn-orange: #f39c12;
+    --amn-text: #e0e0e0;
+    --amn-muted: #8a8a9a;
+    --slide-max-w: 1100px;
+    --mono: ui-monospace,"Cascadia Code","Segoe UI Mono",Consolas,monospace;
   }
 
-  * { box-sizing:border-box; }
-  html,body { margin:0; height:100%; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
-    font-family:var(--sans); background:var(--paper); color:var(--text);
-    -webkit-font-smoothing:antialiased; overflow:hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--amn-darker);
+    color: var(--amn-text);
+    overflow: hidden;
+    height: 100vh;
   }
-  .deck { position:fixed; inset:0; overflow:hidden; }
 
-  /* ---- slides ---- */
+  .deck { position: relative; width: 100%; height: 100vh; }
+
   .slide {
-    position:absolute; inset:0; display:none;
-    padding:clamp(24px,5vh,64px) clamp(20px,6vw,96px) 92px;
-    overflow-y:auto;
-    animation:fade .45s ease both;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    padding: 42px 80px 84px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .45s ease;
+    overflow-y: auto;
   }
-  .slide.active { display:flex; }
-  .slide-inner { margin:auto; width:100%; max-width:1080px; }
-  @media (prefers-reduced-motion: reduce) { .slide { animation:none; } }
-  @keyframes fade { from { opacity:0; transform:translateY(10px);} to { opacity:1; transform:none;} }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide.section-divider,
+  .slide.title-slide { justify-content: center; overflow-y: hidden; }
+  @media (max-width: 720px){ .slide { padding: 30px 26px 84px; } }
 
-  /* ---- type ---- */
-  .kicker {
-    font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--signal); font-weight:600; display:flex; align-items:center; gap:10px; margin-bottom:16px;
-  }
-  .kicker::before { content:""; width:26px; height:2px; background:var(--signal); display:inline-block; }
-  h1 { font-size:clamp(30px,5.4vw,58px); line-height:1.03; letter-spacing:-.022em; margin:0; color:var(--ink); font-weight:800; text-wrap:balance; }
-  h2 { font-size:clamp(24px,3.6vw,40px); line-height:1.08; letter-spacing:-.02em; margin:0 0 8px; color:var(--ink); font-weight:750; text-wrap:balance; }
-  h3 { font-size:16px; margin:0; color:var(--ink); font-weight:700; letter-spacing:-.01em; }
-  .lead { font-size:clamp(15px,1.7vw,19px); line-height:1.55; color:var(--dim); max-width:60ch; margin:14px 0 0; }
-  p { line-height:1.6; }
-  strong { color:var(--ink); font-weight:680; }
-  .mono { font-family:var(--mono); }
+  h1 { font-size: 2.8rem; font-weight: 800; line-height: 1.15; margin-bottom: .3em; letter-spacing:-.02em; }
+  h2 { font-size: 1.85rem; font-weight: 700; margin-bottom: .5em; color: var(--amn-yellow); letter-spacing:-.01em; }
+  h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: .4em; color: var(--amn-yellow); }
+  p, li { font-size: 1.05rem; line-height: 1.6; }
+  ul { list-style: none; padding: 0; }
+  ul li { padding-left: 1.6em; position: relative; margin-bottom: .5em; }
+  ul li::before { content: '▸'; position: absolute; left: 0; color: var(--amn-yellow); font-weight: 700; }
 
-  /* ---- title slide ---- */
-  .hero { position:relative; }
-  .hero-grid {
-    position:absolute; inset:-200px -400px; z-index:0; opacity:.5; pointer-events:none;
-    background-image:radial-gradient(circle at 1px 1px, var(--border2) 1px, transparent 0);
-    background-size:26px 26px;
-    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 30% 40%, #000 30%, transparent 75%);
-            mask-image:radial-gradient(ellipse 70% 60% at 30% 40%, #000 30%, transparent 75%);
-  }
-  .hero-inner { position:relative; z-index:1; }
-  .badge {
-    display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:12px;
-    letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
-    border:1px solid var(--border); background:var(--surface); padding:7px 13px; border-radius:100px; margin-bottom:26px;
-  }
-  .badge b { color:var(--signal); font-weight:700; }
-  .sig { display:inline-flex; align-items:flex-end; gap:2px; height:13px; }
-  .sig i { width:3px; background:var(--signal); border-radius:1px; display:block; animation:bar 1.8s ease-in-out infinite; }
-  .sig i:nth-child(1){height:35%; animation-delay:0s} .sig i:nth-child(2){height:60%; animation-delay:.2s}
-  .sig i:nth-child(3){height:82%; animation-delay:.4s} .sig i:nth-child(4){height:100%; animation-delay:.6s}
-  @keyframes bar { 0%,100%{opacity:.35} 50%{opacity:1} }
-  @media (prefers-reduced-motion: reduce){ .sig i{animation:none; opacity:.8} }
-  .hero h1 .ver { color:var(--signal); }
-  .hero-meta { display:flex; gap:28px; flex-wrap:wrap; margin-top:34px; }
-  .hero-meta > div { display:flex; flex-direction:column; gap:3px; }
-  .hero-meta .l { font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); }
-  .hero-meta .v { font-size:15px; color:var(--text); font-weight:600; }
+  strong { color: #fff; font-weight: 600; }
+  .highlight { color: var(--amn-yellow); font-weight: 600; }
+  .accent   { color: var(--amn-accent); }
+  .green    { color: var(--amn-green); }
+  .red      { color: var(--amn-red); }
+  .muted    { color: var(--amn-muted); font-size: .95rem; }
+  .mono     { font-family: var(--mono); }
 
-  /* ---- cards / grid ---- */
-  .grid { display:grid; gap:16px; margin-top:28px; }
-  .g2 { grid-template-columns:1fr 1fr; } .g3 { grid-template-columns:repeat(3,1fr); }
-  @media (max-width:720px){ .g2,.g3 { grid-template-columns:1fr; } }
+  .content { max-width: var(--slide-max-w); width: 100%; }
+  .lead { font-size: 1.12rem; color: var(--amn-text); max-width: 68ch; margin-bottom: 6px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: center; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 26px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+  @media (max-width: 780px){ .two-col,.three-col,.grid2 { grid-template-columns: 1fr; gap: 24px; } }
+
   .card {
-    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
-    padding:18px 20px; box-shadow:var(--shadow);
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; padding: 22px;
   }
-  .card .ch { display:flex; align-items:center; gap:11px; margin-bottom:9px; }
-  .card p { margin:0; font-size:13.5px; line-height:1.55; color:var(--dim); }
-  .card .num { font-family:var(--mono); font-weight:700; font-size:13px; color:var(--signal);
-    width:27px; height:27px; flex:none; display:grid; place-items:center; border-radius:7px;
-    background:var(--signal-soft); }
+  .card h3 { margin-top: 0; }
+  .card p { font-size: .98rem; color: var(--amn-text); }
 
-  /* ---- status ticks (mirror the product) ---- */
-  .tick { width:22px; height:22px; flex:none; border-radius:6px; display:grid; place-items:center; font-size:12px; font-weight:800; }
-  .tick.pass { background:var(--pass-soft); color:var(--pass); }
-  .tick.fail { background:var(--fail-soft); color:var(--fail); }
-  .tick.hold { background:var(--hold-soft); color:var(--hold); }
-  .tick.dim  { background:var(--surface2); color:var(--faint); }
-  .tick.run  { background:var(--signal-soft); color:var(--signal); }
+  .badge {
+    display: inline-block; padding: 4px 14px;
+    border-radius: 20px; font-size: .85rem; font-weight: 600;
+    margin-right: 6px; margin-bottom: 6px;
+  }
+  .badge-yellow { background: var(--amn-yellow); color: var(--amn-dark); }
+  .badge-green  { background: var(--amn-green); color: #fff; }
+  .badge-blue   { background: var(--amn-accent); color: #fff; }
+  .badge-red    { background: var(--amn-red); color: #fff; }
+  .badge-orange { background: var(--amn-orange); color: #fff; }
+  .badge-num { background: rgba(255,214,0,.15); color: var(--amn-yellow); border:1px solid rgba(255,214,0,.35); font-family:var(--mono); }
 
-  /* ---- comparison ---- */
-  .vs { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:26px; }
-  @media (max-width:720px){ .vs { grid-template-columns:1fr; } }
-  .vs-col { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); box-shadow:var(--shadow); }
-  .vs-col .hd { padding:13px 18px; font-weight:700; font-size:14px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); }
-  .vs-col.old .hd { color:var(--dim); background:var(--surface2); }
-  .vs-col.new .hd { color:var(--signal); background:var(--signal-soft); }
-  .vs-col .hd .tag { font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; margin-left:auto; opacity:.8; }
-  .vs-col ul { list-style:none; margin:0; padding:8px 0; }
-  .vs-col li { display:flex; gap:11px; padding:9px 18px; font-size:13.5px; line-height:1.5; align-items:flex-start; }
-  .vs-col li::before { content:""; margin-top:8px; width:6px; height:6px; border-radius:50%; flex:none; }
-  .vs-col.old li::before { background:var(--faint); }
-  .vs-col.new li::before { background:var(--signal); }
+  /* compare table */
+  .compare-table { width: 100%; border-collapse: collapse; margin-top: 22px; }
+  .compare-table th, .compare-table td {
+    padding: 14px 18px; text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    font-size: 1rem; vertical-align: top;
+  }
+  .compare-table th { font-weight: 600; color: var(--amn-yellow); border-bottom: 2px solid rgba(255,214,0,.3); }
+  .compare-table th.old { color: var(--amn-muted); }
+  .compare-table td.aspect { color: var(--amn-muted); font-weight:600; white-space:nowrap; }
+  .compare-table td.new { color:#fff; }
+  .compare-table tr:last-child td { border-bottom: none; }
 
-  /* ---- workflow rail ---- */
-  .rail { display:flex; flex-direction:column; gap:9px; margin-top:24px; }
-  .step { display:flex; align-items:center; gap:15px; padding:13px 17px; border:1px solid var(--border);
-    border-radius:10px; background:var(--surface); box-shadow:var(--shadow); }
-  .step .sn { font-family:var(--mono); font-size:13px; font-weight:700; color:var(--signal); width:30px; flex:none; }
+  /* workflow rail */
+  .rail { display:flex; flex-direction:column; gap:11px; margin-top:22px; }
+  .step {
+    display:flex; align-items:center; gap:16px; padding:14px 18px;
+    background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px;
+  }
+  .step .sn { font-family:var(--mono); font-size:.95rem; font-weight:700; color:var(--amn-yellow); width:30px; flex:none; }
   .step .st { flex:1; min-width:0; }
-  .step .st b { display:block; font-size:14.5px; color:var(--ink); }
-  .step .st span { font-size:12.5px; color:var(--dim); }
-  .step.two { display:grid; grid-template-columns:1fr 1fr; gap:0 14px; }
-  @media (max-width:640px){ .step.two { grid-template-columns:1fr; } }
+  .step .st b { display:block; font-size:1.02rem; color:#fff; font-weight:600; }
+  .step .st span { font-size:.9rem; color:var(--amn-muted); }
 
-  /* ---- mockup panel (product echo) ---- */
-  .mock { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
-  .mock-bar { display:flex; align-items:center; gap:7px; padding:10px 14px; border-bottom:1px solid var(--border); background:var(--surface2); }
-  .mock-bar .dot { width:9px; height:9px; border-radius:50%; background:var(--border2); }
-  .mock-bar .t { margin-left:8px; font-family:var(--mono); font-size:11.5px; color:var(--dim); }
-  .mock-row { display:flex; align-items:center; gap:13px; padding:13px 16px; border-top:1px solid var(--border); }
-  .mock-row:first-of-type { border-top:0; }
-  .mock-row .mr-t { flex:1; min-width:0; }
-  .mock-row .mr-t b { font-size:13.5px; color:var(--ink); font-weight:650; display:block; }
-  .mock-row .mr-t span { font-size:11.5px; color:var(--dim); }
-  .mock-row .mr-s { font-family:var(--mono); font-size:11.5px; text-align:right; }
-  .mock-row .mr-s .lbl { display:block; font-weight:700; }
-  .mock-row .mr-s .pass { color:var(--pass); } .mock-row .mr-s .fail { color:var(--fail); }
-  .mock-row .mr-s .run { color:var(--signal); } .mock-row .mr-s .dim { color:var(--faint); }
-  .ghostbtn { font-size:11.5px; font-family:var(--sans); border:1px solid var(--border2); background:transparent;
-    color:var(--text); padding:5px 11px; border-radius:7px; flex:none; }
+  /* status ticks (the ACS 2.0 vocabulary, in house colours) */
+  .tick { width:24px; height:24px; flex:none; border-radius:7px; display:grid; place-items:center; font-size:12px; font-weight:800; }
+  .tick.pass { background:rgba(46,204,113,.16); color:var(--amn-green); }
+  .tick.fail { background:rgba(231,76,60,.16); color:var(--amn-red); }
+  .tick.hold { background:rgba(243,156,18,.16); color:var(--amn-orange); }
+  .tick.dim  { background:rgba(255,255,255,.07); color:var(--amn-muted); }
+  .tick.run  { background:rgba(58,134,255,.16); color:var(--amn-accent); }
+  .tick.sm { width:20px; height:20px; font-size:10px; border-radius:6px; }
 
-  /* counts (validate) */
-  .counts { display:flex; gap:10px; text-align:center; }
-  .counts > div { flex:1; padding:14px 8px; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
-  .counts .n { font-family:var(--mono); font-size:32px; font-weight:800; line-height:1; }
-  .counts .n.p { color:var(--pass); } .counts .n.f { color:var(--fail); } .counts .n.a { color:var(--faint); }
-  .counts .cl { font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); margin-top:8px; }
-  .leavecode { margin-top:14px; background:var(--pass-soft); border-radius:10px; padding:14px 16px; }
-  .leavecode .cl { font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--pass); }
-  .leavecode .code { font-family:var(--mono); font-size:26px; font-weight:800; color:var(--pass); letter-spacing:.06em; margin-top:2px; }
+  /* UI preview panel (stands in for a screenshot) */
+  .ui { background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:14px; overflow:hidden;
+        box-shadow:0 10px 34px rgba(0,0,0,.4); }
+  .ui-bar { display:flex; align-items:center; gap:7px; padding:11px 15px; background:rgba(255,255,255,.05); border-bottom:1px solid rgba(255,255,255,.1); }
+  .ui-bar .dot { width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.18); }
+  .ui-bar .t { margin-left:8px; font-family:var(--mono); font-size:.72rem; color:var(--amn-muted); }
+  .ui-row { display:flex; align-items:center; gap:13px; padding:13px 16px; border-top:1px solid rgba(255,255,255,.07); }
+  .ui-row:first-of-type { border-top:0; }
+  .ui-row .rt { flex:1; min-width:0; }
+  .ui-row .rt b { font-size:.92rem; color:#fff; font-weight:600; display:block; }
+  .ui-row .rt span { font-size:.76rem; color:var(--amn-muted); }
+  .ui-row .rs { font-family:var(--mono); font-size:.76rem; text-align:right; }
+  .ui-row .rs .lbl { display:block; font-weight:700; }
+  .ui-row .rs .g { color:var(--amn-green); } .ui-row .rs .r { color:var(--amn-red); }
+  .ui-row .rs .b { color:var(--amn-accent); } .ui-row .rs .m { color:var(--amn-muted); }
+  .ghostbtn { font-size:.76rem; border:1px solid rgba(255,255,255,.18); background:transparent; color:var(--amn-text);
+    padding:5px 11px; border-radius:7px; flex:none; }
 
-  /* callouts */
-  .note { display:flex; gap:13px; padding:15px 18px; border-radius:10px; margin-top:22px; align-items:flex-start;
-    border:1px solid var(--border); background:var(--surface); }
-  .note.warn { background:var(--hold-soft); border-color:transparent; }
-  .note.key  { background:var(--signal-soft); border-color:transparent; }
-  .note .ic { flex:none; width:24px; height:24px; border-radius:6px; display:grid; place-items:center; font-weight:800; font-size:13px; }
-  .note.warn .ic { background:var(--hold); color:#fff; } .note.key .ic { background:var(--signal); color:#fff; }
-  .note .tx { font-size:13.5px; line-height:1.55; } .note .tx b { color:var(--ink); }
+  .counts { display:flex; gap:10px; text-align:center; padding:16px; }
+  .counts > div { flex:1; padding:12px 6px; border:1px solid rgba(255,255,255,.1); border-radius:11px; background:rgba(255,255,255,.03); }
+  .counts .n { font-family:var(--mono); font-size:2rem; font-weight:800; line-height:1; }
+  .counts .n.p { color:var(--amn-green); } .counts .n.f { color:var(--amn-red); } .counts .n.a { color:var(--amn-muted); }
+  .counts .cl { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--amn-muted); margin-top:7px; }
+  .leavecode { margin:0 16px 16px; background:rgba(46,204,113,.12); border:1px solid rgba(46,204,113,.3); border-radius:11px; padding:13px 16px; }
+  .leavecode .cl { font-family:var(--mono); font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--amn-green); }
+  .leavecode .code { font-family:var(--mono); font-size:1.6rem; font-weight:800; color:var(--amn-green); letter-spacing:.06em; margin-top:2px; }
 
-  .taglist { display:flex; flex-wrap:wrap; gap:9px; margin-top:22px; }
-  .pill { font-size:13px; padding:8px 14px; border-radius:100px; border:1px solid var(--border); background:var(--surface);
-    display:inline-flex; align-items:center; gap:9px; }
-  .pill .tick { width:18px; height:18px; font-size:10px; }
+  /* callout */
+  .note { display:flex; gap:13px; padding:15px 18px; border-radius:12px; margin-top:22px; align-items:flex-start;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); }
+  .note.warn { background:rgba(243,156,18,.1); border-color:rgba(243,156,18,.35); }
+  .note.key  { background:rgba(58,134,255,.1); border-color:rgba(58,134,255,.35); }
+  .note .ic { flex:none; width:26px; height:26px; border-radius:7px; display:grid; place-items:center; font-weight:800; font-size:14px; }
+  .note.warn .ic { background:var(--amn-orange); color:#1a1a2e; } .note.key .ic { background:var(--amn-accent); color:#fff; }
+  .note .tx { font-size:.98rem; line-height:1.55; }
 
-  /* two-col slide layout */
-  .split { display:grid; grid-template-columns:1fr 1fr; gap:34px; align-items:center; margin-top:26px; }
-  @media (max-width:840px){ .split { grid-template-columns:1fr; gap:24px; } }
-  .split .txt p { font-size:14.5px; color:var(--dim); margin:14px 0 0; }
+  /* flow chips */
+  .flow { display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin:8px 0 4px; }
+  .flow-step { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:10px;
+    padding:9px 14px; font-size:.86rem; font-weight:500; }
+  .flow-step .n { font-family:var(--mono); color:var(--amn-yellow); font-weight:700; margin-right:7px; }
+  .flow-arrow { color:var(--amn-muted); }
 
-  /* quick ref */
-  .qr { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:24px; }
-  @media (max-width:720px){ .qr { grid-template-columns:1fr; } }
-  .qr-item { display:flex; gap:13px; padding:15px 17px; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
-  .qr-item .qn { font-family:var(--mono); color:var(--signal); font-weight:700; font-size:13px; flex:none; }
-  .qr-item b { display:block; font-size:13.5px; color:var(--ink); margin-bottom:2px; }
-  .qr-item span { font-size:12.5px; color:var(--dim); line-height:1.5; }
+  /* pills row */
+  .pills { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+  .pill { font-size:.95rem; padding:9px 15px; border-radius:100px; border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05); display:inline-flex; align-items:center; gap:9px; }
 
-  /* ---- chrome: nav ---- */
-  .chrome { position:fixed; left:0; right:0; bottom:0; z-index:20; height:60px;
-    display:flex; align-items:center; gap:16px; padding:0 clamp(16px,4vw,40px);
-    background:color-mix(in srgb, var(--paper) 82%, transparent); backdrop-filter:blur(10px);
-    border-top:1px solid var(--border); }
-  .progress { flex:1; display:flex; gap:5px; align-items:center; }
-  .progress button { flex:1; height:4px; max-width:46px; border:0; padding:0; border-radius:3px; background:var(--border2);
-    cursor:pointer; transition:background .2s; }
-  .progress button.on { background:var(--signal); }
-  .progress button.seen { background:var(--faint); }
-  .ctl { display:flex; align-items:center; gap:8px; }
-  .navbtn { width:34px; height:34px; border-radius:8px; border:1px solid var(--border2); background:var(--surface); color:var(--text);
-    cursor:pointer; font-size:15px; display:grid; place-items:center; }
-  .navbtn:disabled { opacity:.35; cursor:default; }
-  .navbtn:hover:not(:disabled) { border-color:var(--signal); color:var(--signal); }
-  .count { font-family:var(--mono); font-size:12.5px; color:var(--dim); min-width:58px; text-align:center; }
-  .count b { color:var(--ink); }
-  .brandmini { font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint);
-    display:flex; align-items:center; gap:8px; }
-  .brandmini b { color:var(--signal); }
-  :focus-visible { outline:2px solid var(--signal); outline-offset:2px; }
-  @media (max-width:640px){ .brandmini{ display:none; } }
-  .hint { position:fixed; top:14px; right:16px; z-index:20; font-family:var(--mono); font-size:11px; color:var(--faint);
-    display:flex; gap:6px; align-items:center; }
-  .kbd { border:1px solid var(--border2); border-radius:5px; padding:1px 6px; background:var(--surface); color:var(--dim); }
+  /* title / divider */
+  .title-slide h1 { font-size: 3.4rem; }
+  .title-slide .ver { color: var(--amn-yellow); }
+  .title-slide .subtitle { font-size: 1.3rem; color: var(--amn-muted); margin-top: .35em; font-weight: 300; }
+  .kit { display:flex; gap:26px; flex-wrap:wrap; justify-content:center; margin-top:34px; }
+  .kit div { display:flex; flex-direction:column; gap:3px; }
+  .kit .l { font-family:var(--mono); font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:var(--amn-muted); }
+  .kit .v { font-size:.98rem; color:var(--amn-text); font-weight:600; }
+  .section-divider { text-align: center; }
+  .section-divider .section-number { font-size: 5.5rem; font-weight: 800; color: rgba(255,214,0,.15); line-height: 1; }
+  .section-divider h2 { font-size: 2.4rem; margin-top: -.2em; }
+
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  .slide.active .animate { animation: fadeInUp .5s ease forwards; }
+  .slide.active .animate.d1 { animation-delay:.1s; opacity:0; }
+  .slide.active .animate.d2 { animation-delay:.25s; opacity:0; }
+  .slide.active .animate.d3 { animation-delay:.4s; opacity:0; }
+  .slide.active .animate.d4 { animation-delay:.55s; opacity:0; }
+  @media (prefers-reduced-motion: reduce){ .slide.active .animate{ animation:none; opacity:1; } .slide{ transition:none; } }
+
+  /* chrome */
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; width:0; background: var(--amn-yellow); z-index: 100; transition: width .35s ease; }
+  .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 40px; background: rgba(15,15,26,.92); backdrop-filter: blur(8px); border-top: 1px solid rgba(255,255,255,.06); z-index: 100; }
+  .nav-bar .brand { font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--amn-muted); }
+  .nav-bar .brand b { color:var(--amn-yellow); }
+  .nav-bar .mid { display:flex; align-items:center; gap:16px; }
+  .nav-bar button { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: var(--amn-text);
+    padding: 10px 22px; border-radius: 8px; cursor: pointer; font-size: .92rem; font-family: inherit; transition: background .2s; }
+  .nav-bar button:hover:not(:disabled) { background: rgba(255,214,0,.15); }
+  .nav-bar button:disabled { opacity: .3; cursor: default; }
+  .slide-counter { font-size: .88rem; color: var(--amn-muted); font-family:var(--mono); min-width:64px; text-align:center; }
+  @media (max-width:640px){ .nav-bar .brand{ display:none; } }
+  :focus-visible { outline:2px solid var(--amn-yellow); outline-offset:2px; }
 </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
 
 <div class="deck" id="deck">
 
   <!-- 1 · TITLE -->
-  <section class="slide active hero">
-    <div class="hero-grid"></div>
-    <div class="slide-inner hero-inner">
-      <span class="badge"><span class="sig"><i></i><i></i><i></i><i></i></span> AMN Field Operations · <b>Training</b></span>
-      <h1>ACS <span class="ver">2.0</span><br>Site commissioning,<br>rebuilt for the field.</h1>
-      <p class="lead">A guided walkthrough of the new ACS for field engineers — what's changed from the old page, and how to complete a site and get your leave code with confidence.</p>
-      <div class="hero-meta">
+  <div class="slide title-slide active">
+    <div class="content" style="text-align:center">
+      <div class="animate"><span class="badge badge-yellow">FIELD ENGINEER TRAINING</span></div>
+      <h1 class="animate d1">ACS <span class="ver">2.0</span></h1>
+      <p class="subtitle animate d2">Site Commissioning — Rebuilt for the Field</p>
+      <p class="muted animate d3" style="margin-top:26px">Guided workflow &bull; Whole-site testing &bull; Automatic CCTV &bull; One leave code</p>
+      <div class="kit animate d4">
         <div><span class="l">Audience</span><span class="v">Field Engineers</span></div>
-        <div><span class="l">Covers</span><span class="v">Full site visit workflow</span></div>
-        <div><span class="l">Replaces</span><span class="v">Classic ACS page</span></div>
+        <div><span class="l">Covers</span><span class="v">Full site-visit workflow</span></div>
+        <div><span class="l">Replaces</span><span class="v">The classic ACS page</span></div>
       </div>
+      <p class="muted animate d4" style="margin-top:34px;font-size:.85rem">Use the arrow keys or the buttons to navigate</p>
     </div>
-  </section>
+  </div>
 
-  <!-- 2 · WHAT & WHY -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">Orientation</div>
-      <h2>Same job. A clearer way to do it.</h2>
-      <p class="lead">ACS is the page you complete during a site visit — record your results, run the automated tests, and get a leave code that signs the site off. ACS 2.0 keeps every one of those jobs and the rules behind them. What's new is the <strong>shape</strong> of the work.</p>
-      <div class="grid g3">
+  <!-- 2 · ORIENTATION / AGENDA -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Same job. A clearer way to do it.</h2>
+      <p class="lead animate d1" style="margin-bottom:26px">ACS is the page you complete during a site visit — record your results, run the automated tests, and get a leave code that signs the site off. ACS 2.0 keeps every one of those jobs and the rules behind them. What's new is the <span class="highlight">shape</span> of the work.</p>
+      <div class="three-col animate d2">
         <div class="card">
-          <div class="ch"><span class="num">1</span><h3>Guided, not scrolled</h3></div>
-          <p>The old single long form becomes a <strong>7-step workflow</strong> down the left. Each step shows a live ✓ / ✕ / ! so you always know what's outstanding.</p>
+          <h3><span class="badge badge-num" style="margin:0 8px 0 0">01</span>Tracks itself</h3>
+          <p>The old page's tabs become a numbered <strong>7-step workflow</strong> down the left — every step shows a live ✓ / ✕ / ! so you always know what's outstanding.</p>
         </div>
         <div class="card">
-          <div class="ch"><span class="num">2</span><h3>One site, one visit</h3></div>
+          <h3><span class="badge badge-num" style="margin:0 8px 0 0">02</span>One site, one visit</h3>
           <p>A dispatch now covers the <strong>whole site</strong> — every cell and sector — instead of one cell at a time.</p>
         </div>
         <div class="card">
-          <div class="ch"><span class="num">3</span><h3>Tests that survive the link</h3></div>
-          <p>The automated tests run <strong>on the server</strong>, so a flaky VSAT link or a sleeping laptop no longer loses your progress.</p>
+          <h3><span class="badge badge-num" style="margin:0 8px 0 0">03</span>More done for you</h3>
+          <p>The camera <strong>configures itself</strong>, the VSAT test picks itself by backhaul, and submit shows every item uploading.</p>
         </div>
       </div>
-      <div class="note key"><span class="ic">i</span><div class="tx"><b>The tests, the thresholds, the leave-code rules and where your data goes are all unchanged.</b> If you knew the old ACS, you already know what's being measured — this is a new way to drive it.</div></div>
+      <div class="note key animate d3"><span class="ic">i</span><div class="tx"><strong>The tests, the thresholds, the leave-code rules and where your data goes are all unchanged.</strong> If you knew the old ACS, you already know what's being measured — this is a new way to drive it.</div></div>
     </div>
-  </section>
+  </div>
 
-  <!-- 3 · THE BIG SHIFT -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">The one change to remember</div>
-      <h2>ACS is now completed per <span style="color:var(--signal)">site</span> — not per cell.</h2>
-      <div class="split">
-        <div class="txt">
-          <p>On the old page you completed a separate ACS for each individual cell. On a three-sector site, that was three dispatches.</p>
-          <p>ACS 2.0 does the site <strong>once</strong>. A single dispatch now covers every cell and sector, and gives you <strong>one submission and one leave code</strong> for the whole site.</p>
-          <div class="note warn" style="margin-top:20px"><span class="ic">!</span><div class="tx"><b>Before you complete ACS, make sure every sector and cell on the site is working.</b> The tests and the drive test are checked across the whole site — a dead sector will show up here.</div></div>
-        </div>
-        <div class="mock">
-          <div class="mock-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">Site-level ACS · what's changed</span></div>
-          <div class="mock-row"><span class="tick pass">✓</span><div class="mr-t"><b>Background tests</b><span>run against all sectors</span></div></div>
-          <div class="mock-row"><span class="tick pass">✓</span><div class="mr-t"><b>Drive test</b><span>validated against each live cell</span></div></div>
-          <div class="mock-row"><span class="tick pass">✓</span><div class="mr-t"><b>One submission</b><span>one leave code, whole site</span></div></div>
-        </div>
-      </div>
+  <!-- 3 · SECTION 01 -->
+  <div class="slide section-divider">
+    <div class="content">
+      <div class="section-number animate">01</div>
+      <h2 class="animate d1">What's Changed</h2>
+      <p class="muted animate d2">The big shift, and how the old page and ACS 2.0 line up</p>
     </div>
-  </section>
+  </div>
 
-  <!-- 4 · OLD VS NEW -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">At a glance</div>
-      <h2>Classic ACS vs ACS 2.0</h2>
-      <div class="vs">
-        <div class="vs-col old">
-          <div class="hd">Classic ACS <span class="tag">Old</span></div>
-          <ul>
-            <li>One long form you scroll top to bottom</li>
-            <li>Completed one cell at a time</li>
-            <li>Tests run in your browser — a disconnect loses them</li>
-            <li>Separate manual CCTV snapshot test</li>
-            <li>You judged whether the VSAT power test applied</li>
-            <li>Little feedback on what actually uploaded on submit</li>
-          </ul>
+  <!-- 4 · THE BIG SHIFT -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">ACS is now completed per <span class="highlight">site</span> — not per cell</h2>
+      <div class="two-col" style="margin-top:20px">
+        <div class="animate d1">
+          <p style="margin-bottom:16px">On the old page you completed a separate ACS for each individual cell. On a three-sector site, that was three dispatches.</p>
+          <p>ACS 2.0 does the site <strong>once</strong>. A single dispatch covers every cell and sector, and gives you <strong>one submission and one leave code</strong> for the whole site.</p>
+          <div class="note warn" style="margin-top:20px"><span class="ic">!</span><div class="tx"><strong>Before you complete ACS, make sure every sector and cell on the site is working.</strong> The tests and the drive test are checked across the whole site — a dead sector will show up here.</div></div>
         </div>
-        <div class="vs-col new">
-          <div class="hd">ACS 2.0 <span class="tag">New</span></div>
-          <ul>
-            <li>7-step workflow with a live status on every step</li>
-            <li>Completed once per site — all cells &amp; sectors</li>
-            <li>Tests run on the server — they keep going regardless</li>
-            <li>CCTV camera configured automatically, end to end</li>
-            <li>The VSAT test knows the backhaul and applies itself</li>
-            <li>Item-by-item upload progress and a clear outcome</li>
-          </ul>
+        <div class="ui animate d2">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">Site-level ACS · what's changed</span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Background tests</b><span>run against all sectors</span></div></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Drive test</b><span>validated against each live cell</span></div></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>One submission</b><span>one leave code, whole site</span></div></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 5 · THE WORKFLOW -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">The workflow</div>
-      <h2>Seven steps, down the left</h2>
-      <p class="lead">The left nav is your checklist for the visit. Work top to bottom; the tick on each step tells you where you stand. You can jump back to any step at any time.</p>
+  <!-- 5 · OLD VS NEW -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Classic ACS vs ACS 2.0</h2>
+      <table class="compare-table animate d1">
+        <thead><tr><th class="old" style="width:20%">Aspect</th><th class="old" style="width:40%">Classic ACS</th><th style="width:40%">ACS 2.0</th></tr></thead>
+        <tbody>
+          <tr><td class="aspect">Layout</td><td>Seven tabs across the top of the page</td><td class="new">Numbered workflow down the left</td></tr>
+          <tr><td class="aspect">Scope</td><td>Completed one cell at a time</td><td class="new">Whole site — all cells &amp; sectors, one visit</td></tr>
+          <tr><td class="aspect">Progress</td><td>No sign on the tabs of what's done</td><td class="new">Live ✓ / ✕ / ! on every step</td></tr>
+          <tr><td class="aspect">CCTV</td><td>A separate, manual snapshot test</td><td class="new">Camera configured automatically, end to end</td></tr>
+          <tr><td class="aspect">VSAT test</td><td>Guessed the backhaul from ping speed</td><td class="new">Reads the site's recorded backhaul</td></tr>
+          <tr><td class="aspect">Submitting</td><td>Little feedback on what uploaded</td><td class="new">Item-by-item progress + a clear outcome</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6 · SECTION 02 -->
+  <div class="slide section-divider">
+    <div class="content">
+      <div class="section-number animate">02</div>
+      <h2 class="animate d1">The Workflow</h2>
+      <p class="muted animate d2">Seven steps down the left — your checklist for the visit</p>
+    </div>
+  </div>
+
+  <!-- 7 · THE SEVEN STEPS -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Seven steps, down the left</h2>
+      <p class="lead animate d1">Work top to bottom; the tick on each step tells you where you stand. You can jump back to any step at any time.</p>
       <div class="rail">
-        <div class="step"><span class="sn">01</span><span class="st"><b>Overview</b><span>Existing dispatches for the site — start a new one or edit the last</span></span><span class="tick dim">–</span></div>
-        <div class="step"><span class="sn">02</span><span class="st"><b>Cell selection</b><span>Choose the dispatch type and the cell(s) in scope</span></span><span class="tick dim">–</span></div>
-        <div class="step"><span class="sn">03</span><span class="st"><b>Data &amp; photos</b><span>Service checks, signal &amp; power readings, installation photos, engineers</span></span><span class="tick dim">–</span></div>
-        <div class="step"><span class="sn">04</span><span class="st"><b>Background tests</b><span>Server-side automated tests — ping, EMC, CCTV, VSAT power</span></span><span class="tick run">↻</span></div>
-        <div class="step"><span class="sn">05</span><span class="st"><b>Trouble tickets</b><span>Open tickets on record for the site</span></span><span class="tick dim">–</span></div>
-        <div class="step"><span class="sn">06</span><span class="st"><b>Satellite info</b><span>Dish pointing &amp; skew — hidden automatically on LEO sites</span></span><span class="tick dim">–</span></div>
-        <div class="step"><span class="sn">07</span><span class="st"><b>Validate &amp; submit</b><span>The pre-submission checklist, your leave code, and upload</span></span><span class="tick dim">–</span></div>
+        <div class="step animate d1"><span class="sn">01</span><span class="st"><b>Overview</b><span>Existing dispatches for the site — start a new one or edit the last</span></span><span class="tick dim">–</span></div>
+        <div class="step animate d1"><span class="sn">02</span><span class="st"><b>Cell selection</b><span>Choose the dispatch type and the cell(s) in scope</span></span><span class="tick dim">–</span></div>
+        <div class="step animate d2"><span class="sn">03</span><span class="st"><b>Data &amp; photos</b><span>Service checks, signal &amp; power readings, installation photos, engineers</span></span><span class="tick dim">–</span></div>
+        <div class="step animate d2"><span class="sn">04</span><span class="st"><b>Background tests</b><span>Server-side automated tests — ping, EMC, CCTV, VSAT power</span></span><span class="tick run">↻</span></div>
+        <div class="step animate d3"><span class="sn">05</span><span class="st"><b>Trouble tickets</b><span>Open tickets on record for the site</span></span><span class="tick dim">–</span></div>
+        <div class="step animate d3"><span class="sn">06</span><span class="st"><b>Satellite info</b><span>Dish pointing &amp; skew — hidden automatically on LEO sites</span></span><span class="tick dim">–</span></div>
+        <div class="step animate d4"><span class="sn">07</span><span class="st"><b>Validate &amp; submit</b><span>The pre-submission checklist, your leave code, and upload</span></span><span class="tick dim">–</span></div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 6 · STEPS 1-3 START -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">Steps 01–03 · Getting set up</div>
-      <h2>Open the site, pick the work, record the data</h2>
-      <div class="grid g3">
-        <div class="card">
-          <div class="ch"><span class="num">01</span><h3>Overview</h3></div>
-          <p>See every past dispatch for the site. Hit <strong>+ New dispatch</strong> to start, or <strong>Edit</strong> the latest to carry on. A short intro reminds you the ACS is now site-level.</p>
-        </div>
-        <div class="card">
-          <div class="ch"><span class="num">02</span><h3>Cell selection</h3></div>
-          <p>Choose the <strong>dispatch type</strong> and the cell in scope. The rest of the workflow stays locked until a type is chosen, so you can't skip it by accident.</p>
-        </div>
-        <div class="card">
-          <div class="ch"><span class="num">03</span><h3>Data &amp; photos</h3></div>
-          <p>Service checks, signal &amp; power readings, engineer names, and your <strong>installation and Snyper photos</strong> — same fields you know, laid out to breathe.</p>
-        </div>
+  <!-- 8 · STEPS 1-3 -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Open the site, pick the work, record the data</h2>
+      <p class="muted animate d1" style="margin-bottom:22px">Steps 01–03 · getting set up</p>
+      <div class="three-col animate d2">
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">01</span>Overview</h3><p>See every past dispatch for the site. Hit <strong>+ New dispatch</strong> to start, or <strong>Edit</strong> the latest to carry on.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">02</span>Cell selection</h3><p>Choose the <strong>dispatch type</strong> and the cell in scope. The workflow stays locked until a type is chosen, so you can't skip it.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">03</span>Data &amp; photos</h3><p>Service checks, signal &amp; power readings, engineer names, and your <strong>installation and Snyper photos</strong> — the same fields you know.</p></div>
       </div>
-      <div class="note"><span class="tick pass" style="width:24px;height:24px">✕</span><div class="tx" style="font-size:13.5px"><b>New:</b> picked the wrong photo? Every thumbnail now has a small <strong>✕</strong> to remove it before you submit. Selecting more photos <em>adds</em> to the set rather than replacing it — so remove, don't re-pick.</div></div>
+      <div class="note animate d3"><span class="tick fail" style="width:26px;height:26px">✕</span><div class="tx"><strong>New:</strong> picked the wrong photo? Every thumbnail now has a small <strong>✕</strong> to remove it before you submit. Selecting more photos <em>adds</em> to the set rather than replacing it — so remove, don't re-pick.</div></div>
     </div>
-  </section>
+  </div>
 
-  <!-- 7 · BACKGROUND TESTS -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">Step 04 · The big one</div>
-      <h2>Background tests run on the server</h2>
-      <div class="split">
-        <div class="txt">
-          <p>Press <strong>Initiate all background tests</strong> and confirm every sector is working. From then on the tests run on the server — <strong>move between tabs, and they keep going</strong> even if your link drops.</p>
-          <p>Each test is a card with a live status. The 15-minute BTS ping runs <strong>per sector</strong>, with its own timer and a <strong>Re-run</strong> button. Start it early — it's the longest one.</p>
-          <div class="note key" style="margin-top:18px"><span class="ic">i</span><div class="tx"><b>Expand any card</b> to see the 60-second measurement blocks building up — ping, Es/No, C/No and the full EMC readout.</div></div>
+  <!-- 9 · BACKGROUND TESTS -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Every sector, tested and tracked live</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 04 · Background tests</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">Press <strong>Initiate all background tests</strong> and confirm every sector is up. The tests now cover <strong>the whole site</strong> — every BTS and every EMC — not just one cell.</p>
+          <p>Each test is a card with a live status. The 15-minute BTS ping runs <strong>per sector, in parallel</strong>, each with its own timer and a <strong>Re-run</strong> button. Start it early — it's the longest, and it runs server-side while you fill in other steps.</p>
+          <div class="note key" style="margin-top:18px"><span class="ic">i</span><div class="tx"><strong>Expand any card</strong> to see the 60-second measurement blocks building up — ping, Es/No, C/No and the full EMC readout.</div></div>
         </div>
-        <div class="mock">
-          <div class="mock-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">04 · Background tests</span></div>
-          <div class="mock-row"><span class="tick pass">✓</span><div class="mr-t"><b>Basic ping</b><span>BTS · EMC · CCTV reachability</span></div><span class="mr-s"><span class="lbl pass">Pass</span></span></div>
-          <div class="mock-row"><span class="tick run">↻</span><div class="mr-t"><b>BTS ping</b><span>15-min latency &amp; loss per BTS</span></div><span class="mr-s"><span class="lbl run">Running</span><span class="dim">⏱ 06:12 · 2/3</span></span></div>
-          <div class="mock-row"><span class="tick pass">✓</span><div class="mr-t"><b>EMC test</b><span>Power &amp; environment</span></div><span class="mr-s"><span class="lbl pass">Pass</span><span class="dim">3/3 EMC</span></span></div>
-          <div class="mock-row"><span class="tick run">↻</span><div class="mr-t"><b>CCTV</b><span>Camera config + region</span></div><span class="mr-s"><span class="lbl run">Running</span></span></div>
-          <div class="mock-row"><span class="tick dim">–</span><div class="mr-t"><b>VSAT power levels</b><span>Es/No &amp; C/No</span></div><span class="mr-s"><span class="lbl dim">N/A · LEO</span></span></div>
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">04 · Background tests</span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Basic ping</b><span>BTS · EMC · CCTV reachability</span></div><span class="rs"><span class="lbl g">Pass</span></span></div>
+          <div class="ui-row"><span class="tick run">↻</span><div class="rt"><b>BTS ping</b><span>15-min latency &amp; loss per BTS</span></div><span class="rs"><span class="lbl b">Running</span><span class="m">06:12 · 2/3</span></span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>EMC test</b><span>Power &amp; environment</span></div><span class="rs"><span class="lbl g">Pass</span><span class="m">3/3 EMC</span></span></div>
+          <div class="ui-row"><span class="tick run">↻</span><div class="rt"><b>CCTV</b><span>Camera config + region</span></div><span class="rs"><span class="lbl b">Running</span></span></div>
+          <div class="ui-row"><span class="tick dim">–</span><div class="rt"><b>VSAT power levels</b><span>Es/No &amp; C/No</span></div><span class="rs"><span class="lbl m">N/A · LEO</span></span></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 8 · CCTV -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">Step 04 · CCTV</div>
-      <h2>The camera configures itself</h2>
-      <div class="split">
-        <div class="txt">
-          <p>There's no separate CCTV test to run any more. The CCTV card does the whole job automatically: it <strong>checks the camera, applies the standard configuration, and pulls a snapshot</strong>.</p>
+  <!-- 10 · CCTV -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">The camera configures itself</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 04 · CCTV</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">There's no separate CCTV test to run any more. The CCTV card does the whole job automatically: it <strong>checks the camera, applies the standard configuration, and pulls a snapshot</strong>.</p>
           <p>Your part is the bit only a human can do: when the snapshot loads, <strong>frame the cabinet box</strong>, then tick that the <strong>cabinet is in the box and the solar panels are visible</strong>. That pushes the intrusion region and completes the card.</p>
-          <div class="note"><span class="ic" style="background:var(--signal);color:#fff">↻</span><div class="tx">A live status line shows the current step — <em>checking… applying… loading snapshot… pushing region</em> — with a full log behind <strong>Show log</strong> if you need it.</div></div>
+          <div class="note" style="margin-top:18px"><span class="ic" style="background:var(--amn-accent);color:#fff">↻</span><div class="tx">A live status line shows the current step — <em>checking… applying… loading snapshot… pushing region</em> — with a full log behind <strong>Show log</strong> if you need it.</div></div>
         </div>
-        <div class="mock">
-          <div class="mock-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">CCTV · automated setup</span></div>
-          <div class="mock-row"><span class="tick pass">✓</span><div class="mr-t"><b>Camera reachable &amp; authed</b><span>DS-2CD2 · FW V5.7</span></div></div>
-          <div class="mock-row"><span class="tick pass">✓</span><div class="mr-t"><b>Standard config applied</b><span>including FTP upload target</span></div></div>
-          <div class="mock-row"><span class="tick run">↻</span><div class="mr-t"><b>Snapshot loaded — frame the cabinet</b><span>drag a box around the cabinet</span></div></div>
-          <div class="mock-row"><span class="tick dim">–</span><div class="mr-t"><b>Confirm cabinet &amp; solar visible</b><span>then the region is pushed</span></div><button class="ghostbtn">Confirm</button></div>
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">CCTV · automated setup</span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Camera reachable &amp; authed</b><span>DS-2CD2 · FW V5.7</span></div></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Standard config applied</b><span>including FTP upload target</span></div></div>
+          <div class="ui-row"><span class="tick run">↻</span><div class="rt"><b>Snapshot loaded — frame the cabinet</b><span>drag a box around the cabinet</span></div></div>
+          <div class="ui-row"><span class="tick dim">–</span><div class="rt"><b>Confirm cabinet &amp; solar visible</b><span>then the region is pushed</span></div><button class="ghostbtn">Confirm</button></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 9 · VSAT / BACKHAUL -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">Step 04 · VSAT power levels</div>
-      <h2>The VSAT test knows the backhaul</h2>
-      <p class="lead">You no longer decide whether the VSAT power-level test applies. ACS 2.0 reads the site's backhaul and does the right thing automatically.</p>
-      <div class="grid g2">
+  <!-- 11 · VSAT -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">The VSAT test knows the backhaul</h2>
+      <p class="lead animate d1">ACS 2.0 reads the site's recorded backhaul and runs the right check automatically — so you don't have to work out whether the dish needs a power test.</p>
+      <div class="grid2 animate d2">
         <div class="card">
-          <div class="ch"><span class="tick pass" style="width:26px;height:26px">✓</span><h3>VSAT sites (Gilat, Hughes…)</h3></div>
+          <h3 style="display:flex;align-items:center;gap:10px"><span class="tick pass">✓</span> VSAT sites (Gilat, Hughes…)</h3>
           <p>The <strong>Es/No and C/No power-level test runs</strong> and must pass, exactly as before. Expand the card to watch both level sets build up in 60-second blocks.</p>
         </div>
         <div class="card">
-          <div class="ch"><span class="tick dim" style="width:26px;height:26px">–</span><h3>LEO sites (Starlink, Amazon…)</h3></div>
+          <h3 style="display:flex;align-items:center;gap:10px"><span class="tick dim">–</span> LEO sites (Starlink, Amazon…)</h3>
           <p>There's no dish to point, so the card shows <strong>N/A</strong> and the satellite step is hidden. <strong>That's correct — not an error.</strong> The 15-minute BTS ping covers the link.</p>
         </div>
       </div>
-      <div class="note warn"><span class="ic">!</span><div class="tx">If a genuine VSAT site ever shows the power test as N/A, its backhaul may be recorded wrongly — flag it to GNOC rather than signing off, because the dish won't have been power-checked.</div></div>
+      <div class="note warn animate d3"><span class="ic">!</span><div class="tx">If a genuine VSAT site ever shows the power test as N/A, its backhaul may be recorded wrongly — flag it to GNOC rather than signing off, because the dish won't have been power-checked.</div></div>
     </div>
-  </section>
+  </div>
 
-  <!-- 10 · SATELLITE -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">Step 06 · Satellite info</div>
-      <h2>Pointing &amp; skew — only when it matters</h2>
-      <div class="split">
-        <div class="txt">
-          <p>For dish-backhaul sites, the satellite step shows the calculated pointing and <strong>skew angle</strong>. Enter your measured skew and confirm it — it must sit within tolerance of the calculated value.</p>
+  <!-- 12 · SATELLITE -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Pointing &amp; skew — only when it matters</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 06 · Satellite info</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">For dish-backhaul sites, the satellite step shows the calculated pointing and <strong>skew angle</strong>. Enter your measured skew and confirm it — it must sit within tolerance of the calculated value.</p>
           <p>On <strong>LEO sites this whole step disappears</strong>, because there's no dish to skew.</p>
-          <div class="note warn" style="margin-top:18px"><span class="ic">!</span><div class="tx"><b>If the satellite data hasn't loaded, the skew check will hold as a failure — not pass.</b> Wait for the pointing data to appear (select a cell if needed), then enter and confirm your reading.</div></div>
+          <div class="note warn" style="margin-top:18px"><span class="ic">!</span><div class="tx"><strong>If the satellite data hasn't loaded, the skew check holds as a failure — not a pass.</strong> Wait for the pointing data to appear (select a cell if needed), then enter and confirm your reading.</div></div>
         </div>
-        <div class="mock">
-          <div class="mock-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">06 · Satellite pointing</span></div>
-          <div class="mock-row"><div class="mr-t"><b>Azimuth</b></div><span class="mr-s"><span class="lbl">122.4°</span></span></div>
-          <div class="mock-row"><div class="mr-t"><b>Elevation</b></div><span class="mr-s"><span class="lbl">31.8°</span></span></div>
-          <div class="mock-row"><div class="mr-t"><b>Calculated skew</b></div><span class="mr-s"><span class="lbl">−18.5°</span></span></div>
-          <div class="mock-row"><span class="tick pass">✓</span><div class="mr-t"><b>Measured skew confirmed</b><span>within 5° tolerance</span></div><span class="mr-s"><span class="lbl pass">−17.0°</span></span></div>
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">06 · Satellite pointing</span></div>
+          <div class="ui-row"><div class="rt"><b>Azimuth</b></div><span class="rs"><span class="lbl">122.4°</span></span></div>
+          <div class="ui-row"><div class="rt"><b>Elevation</b></div><span class="rs"><span class="lbl">31.8°</span></span></div>
+          <div class="ui-row"><div class="rt"><b>Calculated skew</b></div><span class="rs"><span class="lbl">−18.5°</span></span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Measured skew confirmed</b><span>within 5° tolerance</span></div><span class="rs"><span class="lbl g">−17.0°</span></span></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 11 · VALIDATE & SUBMIT -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">Step 07 · Validate &amp; submit</div>
-      <h2>The checklist, your leave code, and upload</h2>
-      <div class="split">
-        <div class="txt">
-          <p>The Validate step tallies everything: <strong>Passed / Failed / N/A</strong>. Any failure has a <strong>Fix →</strong> button that jumps you straight to the field that needs attention.</p>
-          <p><strong>Zero failures issues a leave code automatically.</strong> If there are failures you can still submit — but the leave code will have to come from GNOC.</p>
+  <!-- 13 · VALIDATE & SUBMIT -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">The checklist, your leave code, and upload</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 07 · Validate &amp; submit</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">The Validate step tallies everything: <strong>Passed / Failed / N/A</strong>. Any failure has a <strong>Fix →</strong> button that jumps you straight to the field that needs attention.</p>
+          <p style="margin-bottom:14px"><strong>Zero failures issues a leave code automatically.</strong> With failures you can still submit — but the leave code has to come from GNOC.</p>
           <p>On submit you get an <strong>item-by-item progress list</strong>, then an outcome box confirming everything reached the ACS server — so you're never guessing whether it went through.</p>
         </div>
-        <div class="mock" style="padding:16px">
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">07 · Validate &amp; submit</span></div>
           <div class="counts">
             <div><div class="n p">14</div><div class="cl">Passed</div></div>
             <div><div class="n f">0</div><div class="cl">Failed</div></div>
@@ -479,123 +447,105 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 12 · WHAT'S THE SAME -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">Reassurance</div>
-      <h2>What hasn't changed</h2>
-      <p class="lead">This is a new way to drive the same machine. Everything you already trust about ACS is intact.</p>
-      <div class="taglist">
-        <span class="pill"><span class="tick pass">✓</span> The tests themselves &amp; what they measure</span>
-        <span class="pill"><span class="tick pass">✓</span> Validation rules &amp; thresholds</span>
-        <span class="pill"><span class="tick pass">✓</span> Leave-code logic &amp; GNOC escalation</span>
-        <span class="pill"><span class="tick pass">✓</span> Signal, cross-pol &amp; power readings</span>
-        <span class="pill"><span class="tick pass">✓</span> Drive test &amp; Snyper survey</span>
-        <span class="pill"><span class="tick pass">✓</span> Engineer sign-off details</span>
-        <span class="pill"><span class="tick pass">✓</span> Data goes to the same ACS server</span>
-      </div>
-      <div class="note key"><span class="ic">i</span><div class="tx">If you were quick on the old page, you'll be quicker here — the fields are the same, they're just laid out as a workflow instead of one long form.</div></div>
+  <!-- 14 · SECTION 03 -->
+  <div class="slide section-divider">
+    <div class="content">
+      <div class="section-number animate">03</div>
+      <h2 class="animate d1">On Site</h2>
+      <p class="muted animate d2">What stays the same, and what to remember on the day</p>
     </div>
-  </section>
+  </div>
 
-  <!-- 13 · FIELD TIPS -->
-  <section class="slide">
-    <div class="slide-inner">
-      <div class="kicker">On site</div>
-      <h2>Six things to remember</h2>
-      <div class="qr">
-        <div class="qr-item"><span class="qn">01</span><div><b>Check every sector first</b><span>The tests cover the whole site — confirm all sectors and cells are up before you start.</span></div></div>
-        <div class="qr-item"><span class="qn">02</span><div><b>Start the BTS ping early</b><span>It's a 15-minute test per sector. Kick off "Initiate all" as soon as you arrive and let it run.</span></div></div>
-        <div class="qr-item"><span class="qn">03</span><div><b>Tests survive a dropout</b><span>They run on the server — switch tabs, lose the link, come back. Progress isn't lost.</span></div></div>
-        <div class="qr-item"><span class="qn">04</span><div><b>CCTV is automatic</b><span>Just frame the cabinet box when the snapshot loads and confirm cabinet + solar visible.</span></div></div>
-        <div class="qr-item"><span class="qn">05</span><div><b>N/A on LEO is normal</b><span>Starlink/Amazon sites show the VSAT power test as N/A — that's expected, not a fault.</span></div></div>
-        <div class="qr-item"><span class="qn">06</span><div><b>Watch the submit outcome</b><span>The outcome box confirms every item uploaded. If anything failed, fix it and submit again.</span></div></div>
+  <!-- 15 · WHAT'S THE SAME -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">What hasn't changed</h2>
+      <p class="lead animate d1">This is a new way to drive the same machine. Everything you already trust about ACS is intact.</p>
+      <div class="pills animate d2">
+        <span class="pill"><span class="tick pass sm">✓</span> The tests themselves &amp; what they measure</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Validation rules &amp; thresholds</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Leave-code logic &amp; GNOC escalation</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Signal, cross-pol &amp; power readings</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Drive test &amp; Snyper survey</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Engineer sign-off details</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Data goes to the same ACS server</span>
+      </div>
+      <div class="note key animate d3"><span class="ic">i</span><div class="tx">If you were quick on the old page, you'll be quicker here — the fields are the same, now laid out as a guided workflow that tracks what's outstanding, instead of tabs you had to keep on top of yourself.</div></div>
+    </div>
+  </div>
+
+  <!-- 16 · FIELD TIPS -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Six things to remember</h2>
+      <div class="grid2 animate d1" style="margin-top:20px">
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">01</span>Check every sector first</h3><p>The tests cover the whole site — confirm all sectors and cells are up before you start.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">02</span>Start the BTS ping early</h3><p>It's a 15-minute test per sector. Kick off "Initiate all" as soon as you arrive and let it run.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">03</span>Start tests, then keep working</h3><p>The long ping runs server-side — move on to other steps while it completes. Just don't reload the page, or it restarts.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">04</span>CCTV is automatic</h3><p>Just frame the cabinet box when the snapshot loads and confirm cabinet + solar are visible.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">05</span>N/A on LEO is normal</h3><p>Starlink/Amazon sites show the VSAT power test as N/A — that's expected, not a fault.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">06</span>Watch the submit outcome</h3><p>The outcome box confirms every item uploaded. If anything failed, fix it and submit again.</p></div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 14 · CLOSE -->
-  <section class="slide hero">
-    <div class="hero-grid"></div>
-    <div class="slide-inner hero-inner">
-      <span class="badge"><span class="sig"><i></i><i></i><i></i><i></i></span> Ready for the field</span>
-      <h2 style="font-size:clamp(28px,4.6vw,48px)">Work down the seven steps.<br>Zero failures, and the leave code is yours.</h2>
-      <p class="lead">One site, one dispatch, one submission. The tool guides you; the ticks tell you what's left. When every step reads ✓, you're done.</p>
-      <div class="taglist" style="margin-top:30px">
-        <span class="pill mono"><span class="tick pass">✓</span> Overview</span>
-        <span class="pill mono"><span class="tick pass">✓</span> Cell selection</span>
-        <span class="pill mono"><span class="tick pass">✓</span> Data &amp; photos</span>
-        <span class="pill mono"><span class="tick pass">✓</span> Background tests</span>
-        <span class="pill mono"><span class="tick pass">✓</span> Trouble tickets</span>
-        <span class="pill mono"><span class="tick pass">✓</span> Satellite</span>
-        <span class="pill mono"><span class="tick pass">✓</span> Validate &amp; submit</span>
+  <!-- 17 · CLOSE -->
+  <div class="slide title-slide">
+    <div class="content" style="text-align:center">
+      <div class="animate"><span class="badge badge-yellow">READY FOR THE FIELD</span></div>
+      <h2 class="animate d1" style="font-size:2.3rem;color:#fff;max-width:20ch;margin:8px auto .3em">Work down the seven steps. Zero failures, and the leave code is yours.</h2>
+      <p class="muted animate d2" style="max-width:60ch;margin:0 auto">One site, one dispatch, one submission. The tool guides you; the ticks tell you what's left. When every step reads ✓, you're done.</p>
+      <div class="pills animate d3" style="justify-content:center;margin-top:28px">
+        <span class="pill mono"><span class="tick pass sm">✓</span> Overview</span>
+        <span class="pill mono"><span class="tick pass sm">✓</span> Cell selection</span>
+        <span class="pill mono"><span class="tick pass sm">✓</span> Data &amp; photos</span>
+        <span class="pill mono"><span class="tick pass sm">✓</span> Background tests</span>
+        <span class="pill mono"><span class="tick pass sm">✓</span> Trouble tickets</span>
+        <span class="pill mono"><span class="tick pass sm">✓</span> Satellite</span>
+        <span class="pill mono"><span class="tick pass sm">✓</span> Validate &amp; submit</span>
       </div>
-      <p style="margin-top:30px;font-size:13px;color:var(--faint)">Questions during a visit go to GNOC. Keep this deck handy for your first few sites.</p>
+      <p class="muted animate d4" style="margin-top:34px">Africa Mobile Networks &bull; ACS 2.0 &bull; Questions during a visit go to GNOC</p>
     </div>
-  </section>
+  </div>
 
+</div><!-- /deck -->
+
+<div class="nav-bar">
+  <span class="brand">AMN &bull; ACS <b>2.0</b></span>
+  <div class="mid">
+    <button id="prevBtn" onclick="go(-1)">← Previous</button>
+    <span class="slide-counter" id="counter">1 / 17</span>
+    <button id="nextBtn" onclick="go(1)">Next →</button>
+  </div>
 </div>
 
-<div class="hint"><span class="kbd">←</span><span class="kbd">→</span> to navigate</div>
-
-<nav class="chrome">
-  <span class="brandmini"><span class="sig" style="height:11px"><i></i><i></i><i></i><i></i></span> AMN · ACS <b>2.0</b></span>
-  <div class="progress" id="progress"></div>
-  <div class="ctl">
-    <button class="navbtn" id="themeBtn" title="Toggle theme" aria-label="Toggle light/dark theme">◐</button>
-    <button class="navbtn" id="prev" aria-label="Previous slide">‹</button>
-    <span class="count" id="count"><b>01</b> / 14</span>
-    <button class="navbtn" id="next" aria-label="Next slide">›</button>
-  </div>
-</nav>
-
 <script>
-  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
-  var total = slides.length, idx = 0;
-  var progress = document.getElementById('progress');
-  var count = document.getElementById('count');
-  var prev = document.getElementById('prev'), next = document.getElementById('next');
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  let cur = 0;
 
-  var pad = function(n){ return (n<10?'0':'')+n; };
-
-  slides.forEach(function(_, i){
-    var b = document.createElement('button');
-    b.setAttribute('aria-label', 'Go to slide ' + (i+1));
-    b.addEventListener('click', function(){ go(i); });
-    progress.appendChild(b);
-  });
-  var dots = Array.prototype.slice.call(progress.children);
-
-  function render(){
-    slides.forEach(function(s,i){ s.classList.toggle('active', i===idx); });
-    dots.forEach(function(d,i){ d.classList.toggle('on', i===idx); d.classList.toggle('seen', i<idx); });
-    count.innerHTML = '<b>'+pad(idx+1)+'</b> / '+pad(total);
-    prev.disabled = idx===0; next.disabled = idx===total-1;
-    var main = slides[idx]; if (main) main.scrollTop = 0;
+  function show(i) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[i].classList.add('active');
+    slides[i].scrollTop = 0;
+    document.getElementById('counter').textContent = `${i+1} / ${total}`;
+    document.getElementById('prevBtn').disabled = (i === 0);
+    document.getElementById('nextBtn').disabled = (i === total - 1);
+    document.getElementById('progressBar').style.width = `${((i+1)/total)*100}%`;
   }
-  function go(i){ idx = Math.max(0, Math.min(total-1, i)); render(); }
-
-  prev.addEventListener('click', function(){ go(idx-1); });
-  next.addEventListener('click', function(){ go(idx+1); });
-  document.addEventListener('keydown', function(e){
-    if (e.key==='ArrowRight' || e.key==='PageDown'){ go(idx+1); e.preventDefault(); }
-    else if (e.key==='ArrowLeft' || e.key==='PageUp'){ go(idx-1); e.preventDefault(); }
-    else if (e.key===' '){ go(idx+1); e.preventDefault(); }
-    else if (e.key==='Home'){ go(0); e.preventDefault(); }
-    else if (e.key==='End'){ go(total-1); e.preventDefault(); }
+  function go(d) {
+    const next = cur + d;
+    if (next >= 0 && next < total) { cur = next; show(cur); }
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
+    if (e.key === 'Home')       { e.preventDefault(); cur = 0; show(cur); }
+    if (e.key === 'End')        { e.preventDefault(); cur = total-1; show(cur); }
   });
-
-  // theme toggle: cycle auto -> light -> dark
-  var themeBtn = document.getElementById('themeBtn');
-  var root = document.documentElement;
-  themeBtn.addEventListener('click', function(){
-    var cur = root.getAttribute('data-theme');
-    var nextT = cur==='light' ? 'dark' : (cur==='dark' ? '' : 'light');
-    if (nextT) root.setAttribute('data-theme', nextT); else root.removeAttribute('data-theme');
-    themeBtn.textContent = nextT==='light' ? '☀' : (nextT==='dark' ? '☾' : '◐');
-  });
-
-  render();
+  show(0);
 </script>
+</body>
+</html>
