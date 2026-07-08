@@ -234,7 +234,9 @@
           <span class="badge badge-yellow" style="margin:0;">01</span> Drive Test Tool
         </h3>
         <p>A new tool for automated signal coverage testing. Drive around a cell site
-           while the app logs signal strength and GPS position, building a live coverage map.</p>
+           while the app logs signal strength and GPS position, building a live coverage map.
+           <span class="highlight">Now updated:</span> one drive validates every cell at the site —
+           all sectors and all technologies.</p>
       </div>
       <div class="card">
         <h3 style="display:flex;align-items:center;gap:10px;">
@@ -269,6 +271,11 @@
     <div class="section-number animate">01</div>
     <h2 class="animate d1">Drive Test Tool</h2>
     <p class="muted animate d2">Automated signal coverage testing while driving around a site</p>
+    <p class="animate d3" style="margin-top:18px;">
+      <span class="badge badge-yellow">UPDATED</span>
+      One drive now validates <span class="highlight">all of a site's cells</span> — every sector,
+      every technology (2G/3G/4G/5G) — in a single session and a single KML file.
+    </p>
   </div>
 </div>
 
@@ -291,6 +298,7 @@
           <li><strong>📡 Signal Logging</strong> — captures strength, quality, cell ID, and network type (2G–5G) every 10 seconds</li>
           <li><strong>📍 GPS Tracking</strong> — records precise location, altitude, and speed alongside every reading</li>
           <li><strong>🗺️ Live Map</strong> — colour-coded dots show coverage quality in real time as you drive</li>
+          <li><strong>📶 Whole-Site Validation</strong> — a single drive now covers <span class="highlight">every cell at the site</span>, across all sectors and technologies, instead of one cell per drive</li>
         </ul>
       </div>
       <div class="animate d2">
@@ -314,10 +322,15 @@
           Before driving, the engineer sets up the test at the tower site:
         </p>
         <ul>
-          <li><strong>Select or type the site name</strong></li>
-          <li><strong>Mark your location</strong> — stand next to the tower and tap to capture your GPS position</li>
-          <li><strong>Scan for available cells</strong> — the phone detects nearby towers</li>
-          <li><strong>Select the target cell</strong> — the specific cell you are testing</li>
+          <li><strong>Select the Site ID</strong> (e.g. OLR0050) — the app loads
+              <span class="highlight">all of the site's cells</span> as targets automatically,
+              each with a technology badge (2G / 3G / 4G)</li>
+          <li><strong>Mark your location</strong> — stand directly next to the mast and tap
+              <em>Mark Site Location</em>; this is the reference point for the distance checks</li>
+          <li><strong>Set the phone to the lowest technology first</strong> — e.g. <em>2G only</em>
+              in the phone's preferred-network-type settings</li>
+          <li><strong>Scan for available cells</strong> — the list shows which target cells the
+              phone can currently see</li>
         </ul>
         <p style="margin-top:20px;">
           Once set up, tap <span class="highlight">Start</span> and begin driving. The app runs
@@ -326,17 +339,64 @@
       </div>
       <div class="animate d2">
         <div class="screenshot-placeholder">
-          <img src="5.png">
+          <img src="step1-site-selected.png">
         </div>
+        <p class="muted" style="margin-top:10px;text-align:center;">
+          Site selected — its cells auto-load as targets with technology badges
+        </p>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 6 — Drive Test: Live Dashboard
+     SLIDE 6 — Drive Test: One Drive, Every Technology
      ═══════════════════════════════════════════ -->
 <div class="slide phone-screenshot" data-slide="6">
+  <div class="content">
+    <h2 class="animate">One Drive, Every Technology <span class="badge badge-yellow" style="vertical-align:middle;margin-left:10px;">NEW</span></h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:15px;">
+          A phone can only "see" the cells of the network mode it is currently on — on 2G it
+          <span class="highlight">cannot see 4G cells at all</span>. So on a multi-technology site,
+          the app <span class="highlight">guides you through each technology in turn</span>.
+        </p>
+        <h3>Cell labels in the scan list</h3>
+        <ul>
+          <li><span class="green"><strong>✓ TARGET</strong></span> — selected for validation; tap a cell to add or remove it</li>
+          <li><strong>EXPECTED</strong> — belongs to this site on the current technology, but the phone isn't picking it up right now</li>
+          <li><span class="red"><strong>WRONG MODE</strong></span> — greyed out; a cell on a technology the phone can't see right now, with a note telling you which mode to switch to</li>
+        </ul>
+        <h3 style="margin-top:14px;">Follow the prompts — don't stop the drive</h3>
+        <div class="flow" style="margin:15px 0;">
+          <div class="flow-step">Start in 2G</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step active-step">✓ 2G done — switch to 3G/4G</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step" style="border-color:var(--amn-green);color:var(--amn-green);">✓ All cells validated</div>
+        </div>
+        <p class="muted">
+          Change the phone's preferred network type only when the app asks, and keep driving —
+          the drive keeps logging across the switch. Single-technology sites show no prompts at all.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="step3-scan.png">
+        </div>
+        <p class="muted" style="margin-top:10px;text-align:center;">
+          Scan with the phone on 4G — the 2G cell is greyed with a "switch to 2G" note
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 7 — Drive Test: Live Dashboard
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="7">
   <div class="content">
     <h2 class="animate">Live Dashboard</h2>
     <div class="two-col">
@@ -348,15 +408,17 @@
         <ul>
           <li>Colour-coded map — green (strong) to red (weak)</li>
           <li>Total data points collected</li>
-          <li>Target cell match count</li>
+          <li>Match counts for the target cells</li>
           <li>Maximum signal strength recorded</li>
           <li>Current speed</li>
           <li>Signal strength chart over time</li>
           <li>Nearby cells detected</li>
         </ul>
         <p style="margin-top:15px;">
-          The dashboard also shows <span class="highlight">7 validation criteria</span> with
-          live pass/fail indicators so you know if you have enough data before stopping.
+          The dashboard shows <span class="highlight">one row per target cell</span> with a live
+          PASS / FAIL indicator. A cell turns to <span class="green">PASS</span> once enough good
+          readings are collected for it. While you're on 2G, the 3G/4G cells sit at
+          <span class="red">FAIL</span> — that's expected; they fill in after you switch modes.
         </p>
         <p style="margin-top:15px;">
           <strong style="color:var(--amn-orange);">Important:</strong> While a drive test is running,
@@ -368,36 +430,51 @@
         <div class="screenshot-placeholder">
           <img src="6.png">
         </div>
+        <div class="screenshot-placeholder" style="margin-top:14px;">
+          <img src="step5-percell.png">
+        </div>
+        <p class="muted" style="margin-top:10px;text-align:center;">
+          Per-cell coverage rows — each target cell validates independently
+        </p>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 7 — Drive Test: Validation & Export
+     SLIDE 8 — Drive Test: Validation & Export
      ═══════════════════════════════════════════ -->
-<div class="slide" data-slide="7">
+<div class="slide" data-slide="8">
   <div class="content">
     <h2 class="animate">Validation &amp; Export</h2>
     <div class="two-col">
       <div class="animate d1">
-        <h3>Automatic Validation</h3>
-        <p style="margin-bottom:15px;">The app checks 7 criteria — matching the <span class="highlight">ACS criteria</span> — to confirm the drive test is complete:</p>
+        <h3>Automatic Validation — Per Cell</h3>
+        <p style="margin-bottom:15px;">The app checks the <span class="highlight">ACS criteria</span>.
+          Two rules apply to the whole drive, and the rest apply to
+          <span class="highlight">every target cell individually</span> — the drive is complete only
+          when every cell passes:</p>
         <table class="compare-table" style="font-size:.95rem;">
+          <tr><th>Whole drive</th><th></th></tr>
           <tr><td>Minimum 100 data points</td><td class="green">✓ / ✗</td></tr>
-          <tr><td>At least 60 target-cell readings</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Data is recent (within 4 days)</td><td class="green">✓ / ✗</td></tr>
+          <tr><th>Each target cell</th><th></th></tr>
+          <tr><td>At least 60 matching readings</td><td class="green">✓ / ✗</td></tr>
           <tr><td>Maximum signal ≥ –55 dBm</td><td class="green">✓ / ✗</td></tr>
           <tr><td>Closest approach within 2 km</td><td class="green">✓ / ✗</td></tr>
           <tr><td>Coverage extent ≥ 1 km</td><td class="green">✓ / ✗</td></tr>
           <tr><td>Signal at range (>600 m)</td><td class="green">✓ / ✗</td></tr>
-          <tr><td>Data is recent (within 4 days)</td><td class="green">✓ / ✗</td></tr>
         </table>
+        <p class="muted" style="margin-top:12px;">
+          When every cell has passed, the app shows <span class="green">"✓ All cells validated"</span>
+          with buttons to keep driving, stop, or export.
+        </p>
       </div>
       <div class="animate d2">
         <h3>KML Export</h3>
         <p style="margin-bottom:15px;">
-          After stopping the test, results can be <span class="highlight">exported as a KML file</span>
-          — compatible with Google Earth and the ACS system.
+          Results are <span class="highlight">exported as one combined KML file</span> covering
+          every technology and sector driven — compatible with Google Earth and the ACS system.
         </p>
         <div class="screenshot-placeholder">
           <img src="7.png">
@@ -405,15 +482,19 @@
         <p class="muted" style="margin-top:12px;">
           Signal readings are colour-coded: green (strong), amber, orange, red (weak).
         </p>
+        <p style="margin-top:12px;">
+          The file also records <span class="highlight">which engineer conducted the drive</span>,
+          the site, and the start time — an independent record of who did the test.
+        </p>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 8 — Section: Field Survey Tool
+     SLIDE 9 — Section: Field Survey Tool
      ═══════════════════════════════════════════ -->
-<div class="slide section-divider" data-slide="8">
+<div class="slide section-divider" data-slide="9">
   <div class="content">
     <div class="section-number animate">02</div>
     <h2 class="animate d1">Field Survey Tool</h2>
@@ -422,9 +503,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 9 — From Paper to Digital
+     SLIDE 10 — From Paper to Digital
      ═══════════════════════════════════════════ -->
-<div class="slide" data-slide="9">
+<div class="slide" data-slide="10">
   <div class="content">
     <h2 class="animate">From Paper to Digital</h2>
     <p class="animate d1" style="margin-bottom:30px;">
@@ -462,9 +543,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 10 — Field Survey: The Electronic Form
+     SLIDE 11 — Field Survey: The Electronic Form
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="10">
+<div class="slide phone-screenshot" data-slide="11">
   <div class="content">
     <h2 class="animate">The Electronic Form</h2>
     <div class="two-col">
@@ -502,9 +583,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 11 — Field Survey: GPS Location Markers
+     SLIDE 12 — Field Survey: GPS Location Markers
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="11">
+<div class="slide phone-screenshot" data-slide="12">
   <div class="content">
     <h2 class="animate">GPS Location Markers</h2>
     <div class="two-col">
@@ -533,9 +614,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 12 — Field Survey: Snyper Device Upload
+     SLIDE 13 — Field Survey: Snyper Device Upload
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="12">
+<div class="slide phone-screenshot" data-slide="13">
   <div class="content">
     <h2 class="animate">Snyper Device Upload</h2>
     <div class="two-col">
@@ -569,9 +650,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 13 — Field Survey: Photos
+     SLIDE 14 — Field Survey: Photos
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="13">
+<div class="slide phone-screenshot" data-slide="14">
   <div class="content">
     <h2 class="animate">Site Photos</h2>
     <p class="animate d1" style="margin-bottom:25px;">
@@ -602,9 +683,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 14 — Field Survey: Pass / Fail Verdict
+     SLIDE 15 — Field Survey: Pass / Fail Verdict
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="14">
+<div class="slide phone-screenshot" data-slide="15">
   <div class="content">
     <h2 class="animate">Survey Verdict — Pass or Fail</h2>
     <div class="two-col">
@@ -634,9 +715,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 15 — Field Survey: Signature & Submission
+     SLIDE 16 — Field Survey: Signature & Submission
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="15">
+<div class="slide phone-screenshot" data-slide="16">
   <div class="content">
     <h2 class="animate">Signature &amp; Submission</h2>
     <div class="two-col">
@@ -673,9 +754,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 16 — Field Survey: Workflow Summary
+     SLIDE 17 — Field Survey: Workflow Summary
      ═══════════════════════════════════════════ -->
-<div class="slide" data-slide="16">
+<div class="slide" data-slide="17">
   <div class="content">
     <h2 class="animate">Field Survey Workflow</h2>
     <div class="flow animate d1" style="justify-content:center; margin: 30px 0;">
@@ -714,9 +795,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 17 — Section: Backend Portal
+     SLIDE 18 — Section: Backend Portal
      ═══════════════════════════════════════════ -->
-<div class="slide section-divider" data-slide="17">
+<div class="slide section-divider" data-slide="18">
   <div class="content">
     <div class="section-number animate">03</div>
     <h2 class="animate d1">Backend Portal</h2>
@@ -725,9 +806,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 18 — Backend: Survey Dashboard
+     SLIDE 19 — Backend: Survey Dashboard
      ═══════════════════════════════════════════ -->
-<div class="slide wide-screenshot" data-slide="18">
+<div class="slide wide-screenshot" data-slide="19">
   <div class="content">
     <h2 class="animate">Survey Dashboard</h2>
     <div class="two-col">
@@ -758,9 +839,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 19 — Backend: Survey Detail View
+     SLIDE 20 — Backend: Survey Detail View
      ═══════════════════════════════════════════ -->
-<div class="slide wide-screenshot" data-slide="19">
+<div class="slide wide-screenshot" data-slide="20">
   <div class="content">
     <h2 class="animate">Detailed Survey View</h2>
     <div class="two-col">
@@ -798,9 +879,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 20 — Backend: PDF Export
+     SLIDE 21 — Backend: PDF Export
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="20">
+<div class="slide phone-screenshot" data-slide="21">
   <div class="content">
     <h2 class="animate">PDF Report Export</h2>
     <div class="two-col">
@@ -830,9 +911,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 21 — Section: Auto Clock-In
+     SLIDE 22 — Section: Auto Clock-In
      ═══════════════════════════════════════════ -->
-<div class="slide section-divider" data-slide="21">
+<div class="slide section-divider" data-slide="22">
   <div class="content">
     <div class="section-number animate">04</div>
     <h2 class="animate d1">Auto Clock-In</h2>
@@ -841,9 +922,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 22 — Auto Clock-In: How It Works
+     SLIDE 23 — Auto Clock-In: How It Works
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="22">
+<div class="slide phone-screenshot" data-slide="23">
   <div class="content">
     <h2 class="animate">Auto Clock-In</h2>
     <div class="two-col">
@@ -881,22 +962,23 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 23 — Summary
+     SLIDE 24 — Summary
      ═══════════════════════════════════════════ -->
-<div class="slide" data-slide="23">
+<div class="slide" data-slide="24">
   <div class="content" style="text-align:center;">
     <h2 class="animate">Summary</h2>
     <div class="three-col animate d1" style="margin-top:30px; grid-template-columns: 1fr 1fr;">
       <div class="card">
         <h3>Drive Test Tool</h3>
-        <p>Automated signal coverage survey with continuous logging,
-           live colour-coded map, real-time validation,
-           and KML export for analysis.</p>
+        <p>Automated signal coverage survey with continuous logging and a
+           live colour-coded map. One drive now validates every cell at the
+           site — all sectors and technologies — with per-cell pass/fail,
+           guided network-mode switching, and one combined KML export.</p>
         <div style="margin-top:14px;">
           <span class="badge badge-green">Live Map</span>
-          <span class="badge badge-blue">2G–5G</span>
-          <span class="badge badge-yellow">Validation</span>
-          <span class="badge badge-orange">KML Export</span>
+          <span class="badge badge-blue">Multi-Cell / Multi-RAT</span>
+          <span class="badge badge-yellow">Per-Cell Validation</span>
+          <span class="badge badge-orange">One KML</span>
         </div>
       </div>
       <div class="card">
