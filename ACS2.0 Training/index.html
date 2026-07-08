@@ -361,7 +361,7 @@
           <div class="ui-row"><span class="tick run">↻</span><div class="rt"><b>BTS ping</b><span>15-min latency &amp; loss per BTS</span></div><span class="rs"><span class="lbl b">Running</span><span class="m">06:12 · 2/3</span></span></div>
           <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>EMC test</b><span>Power &amp; environment</span></div><span class="rs"><span class="lbl g">Pass</span><span class="m">3/3 EMC</span></span></div>
           <div class="ui-row"><span class="tick run">↻</span><div class="rt"><b>CCTV</b><span>Camera config + region</span></div><span class="rs"><span class="lbl b">Running</span></span></div>
-          <div class="ui-row"><span class="tick dim">–</span><div class="rt"><b>VSAT power levels</b><span>Es/No &amp; C/No</span></div><span class="rs"><span class="lbl m">N/A · LEO</span></span></div>
+          <div class="ui-row"><span class="tick dim">–</span><div class="rt"><b>VSAT power levels</b><span>Es/No &amp; C/No</span></div><span class="rs"><span class="lbl m">N/A · non-Gilat</span></span></div>
         </div>
       </div>
     </div>
@@ -393,19 +393,19 @@
   <!-- 11 · VSAT -->
   <div class="slide">
     <div class="content">
-      <h2 class="animate">The VSAT test knows the backhaul</h2>
-      <p class="lead animate d1">ACS 2.0 reads the site's recorded backhaul and runs the right check automatically — so you don't have to work out whether the dish needs a power test.</p>
+      <h2 class="animate">The power-level test runs on Gilat only</h2>
+      <p class="lead animate d1">ACS 2.0 reads the site's recorded backhaul and only runs the Es/No &amp; C/No power-level test where it can — on <strong>Gilat</strong>, the one satellite platform whose modem reports those levels.</p>
       <div class="grid2 animate d2">
         <div class="card">
-          <h3 style="display:flex;align-items:center;gap:10px"><span class="tick pass">✓</span> VSAT sites (Gilat, Hughes…)</h3>
-          <p>The <strong>Es/No and C/No power-level test runs</strong> and must pass, exactly as before. Expand the card to watch both level sets build up in 60-second blocks.</p>
+          <h3 style="display:flex;align-items:center;gap:10px"><span class="tick pass">✓</span> Gilat sites</h3>
+          <p>The <strong>Es/No and C/No power-level test runs</strong> and must pass. Expand the card to watch both level sets build up in 60-second blocks.</p>
         </div>
         <div class="card">
-          <h3 style="display:flex;align-items:center;gap:10px"><span class="tick dim">–</span> LEO sites (Starlink, Amazon…)</h3>
-          <p>There's no dish to point, so the card shows <strong>N/A</strong> and the satellite step is hidden. <strong>That's correct — not an error.</strong> The 15-minute BTS ping covers the link.</p>
+          <h3 style="display:flex;align-items:center;gap:10px"><span class="tick dim">–</span> Everything else</h3>
+          <p>Other VSAT platforms (<strong>Hughes, UHP…</strong>) don't expose those readings, and LEO sites (<strong>Starlink, Amazon…</strong>) have no dish — so the card shows <strong>N/A</strong>. That's correct, not an error: the 15-minute BTS ping covers the link.</p>
         </div>
       </div>
-      <div class="note warn animate d3"><span class="ic">!</span><div class="tx">If a genuine VSAT site ever shows the power test as N/A, its backhaul may be recorded wrongly — flag it to GNOC rather than signing off, because the dish won't have been power-checked.</div></div>
+      <div class="note warn animate d3"><span class="ic">!</span><div class="tx">If a genuine <strong>Gilat</strong> site ever shows the power test as N/A, its backhaul may be recorded wrongly — flag it to GNOC rather than signing off, because the dish won't have been power-checked.</div></div>
     </div>
   </div>
 
@@ -449,7 +449,7 @@
             <div><div class="n f">0</div><div class="cl">Failed</div></div>
             <div><div class="n a">3</div><div class="cl">N/A</div></div>
           </div>
-          <div class="leavecode"><div class="cl">Leave code</div><div class="code">7F3K-92</div></div>
+          <div class="leavecode"><div class="cl">Leave code</div><div class="code">MNG_9983</div></div>
         </div>
       </div>
     </div>
