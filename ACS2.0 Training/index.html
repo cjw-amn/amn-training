@@ -234,7 +234,7 @@
     <div class="content">
       <h2 class="animate">Same job. A clearer way to do it.</h2>
       <p class="lead animate d1" style="margin-bottom:26px">ACS is the page you complete during a site visit — record your results, run the automated tests, and get a leave code that signs the site off. ACS 2.0 keeps every one of those jobs and the rules behind them. What's new is the <span class="highlight">shape</span> of the work.</p>
-      <div class="three-col animate d2">
+      <div class="grid2 animate d2">
         <div class="card">
           <h3><span class="badge badge-num" style="margin:0 8px 0 0">01</span>Tracks itself</h3>
           <p>The old page's tabs become a numbered <strong>7-step workflow</strong> down the left — every step shows a live ✓ / ✕ / ! so you always know what's outstanding.</p>
@@ -246,6 +246,10 @@
         <div class="card">
           <h3><span class="badge badge-num" style="margin:0 8px 0 0">03</span>More done for you</h3>
           <p>The camera <strong>configures itself</strong>, the VSAT test picks itself by backhaul, and submit shows every item uploading.</p>
+        </div>
+        <div class="card">
+          <h3><span class="badge badge-num" style="margin:0 8px 0 0">04</span>Lighter to load</h3>
+          <p>The page is about <strong>half the size</strong> of the old one, so it's far more likely to load first time on a slow or busy <strong>VSAT link</strong> — and quicker when it does.</p>
         </div>
       </div>
       <div class="note key animate d3"><span class="ic">i</span><div class="tx"><strong>The tests, the thresholds, the leave-code rules and where your data goes are all unchanged.</strong> If you knew the old ACS, you already know what's being measured — this is a new way to drive it.</div></div>
@@ -267,7 +271,7 @@
       <h2 class="animate">ACS is now completed per <span class="highlight">site</span> — not per cell</h2>
       <div class="two-col" style="margin-top:20px">
         <div class="animate d1">
-          <p style="margin-bottom:16px">On the old page you completed a separate ACS for each individual cell. On a three-sector site, that was three dispatches.</p>
+          <p style="margin-bottom:16px">On the old page you completed a separate ACS for each individual cell — and every sector carries a cell for each technology on it. A three-sector site running <strong>2G and 4G</strong> is six cells, so that was <strong>up to six separate ACS completions</strong>.</p>
           <p>ACS 2.0 does the site <strong>once</strong>. A single dispatch covers every cell and sector, and gives you <strong>one submission and one leave code</strong> for the whole site.</p>
           <div class="note warn" style="margin-top:20px"><span class="ic">!</span><div class="tx"><strong>Before you complete ACS, make sure every sector and cell on the site is working.</strong> The tests and the drive test are checked across the whole site — a dead sector will show up here.</div></div>
         </div>
@@ -294,6 +298,7 @@
           <tr><td class="aspect">CCTV</td><td>A separate, manual snapshot test</td><td class="new">Camera configured automatically, end to end</td></tr>
           <tr><td class="aspect">VSAT test</td><td>Guessed the backhaul from ping speed</td><td class="new">Reads the site's recorded backhaul</td></tr>
           <tr><td class="aspect">Submitting</td><td>Little feedback on what uploaded</td><td class="new">Item-by-item progress + a clear outcome</td></tr>
+          <tr><td class="aspect">Loading</td><td>A heavier page — slower over a poor link</td><td class="new">About half the size — loads better on VSAT</td></tr>
         </tbody>
       </table>
     </div>
