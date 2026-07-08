@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMN App — New Features Presentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --amn-yellow: #FFD600;
+    --amn-dark: #1a1a2e;
+    --amn-darker: #0f0f1a;
+    --amn-accent: #3a86ff;
+    --amn-green: #2ecc71;
+    --amn-red: #e74c3c;
+    --amn-orange: #f39c12;
+    --amn-text: #e0e0e0;
+    --amn-muted: #8a8a9a;
+    --slide-max-w: 1100px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--amn-darker);
+    color: var(--amn-text);
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .deck { position: relative; width: 100%; height: 100vh; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    padding: 40px 80px 80px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .45s ease;
+    overflow-y: auto;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide.section-divider,
+  .slide.title-slide { justify-content: center; overflow-y: hidden; }
+
+  h1 { font-size: 2.8rem; font-weight: 700; line-height: 1.2; margin-bottom: .3em; }
+  h2 { font-size: 1.8rem; font-weight: 600; margin-bottom: .5em; color: var(--amn-yellow); }
+  h3 { font-size: 1.15rem; font-weight: 500; margin-bottom: .4em; color: var(--amn-yellow); }
+  p, li { font-size: 1.05rem; line-height: 1.6; }
+  ul { list-style: none; padding: 0; }
+  ul li { padding-left: 1.6em; position: relative; margin-bottom: .45em; }
+  ul li::before {
+    content: '▸'; position: absolute; left: 0;
+    color: var(--amn-yellow); font-weight: 700;
+  }
+
+  .highlight { color: var(--amn-yellow); font-weight: 600; }
+  .accent   { color: var(--amn-accent); }
+  .green    { color: var(--amn-green); }
+  .red      { color: var(--amn-red); }
+  .muted    { color: var(--amn-muted); font-size: .95rem; }
+
+  .content { max-width: var(--slide-max-w); width: 100%; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; }
+
+  .card {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; padding: 22px;
+  }
+  .card h3 { margin-top: 0; }
+
+  .badge {
+    display: inline-block; padding: 4px 14px;
+    border-radius: 20px; font-size: .85rem; font-weight: 600;
+    margin-right: 6px; margin-bottom: 6px;
+  }
+  .badge-yellow { background: var(--amn-yellow); color: var(--amn-dark); }
+  .badge-green  { background: var(--amn-green); color: #fff; }
+  .badge-blue   { background: var(--amn-accent); color: #fff; }
+  .badge-red    { background: var(--amn-red); color: #fff; }
+  .badge-orange { background: var(--amn-orange); color: #fff; }
+
+  .screenshot-placeholder {
+    width: 100%;
+    border-radius: 12px; display: flex;
+    align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+  .screenshot-placeholder img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain; border-radius: 8px;
+  }
+  .screenshot-placeholder video {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain; border-radius: 8px;
+  }
+
+  /* Phone screenshots: constrain height so tall images don't overflow */
+  .phone-screenshot .screenshot-placeholder {
+    max-height: calc(100vh - 140px);
+  }
+  .phone-screenshot .screenshot-placeholder img {
+    max-height: calc(100vh - 160px);
+    width: auto;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,.4));
+  }
+
+  /* Wide screenshots (browser/PDF): full width with subtle shadow */
+  .wide-screenshot .screenshot-placeholder img {
+    width: 100%;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,.4));
+    border-radius: 6px;
+  }
+
+  .compare-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  .compare-table th, .compare-table td {
+    padding: 14px 20px; text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    font-size: 1.05rem;
+  }
+  .compare-table th {
+    font-weight: 600; color: var(--amn-yellow);
+    border-bottom: 2px solid rgba(255,214,0,.3);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .flow {
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap; margin: 20px 0;
+  }
+  .flow-step {
+    background: rgba(255,255,255,.08); border-radius: 10px;
+    padding: 14px 22px; font-weight: 500; text-align: center;
+    min-width: 120px; border: 1px solid rgba(255,255,255,.1);
+  }
+  .flow-step.active-step {
+    background: rgba(255,214,0,.15);
+    border-color: var(--amn-yellow);
+    color: var(--amn-yellow);
+  }
+  .flow-arrow { color: var(--amn-muted); font-size: 1.4rem; }
+
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 40px;
+    background: rgba(15,15,26,.92); backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255,255,255,.06);
+    z-index: 100;
+  }
+  .nav-bar button {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+    color: var(--amn-text); padding: 10px 24px; border-radius: 8px;
+    cursor: pointer; font-size: .95rem; font-family: inherit;
+    transition: background .2s;
+  }
+  .nav-bar button:hover { background: rgba(255,214,0,.15); }
+  .nav-bar button:disabled { opacity: .3; cursor: default; }
+  .slide-counter { font-size: .9rem; color: var(--amn-muted); }
+
+  .progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: var(--amn-yellow); z-index: 100;
+    transition: width .35s ease;
+  }
+
+  .title-slide h1 { font-size: 3.2rem; }
+  .title-slide .subtitle {
+    font-size: 1.3rem; color: var(--amn-muted);
+    margin-top: .4em; font-weight: 300;
+  }
+
+  .section-divider { text-align: center; }
+  .section-divider .section-number {
+    font-size: 5rem; font-weight: 700;
+    color: rgba(255,214,0,.15); line-height: 1;
+  }
+  .section-divider h2 { font-size: 2.4rem; margin-top: -.3em; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .slide.active .animate { animation: fadeInUp .5s ease forwards; }
+  .slide.active .animate.d1 { animation-delay: .1s; opacity: 0; }
+  .slide.active .animate.d2 { animation-delay: .25s; opacity: 0; }
+  .slide.active .animate.d3 { animation-delay: .4s; opacity: 0; }
+  .slide.active .animate.d4 { animation-delay: .55s; opacity: 0; }
+</style>
+<style>
+
+  /* ---- ACS 2.0 additions (additive; do not restyle shared classes) ---- */
+  :root { --mono: ui-monospace,"Cascadia Code","Segoe UI Mono",Consolas,monospace; }
+  .mono { font-family: var(--mono); }
+  .lead { font-size: 1.12rem; color: var(--amn-text); max-width: 68ch; margin-bottom: 6px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+  @media (max-width:780px){ .grid2 { grid-template-columns:1fr; } }
+  .badge-num { background: rgba(255,214,0,.15); color: var(--amn-yellow); border:1px solid rgba(255,214,0,.35); font-family:var(--mono); }
+  .compare-table th.old { color: var(--amn-muted); }
+  .compare-table td.aspect { color: var(--amn-muted); font-weight:600; white-space:nowrap; }
+  .compare-table td.new { color:#fff; }
+  .rail { display:flex; flex-direction:column; gap:11px; margin-top:22px; }
+  .step { display:flex; align-items:center; gap:16px; padding:14px 18px; background: rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px; }
+  .step .sn { font-family:var(--mono); font-size:.95rem; font-weight:700; color:var(--amn-yellow); width:30px; flex:none; }
+  .step .st { flex:1; min-width:0; }
+  .step .st b { display:block; font-size:1.02rem; color:#fff; font-weight:600; }
+  .step .st span { font-size:.9rem; color:var(--amn-muted); }
+  .tick { width:24px; height:24px; flex:none; border-radius:7px; display:grid; place-items:center; font-size:12px; font-weight:800; }
+  .tick.pass { background:rgba(46,204,113,.16); color:var(--amn-green); }
+  .tick.fail { background:rgba(231,76,60,.16); color:var(--amn-red); }
+  .tick.hold { background:rgba(243,156,18,.16); color:var(--amn-orange); }
+  .tick.dim  { background:rgba(255,255,255,.07); color:var(--amn-muted); }
+  .tick.run  { background:rgba(58,134,255,.16); color:var(--amn-accent); }
+  .tick.sm { width:20px; height:20px; font-size:10px; border-radius:6px; }
+  .ui { background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:14px; overflow:hidden; box-shadow:0 10px 34px rgba(0,0,0,.4); }
+  .ui-bar { display:flex; align-items:center; gap:7px; padding:11px 15px; background:rgba(255,255,255,.05); border-bottom:1px solid rgba(255,255,255,.1); }
+  .ui-bar .dot { width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.18); }
+  .ui-bar .t { margin-left:8px; font-family:var(--mono); font-size:.72rem; color:var(--amn-muted); }
+  .ui-row { display:flex; align-items:center; gap:13px; padding:13px 16px; border-top:1px solid rgba(255,255,255,.07); }
+  .ui-row:first-of-type { border-top:0; }
+  .ui-row .rt { flex:1; min-width:0; }
+  .ui-row .rt b { font-size:.92rem; color:#fff; font-weight:600; display:block; }
+  .ui-row .rt span { font-size:.76rem; color:var(--amn-muted); }
+  .ui-row .rs { font-family:var(--mono); font-size:.76rem; text-align:right; }
+  .ui-row .rs .lbl { display:block; font-weight:700; }
+  .ui-row .rs .g { color:var(--amn-green); } .ui-row .rs .r { color:var(--amn-red); }
+  .ui-row .rs .b { color:var(--amn-accent); } .ui-row .rs .m { color:var(--amn-muted); }
+  .ghostbtn { font-size:.76rem; border:1px solid rgba(255,255,255,.18); background:transparent; color:var(--amn-text); padding:5px 11px; border-radius:7px; flex:none; }
+  .counts { display:flex; gap:10px; text-align:center; padding:16px; }
+  .counts > div { flex:1; padding:12px 6px; border:1px solid rgba(255,255,255,.1); border-radius:11px; background:rgba(255,255,255,.03); }
+  .counts .n { font-family:var(--mono); font-size:2rem; font-weight:800; line-height:1; }
+  .counts .n.p { color:var(--amn-green); } .counts .n.f { color:var(--amn-red); } .counts .n.a { color:var(--amn-muted); }
+  .counts .cl { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--amn-muted); margin-top:7px; }
+  .leavecode { margin:0 16px 16px; background:rgba(46,204,113,.12); border:1px solid rgba(46,204,113,.3); border-radius:11px; padding:13px 16px; }
+  .leavecode .cl { font-family:var(--mono); font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--amn-green); }
+  .leavecode .code { font-family:var(--mono); font-size:1.6rem; font-weight:800; color:var(--amn-green); letter-spacing:.06em; margin-top:2px; }
+  .note { display:flex; gap:13px; padding:15px 18px; border-radius:12px; margin-top:22px; align-items:flex-start; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); }
+  .note.warn { background:rgba(243,156,18,.1); border-color:rgba(243,156,18,.35); }
+  .note.key  { background:rgba(58,134,255,.1); border-color:rgba(58,134,255,.35); }
+  .note .ic { flex:none; width:26px; height:26px; border-radius:7px; display:grid; place-items:center; font-weight:800; font-size:14px; }
+  .note.warn .ic { background:var(--amn-orange); color:#1a1a2e; } .note.key .ic { background:var(--amn-accent); color:#fff; }
+  .note .tx { font-size:.98rem; line-height:1.55; }
+  .pills { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+  .pill { font-size:.95rem; padding:9px 15px; border-radius:100px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); display:inline-flex; align-items:center; gap:9px; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+  <!-- COMBINED TITLE -->
+  <div class="slide title-slide active" data-slide="1">
+    <div class="content" style="text-align:center;">
+      <div class="animate"><span class="badge badge-yellow">FIELD TEAM TRAINING</span></div>
+      <h1 class="animate d1">AMN Field App <span style="color:var(--amn-yellow)">+</span> ACS 2.0</h1>
+      <p class="subtitle animate d2">New field tools, and the rebuilt site-commissioning workflow</p>
+      <p class="muted animate d3" style="margin-top:26px;">Drive Test &bull; Field Survey &bull; Backend Portal &bull; Auto Clock-In &bull; ACS 2.0</p>
+      <p class="muted animate d4" style="margin-top:34px;font-size:.85rem;">Use the arrow keys or the buttons to navigate</p>
+    </div>
+  </div>
+
+  <!-- COMBINED AGENDA -->
+  <div class="slide" data-slide="2">
+    <div class="content">
+      <h2 class="animate">What We'll Cover</h2>
+      <p class="animate d1" style="margin-bottom:26px;">Two parts. First the new tools in the <span class="highlight">AMN Field App</span>, then the rebuilt <span class="highlight">ACS 2.0</span> site-commissioning workflow &mdash; how it changes from the old page and how to complete a site.</p>
+      <div class="three-col animate d2" style="grid-template-columns:1fr 1fr;">
+        <div class="card"><h3><span class="badge badge-yellow" style="margin:0 8px 0 0;">01</span>Drive Test Tool</h3><p>Automated signal-coverage testing &mdash; one drive validates every cell at the site, all sectors and technologies.</p></div>
+        <div class="card"><h3><span class="badge badge-yellow" style="margin:0 8px 0 0;">02</span>Field Survey Tool</h3><p>The paper survey goes digital &mdash; GPS, photos, Snyper import, verdict, signature, one-tap submit.</p></div>
+        <div class="card"><h3><span class="badge badge-yellow" style="margin:0 8px 0 0;">03</span>Backend Portal</h3><p>View and review submitted surveys and download PDF reports.</p></div>
+        <div class="card"><h3><span class="badge badge-yellow" style="margin:0 8px 0 0;">04</span>Auto Clock-In</h3><p>Automatically clocked in on login &mdash; no more forgotten clock-ins.</p></div>
+        <div class="card" style="border-color:rgba(255,214,0,.35);"><h3><span class="badge badge-yellow" style="margin:0 8px 0 0;">05</span>ACS 2.0</h3><p>The rebuilt site-commissioning page &mdash; a guided 7-step workflow, whole-site testing, automatic CCTV, and one leave code.</p></div>
+      </div>
+    </div>
+  </div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 3 — Section: Drive Test Tool
+     ═══════════════════════════════════════════ -->
+<div class="slide section-divider" data-slide="3">
+  <div class="content">
+    <div class="section-number animate">01</div>
+    <h2 class="animate d1">Drive Test Tool</h2>
+    <p class="muted animate d2">Automated signal coverage testing while driving around a site</p>
+    <p class="animate d3" style="margin-top:18px;">
+      <span class="badge badge-yellow">UPDATED</span>
+      One drive now validates <span class="highlight">all of a site's cells</span> — every sector,
+      every technology (2G/3G/4G/5G) — in a single session and a single KML file.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 4 — Drive Test: Overview
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="4">
+  <div class="content">
+    <h2 class="animate">What Is a Drive Test?</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          A drive test is a <span class="highlight">signal coverage survey</span> performed by driving
+          around a cell tower site. This replaces the need for the
+          <span class="highlight">GNetTrack Pro</span> app — the same logging is now built directly
+          into the AMN Field App, capturing signal strength and GPS position
+          to build a coverage map showing where the signal is strong, weak, or absent.
+        </p>
+        <ul>
+          <li><strong>📡 Signal Logging</strong> — captures strength, quality, cell ID, and network type (2G–5G) every 10 seconds</li>
+          <li><strong>📍 GPS Tracking</strong> — records precise location, altitude, and speed alongside every reading</li>
+          <li><strong>🗺️ Live Map</strong> — colour-coded dots show coverage quality in real time as you drive</li>
+          <li><strong>📶 Whole-Site Validation</strong> — a single drive now covers <span class="highlight">every cell at the site</span>, across all sectors and technologies, instead of one cell per drive</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="4.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 5 — Drive Test: Setup
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="5">
+  <div class="content">
+    <h2 class="animate">Starting a Drive Test</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Before driving, the engineer sets up the test at the tower site:
+        </p>
+        <ul>
+          <li><strong>Select the Site ID</strong> (e.g. OLR0050) — the app loads
+              <span class="highlight">all of the site's cells</span> as targets automatically,
+              each with a technology badge (2G / 3G / 4G)</li>
+          <li><strong>Mark your location</strong> — stand directly next to the mast and tap
+              <em>Mark Site Location</em>; this is the reference point for the distance checks</li>
+          <li><strong>Set the phone to the lowest technology first</strong> — e.g. <em>2G only</em>
+              in the phone's preferred-network-type settings</li>
+          <li><strong>Scan for available cells</strong> — the list shows which target cells the
+              phone can currently see</li>
+        </ul>
+        <p style="margin-top:20px;">
+          Once set up, tap <span class="highlight">Start</span> and begin driving. The app runs
+          in the background, logging continuously.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="step1-site-selected.png">
+        </div>
+        <p class="muted" style="margin-top:10px;text-align:center;">
+          Site selected — its cells auto-load as targets with technology badges
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 6 — Drive Test: One Drive, Every Technology
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="6">
+  <div class="content">
+    <h2 class="animate">One Drive, Every Technology <span class="badge badge-yellow" style="vertical-align:middle;margin-left:10px;">NEW</span></h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:15px;">
+          A phone can only "see" the cells of the network mode it is currently on — on 2G it
+          <span class="highlight">cannot see 4G cells at all</span>. So on a multi-technology site,
+          the app <span class="highlight">guides you through each technology in turn</span>.
+        </p>
+        <h3>Cell labels in the scan list</h3>
+        <ul>
+          <li><span class="green"><strong>✓ TARGET</strong></span> — selected for validation; tap a cell to add or remove it</li>
+          <li><strong>EXPECTED</strong> — belongs to this site on the current technology, but the phone isn't picking it up right now</li>
+          <li><span class="red"><strong>WRONG MODE</strong></span> — greyed out; a cell on a technology the phone can't see right now, with a note telling you which mode to switch to</li>
+        </ul>
+        <h3 style="margin-top:14px;">Follow the prompts — don't stop the drive</h3>
+        <div class="flow" style="margin:15px 0;">
+          <div class="flow-step">Start in 2G</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step active-step">✓ 2G done — switch to 3G/4G</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step" style="border-color:var(--amn-green);color:var(--amn-green);">✓ All cells validated</div>
+        </div>
+        <p class="muted">
+          Change the phone's preferred network type only when the app asks, and keep driving —
+          the drive keeps logging across the switch. Single-technology sites show no prompts at all.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="step3-scan.png">
+        </div>
+        <p class="muted" style="margin-top:10px;text-align:center;">
+          Scan with the phone on 4G — the 2G cell is greyed with a "switch to 2G" note
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 7 — Drive Test: Live Dashboard
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="7">
+  <div class="content">
+    <h2 class="animate">Live Dashboard</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          While the test is running, the dashboard shows
+          <span class="highlight">real-time metrics</span>:
+        </p>
+        <ul>
+          <li>Colour-coded map — green (strong) to red (weak)</li>
+          <li>Total data points collected</li>
+          <li>Match counts for the target cells</li>
+          <li>Maximum signal strength recorded</li>
+          <li>Current speed</li>
+          <li>Signal strength chart over time</li>
+          <li>Nearby cells detected</li>
+        </ul>
+        <p style="margin-top:15px;">
+          The dashboard shows <span class="highlight">one row per target cell</span> with a live
+          PASS / FAIL indicator. A cell turns to <span class="green">PASS</span> once enough good
+          readings are collected for it. While you're on 2G, the 3G/4G cells sit at
+          <span class="red">FAIL</span> — that's expected; they fill in after you switch modes.
+        </p>
+        <p style="margin-top:15px;">
+          <strong style="color:var(--amn-orange);">Important:</strong> While a drive test is running,
+          the app stays on the dashboard screen — <span class="highlight">you cannot navigate to other
+          screens</span> until you stop the test.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="6.png">
+        </div>
+        <div class="screenshot-placeholder" style="margin-top:14px;">
+          <img src="step5-percell.png">
+        </div>
+        <p class="muted" style="margin-top:10px;text-align:center;">
+          Per-cell coverage rows — each target cell validates independently
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 8 — Drive Test: Validation & Export
+     ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="8">
+  <div class="content">
+    <h2 class="animate">Validation &amp; Export</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <h3>Automatic Validation — Per Cell</h3>
+        <p style="margin-bottom:15px;">The app checks the <span class="highlight">ACS criteria</span>.
+          Two rules apply to the whole drive, and the rest apply to
+          <span class="highlight">every target cell individually</span> — the drive is complete only
+          when every cell passes:</p>
+        <table class="compare-table" style="font-size:.95rem;">
+          <tr><th>Whole drive</th><th></th></tr>
+          <tr><td>Minimum 100 data points</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Data is recent (within 4 days)</td><td class="green">✓ / ✗</td></tr>
+          <tr><th>Each target cell</th><th></th></tr>
+          <tr><td>At least 60 matching readings</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Maximum signal ≥ –55 dBm</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Closest approach within 2 km</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Coverage extent ≥ 1 km</td><td class="green">✓ / ✗</td></tr>
+          <tr><td>Signal at range (>600 m)</td><td class="green">✓ / ✗</td></tr>
+        </table>
+        <p class="muted" style="margin-top:12px;">
+          When every cell has passed, the app shows <span class="green">"✓ All cells validated"</span>
+          with buttons to keep driving, stop, or export.
+        </p>
+      </div>
+      <div class="animate d2">
+        <h3>KML Export</h3>
+        <p style="margin-bottom:15px;">
+          Results are <span class="highlight">exported as one combined KML file</span> covering
+          every technology and sector driven — compatible with Google Earth and the ACS system.
+        </p>
+        <div class="screenshot-placeholder">
+          <img src="7.png">
+        </div>
+        <p class="muted" style="margin-top:12px;">
+          Signal readings are colour-coded: green (strong), amber, orange, red (weak).
+        </p>
+        <p style="margin-top:12px;">
+          The file also records <span class="highlight">which engineer conducted the drive</span>,
+          the site, and the start time — an independent record of who did the test.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 9 — Section: Field Survey Tool
+     ═══════════════════════════════════════════ -->
+<div class="slide section-divider" data-slide="9">
+  <div class="content">
+    <div class="section-number animate">02</div>
+    <h2 class="animate d1">Field Survey Tool</h2>
+    <p class="muted animate d2">A complete digital replacement for the paper survey form</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 10 — Field Survey: The Electronic Form
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="10">
+  <div class="content">
+    <h2 class="animate">The Electronic Form</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:15px;">
+          The digital form mirrors every section of the paper form, organised into
+          <span class="highlight">collapsible sections</span> so engineers can focus on one area at a time.
+        </p>
+        <h3>Survey Information</h3>
+        <ul>
+          <li>Village name &amp; ID, area, region, territory</li>
+          <li>Population &amp; demographics</li>
+          <li>Survey date, team &amp; 3 local contacts</li>
+          <li>Village economic activities</li>
+        </ul>
+        <h3 style="margin-top:14px;">Access &amp; Environment</h3>
+        <ul>
+          <li>Road &amp; river access, vehicle accessibility</li>
+          <li>Health, safety &amp; environmental factors</li>
+        </ul>
+        <h3 style="margin-top:14px;">Candidate Sites</h3>
+        <ul>
+          <li>Multiple candidate locations with landlord details</li>
+          <li>Distances to landmarks, permitting %</li>
+          <li>Mark preferred candidate</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="10.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 11 — Field Survey: GPS Location Markers
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="11">
+  <div class="content">
+    <h2 class="animate">GPS Location Markers</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          No more writing down coordinates by hand. The app captures
+          <span class="highlight">precise GPS readings</span> with a single tap at multiple points during the survey.
+        </p>
+        <ul>
+          <li><strong>Village header location</strong> — centre of the village</li>
+          <li><strong>Per-candidate site</strong> — each proposed tower location</li>
+          <li><strong>Signal reading locations</strong> — where measurements were taken</li>
+        </ul>
+        <p style="margin-top:20px;">
+          Coordinates include <span class="highlight">latitude, longitude, and altitude</span>,
+          captured to 6 decimal places using the device's high-accuracy GPS.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="11.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 12 — Field Survey: Snyper Device Upload
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="12">
+  <div class="content">
+    <h2 class="animate">Snyper Device Upload</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Signal readings from the <span class="highlight">Snyper RF scanner</span> can be imported
+          directly into the survey via USB — no laptop required.
+        </p>
+        <ul>
+          <li>Connect the Snyper device to the phone via a <span class="highlight">USB OTG adapter</span></li>
+          <li>Browse the device's files from within the app</li>
+          <li>Select the CSV export file for each direction</li>
+          <li>Signal data is parsed and populated automatically</li>
+        </ul>
+        <p style="margin-top:20px;">
+          The app reads <span class="highlight">2G, 3G, 4G, and 5G</span> signal data including
+          dBm, RSSI, MNO, band, cell ID, and more — exactly what would previously
+          be transcribed by hand.
+        </p>
+        <p class="muted" style="margin-top:12px;">
+          Snyper CSV files are also uploaded to the server alongside the survey for reference.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <video src="12.mp4" controls preload="metadata" style="max-height:calc(100vh - 200px);"></video>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 13 — Field Survey: Photos
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="13">
+  <div class="content">
+    <h2 class="animate">Site Photos</h2>
+    <p class="animate d1" style="margin-bottom:25px;">
+      Photos are taken <span class="highlight">directly within the survey</span> and automatically
+      attached — no separate email or upload step.
+    </p>
+    <div class="three-col animate d2" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <h3>Photo Categories</h3>
+        <ul>
+          <li>General pictures of the village</li>
+          <li>Road access pictures</li>
+          <li>Panoramic pictures of candidate site</li>
+          <li>Site pictures from each corner</li>
+          <li>Site pictures from near</li>
+        </ul>
+        <p style="margin-top:14px;" class="muted">
+          Multiple photos per category. Use the camera or pick from the gallery.
+        </p>
+      </div>
+      <div>
+        <div class="screenshot-placeholder">
+          <img src="13.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 14 — Field Survey: Pass / Fail Verdict
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="14">
+  <div class="content">
+    <h2 class="animate">Survey Verdict — Pass or Fail</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          At the end of the survey, the field engineer records their
+          <span class="highlight">on-site assessment</span> of whether the site is suitable.
+        </p>
+        <ul>
+          <li>Select <span class="green"><strong>PASS</strong></span> or <span class="red"><strong>FAIL</strong></span></li>
+          <li>Provide a <strong>mandatory comment</strong> explaining the verdict</li>
+          <li>Both are required before the survey can be submitted</li>
+        </ul>
+        <p style="margin-top:20px;">
+          This verdict is the surveyor's professional judgement from the field —
+          it is visible to reviewers on the backend portal alongside all the
+          supporting data.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="14.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 15 — Field Survey: Signature & Submission
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="15">
+  <div class="content">
+    <h2 class="animate">Signature &amp; Submission</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          When the surveyor is ready, they tap <strong>Submit</strong>. The app checks that
+          all required fields are complete, then presents a
+          <span class="highlight">signature capture</span> screen.
+        </p>
+        <div class="flow" style="margin:25px 0;">
+          <div class="flow-step">Complete form</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">Tap Submit</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step active-step">Sign</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">Upload</div>
+        </div>
+        <ul>
+          <li>Signature drawn on-screen with finger</li>
+          <li>Confirms "all data entered is true and accurate"</li>
+          <li>Survey, photos, signature &amp; Snyper files uploaded together</li>
+          <li>Data integrity verified via SHA-256 checksums</li>
+          <li>Survey appears immediately on the backend portal</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="15.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 16 — Field Survey: Workflow Summary
+     ═══════════════════════════════════════════ -->
+<div class="slide" data-slide="16">
+  <div class="content">
+    <h2 class="animate">Field Survey Workflow</h2>
+    <div class="flow animate d1" style="justify-content:center; margin: 30px 0;">
+      <div class="flow-step">Create New Survey</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Fill Form Sections</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Capture GPS</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Import Snyper</div>
+    </div>
+    <div class="flow animate d2" style="justify-content:center; margin: 0 0 30px;">
+      <div class="flow-step">Take Photos</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">Set Verdict</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step active-step">Sign &amp; Submit</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step" style="border-color:var(--amn-green);color:var(--amn-green);">Visible on Portal</div>
+    </div>
+    <div class="two-col animate d3">
+      <div class="card">
+        <h3>Auto-Save</h3>
+        <p>The app <span class="highlight">automatically saves your progress</span> as you type.
+           If you're interrupted — a phone call, low battery, or need to travel — your work is
+           preserved as a draft. Come back any time to finish.</p>
+      </div>
+      <div class="card">
+        <h3>Works Offline</h3>
+        <p>All form data and photos are <span class="highlight">stored locally on the device</span>.
+           You can complete an entire survey without network coverage and submit when you're
+           back online.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 17 — Section: Backend Portal
+     ═══════════════════════════════════════════ -->
+<div class="slide section-divider" data-slide="17">
+  <div class="content">
+    <div class="section-number animate">03</div>
+    <h2 class="animate d1">Backend Portal</h2>
+    <p class="muted animate d2">Centrally view and review submitted field surveys</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 18 — Backend: Survey Dashboard
+     ═══════════════════════════════════════════ -->
+<div class="slide wide-screenshot" data-slide="18">
+  <div class="content">
+    <h2 class="animate">Survey Dashboard</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Submitted surveys appear immediately on the
+          <span class="highlight">AMN Portal</span>, giving managers and reviewers
+          instant visibility.
+        </p>
+        <h3>Dashboard Features</h3>
+        <ul>
+          <li>Card grid of all submitted surveys</li>
+          <li>Search by village name, ID, territory, or submitter</li>
+          <li>Sort by date or alphabetically</li>
+          <li>Filter by country or territory</li>
+          <li>Summary stats — total surveys, countries, this month's submissions</li>
+          <li>Integrity verification badge on each card</li>
+          <li>Surveyor's verdict (Pass/Fail) shown on each card</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="18.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 19 — Backend: Survey Detail View
+     ═══════════════════════════════════════════ -->
+<div class="slide wide-screenshot" data-slide="19">
+  <div class="content">
+    <h2 class="animate">Detailed Survey View</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:15px;">
+          Clicking a survey card opens a <span class="highlight">full detail view</span> with every
+          section of the submitted form, all photos, and signal readings.
+        </p>
+        <h3>Survey Data</h3>
+        <ul>
+          <li>Village &amp; location, demographics &amp; activities</li>
+          <li>Access &amp; environment details</li>
+          <li>Candidate sites with distances &amp; contacts</li>
+        </ul>
+        <h3 style="margin-top:14px;">Signal &amp; Media</h3>
+        <ul>
+          <li>Signal readings table grouped by technology (2G–5G)</li>
+          <li>All photos in gallery view with signature</li>
+          <li>Snyper files available for download</li>
+        </ul>
+        <h3 style="margin-top:14px;">Review &amp; Export</h3>
+        <ul>
+          <li>Surveyor's Pass/Fail verdict &amp; comment</li>
+          <li>Data integrity verification status</li>
+          <li>Download as branded PDF report</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="19.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 20 — Backend: PDF Export
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="20">
+  <div class="content">
+    <h2 class="animate">PDF Report Export</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Any survey can be <span class="highlight">downloaded as a professional PDF report</span>
+          directly from the portal — ideal for sharing with stakeholders
+          and for inclusion into <span class="highlight">As Built documents</span>.
+        </p>
+        <h3>PDF Contents</h3>
+        <ul>
+          <li>AMN-branded cover page</li>
+          <li>All survey sections and data</li>
+          <li>Embedded site photos</li>
+          <li>Signal reading tables (colour-coded by technology)</li>
+          <li>Surveyor's signature</li>
+          <li>Integrity verification notice</li>
+        </ul>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="20.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 21 — Section: Auto Clock-In
+     ═══════════════════════════════════════════ -->
+<div class="slide section-divider" data-slide="21">
+  <div class="content">
+    <div class="section-number animate">04</div>
+    <h2 class="animate d1">Auto Clock-In</h2>
+    <p class="muted animate d2">Automatically clocked in when you log into the app</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 22 — Auto Clock-In: How It Works
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="22">
+  <div class="content">
+    <h2 class="animate">Auto Clock-In</h2>
+    <div class="two-col">
+      <div class="animate d1">
+        <p style="margin-bottom:20px;">
+          Field engineers are now <span class="highlight">automatically clocked in</span> as soon as they
+          log into the app — no extra steps needed.
+        </p>
+        <div class="flow" style="margin:25px 0;">
+          <div class="flow-step">Log In</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step active-step">Auto Clock-In</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">Location Tracking Starts</div>
+        </div>
+        <h3>How It Works</h3>
+        <ul>
+          <li>On first login, a <strong>one-time consent</strong> screen explains that location will be tracked while clocked in</li>
+          <li>Once accepted, future logins clock you in automatically</li>
+          <li>A <span class="green">green status bar</span> confirms you are clocked in</li>
+          <li>You can still manually clock out at any time</li>
+          <li>Location is tracked periodically for workforce management</li>
+        </ul>
+        <p class="muted" style="margin-top:15px;">
+          Only field engineers are auto-clocked in — other user types are unaffected.
+        </p>
+      </div>
+      <div class="animate d2">
+        <div class="screenshot-placeholder">
+          <img src="22.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3 · SECTION 01 -->
+  <div class="slide section-divider">
+    <div class="content">
+      <div class="section-number animate">05</div>
+      <h2 class="animate d1">ACS 2.0 — Site Commissioning</h2>
+      <p class="muted animate d2">The commissioning page, rebuilt — what's changed and how to complete a site</p>
+    </div>
+  </div>
+
+  <!-- 4 · THE BIG SHIFT -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">ACS is now completed per <span class="highlight">site</span> — not per cell</h2>
+      <div class="two-col" style="margin-top:20px">
+        <div class="animate d1">
+          <p style="margin-bottom:16px">On the old page you completed a separate ACS for each individual cell — and every sector carries a cell for each technology on it. A three-sector site running <strong>2G and 4G</strong> is six cells, so that was <strong>up to six separate ACS completions</strong>.</p>
+          <p>ACS 2.0 does the site <strong>once</strong>. A single dispatch covers every cell and sector, and gives you <strong>one submission and one leave code</strong> for the whole site.</p>
+          <div class="note warn" style="margin-top:20px"><span class="ic">!</span><div class="tx"><strong>Before you complete ACS, make sure every sector and cell on the site is working.</strong> The tests and the drive test are checked across the whole site — a dead sector will show up here.</div></div>
+        </div>
+        <div class="ui animate d2">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">Site-level ACS · what's changed</span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Background tests</b><span>run against all sectors</span></div></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Drive test</b><span>validated against each live cell</span></div></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>One submission</b><span>one leave code, whole site</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · OLD VS NEW -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Classic ACS vs ACS 2.0</h2>
+      <table class="compare-table animate d1">
+        <thead><tr><th class="old" style="width:20%">Aspect</th><th class="old" style="width:40%">Classic ACS</th><th style="width:40%">ACS 2.0</th></tr></thead>
+        <tbody>
+          <tr><td class="aspect">Layout</td><td>Seven tabs across the top of the page</td><td class="new">Numbered workflow down the left</td></tr>
+          <tr><td class="aspect">Scope</td><td>Completed one cell at a time</td><td class="new">Whole site — all cells &amp; sectors, one visit</td></tr>
+          <tr><td class="aspect">Progress</td><td>No sign on the tabs of what's done</td><td class="new">Live ✓ / ✕ / ! on every step</td></tr>
+          <tr><td class="aspect">CCTV</td><td>A separate, manual snapshot test</td><td class="new">Camera configured automatically, end to end</td></tr>
+          <tr><td class="aspect">VSAT test</td><td>Guessed the backhaul from ping speed</td><td class="new">Reads the site's recorded backhaul</td></tr>
+          <tr><td class="aspect">Submitting</td><td>Little feedback on what uploaded</td><td class="new">Item-by-item progress + a clear outcome</td></tr>
+          <tr><td class="aspect">Loading</td><td>A heavier page — slower over a poor link</td><td class="new">About half the size — loads better on VSAT</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6 · SECTION 02 -->
+  <div class="slide section-divider">
+    <div class="content">
+      <div class="section-number animate">06</div>
+      <h2 class="animate d1">The Workflow</h2>
+      <p class="muted animate d2">Seven steps down the left — your checklist for the visit</p>
+    </div>
+  </div>
+
+  <!-- 7 · THE SEVEN STEPS -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Seven steps, down the left</h2>
+      <p class="lead animate d1">Work top to bottom. Each step carries a live status — a green <span class="green">✓</span> when it's done, a red <span class="red">✕</span> where something needs your attention, and a dash until you get there — so you always know what's left. You can jump back to any step at any time.</p>
+      <div class="rail">
+        <div class="step animate d1"><span class="sn">01</span><span class="st"><b>Overview</b><span>Existing dispatches for the site — start a new one or edit the last</span></span><span class="tick pass">✓</span></div>
+        <div class="step animate d1"><span class="sn">02</span><span class="st"><b>Cell selection</b><span>Choose the dispatch type and the cell(s) in scope</span></span><span class="tick pass">✓</span></div>
+        <div class="step animate d2"><span class="sn">03</span><span class="st"><b>Data &amp; photos</b><span>Service checks, signal &amp; power readings, installation photos, engineers</span></span><span class="tick fail">✕</span></div>
+        <div class="step animate d2"><span class="sn">04</span><span class="st"><b>Background tests</b><span>Server-side automated tests — ping, EMC, CCTV, VSAT power</span></span><span class="tick run">↻</span></div>
+        <div class="step animate d3"><span class="sn">05</span><span class="st"><b>Trouble tickets</b><span>Open tickets on record for the site</span></span><span class="tick dim">–</span></div>
+        <div class="step animate d3"><span class="sn">06</span><span class="st"><b>Satellite info</b><span>Dish pointing &amp; skew — hidden automatically on LEO sites</span></span><span class="tick dim">–</span></div>
+        <div class="step animate d4"><span class="sn">07</span><span class="st"><b>Validate &amp; submit</b><span>The pre-submission checklist, your leave code, and upload</span></span><span class="tick dim">–</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 · STEPS 1-3 -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Open the site, pick the work, record the data</h2>
+      <p class="muted animate d1" style="margin-bottom:22px">Steps 01–03 · getting set up</p>
+      <div class="three-col animate d2">
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">01</span>Overview</h3><p>See every past dispatch for the site. Hit <strong>+ New dispatch</strong> to start, or <strong>Edit</strong> the latest to carry on.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">02</span>Cell selection</h3><p>Choose the <strong>dispatch type</strong> and the cell in scope. The workflow stays locked until a type is chosen, so you can't skip it.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">03</span>Data &amp; photos</h3><p>Service checks, signal &amp; power readings, engineer names, and your <strong>installation and Snyper photos</strong> — the same fields you know.</p></div>
+      </div>
+      <div class="note animate d3"><span class="tick fail" style="width:26px;height:26px">✕</span><div class="tx"><strong>New:</strong> picked the wrong photo? Every thumbnail now has a small <strong>✕</strong> to remove it before you submit. Selecting more photos <em>adds</em> to the set rather than replacing it — so remove, don't re-pick.</div></div>
+    </div>
+  </div>
+
+  <!-- 8b · DRIVE TEST -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">The drive test checks every technology</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 03 · Drive test upload</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">Every sector runs a cell <strong>per technology</strong> — 2G and 4G (and 3G where it's deployed). ACS 2.0 validates <strong>each of those cells on its own</strong>: enough coverage points, a strong enough peak signal, and good spread around the site.</p>
+          <p>Record it however suits the drive: <strong>one file that covers all technologies</strong>, or <strong>separate files</strong> — say a 2G drive and a 4G drive. ACS combines them and checks every cell against the whole set.</p>
+          <div class="note key" style="margin-top:18px"><span class="ic">i</span><div class="tx">Files <strong>add up</strong> as you attach them — drop in the 2G file, then the 4G. Re-adding the same file does nothing, and you can remove one with <strong>✕</strong>. <strong>Every live cell must pass</strong> for the drive test to go green.</div></div>
+        </div>
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">Drive test · per-cell results</span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Sector 1 · 2G</b><span>148 points · peak −71 dBm</span></div><span class="rs"><span class="lbl g">Pass</span></span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Sector 1 · 4G</b><span>132 points · peak −68 dBm</span></div><span class="rs"><span class="lbl g">Pass</span></span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Sector 2 · 2G</b><span>151 points · peak −74 dBm</span></div><span class="rs"><span class="lbl g">Pass</span></span></div>
+          <div class="ui-row"><span class="tick fail">✕</span><div class="rt"><b>Sector 2 · 4G</b><span>peak −101 dBm (min −95)</span></div><span class="rs"><span class="lbl r">Fail</span></span></div>
+          <div class="ui-row"><span class="tick dim">–</span><div class="rt"><b>Sector 3 · 2G / 4G</b><span>awaiting file</span></div><span class="rs"><span class="lbl m">Pending</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 · BACKGROUND TESTS -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Every sector, tested and tracked live</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 04 · Background tests</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">Press <strong>Initiate all background tests</strong> and confirm every sector is up. The tests now cover <strong>the whole site</strong> — every BTS and every EMC — not just one cell.</p>
+          <p>Each test is a card with a live status. The 15-minute BTS ping runs <strong>per sector, in parallel</strong>, each with its own timer and a <strong>Re-run</strong> button. Start it early — it's the longest, and it runs server-side while you fill in other steps.</p>
+          <div class="note key" style="margin-top:18px"><span class="ic">i</span><div class="tx"><strong>Expand any card</strong> to see the 60-second measurement blocks building up — ping, Es/No, C/No and the full EMC readout.</div></div>
+        </div>
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">04 · Background tests</span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Basic ping</b><span>BTS · EMC · CCTV reachability</span></div><span class="rs"><span class="lbl g">Pass</span></span></div>
+          <div class="ui-row"><span class="tick run">↻</span><div class="rt"><b>BTS ping</b><span>15-min latency &amp; loss per BTS</span></div><span class="rs"><span class="lbl b">Running</span><span class="m">06:12 · 2/3</span></span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>EMC test</b><span>Power &amp; environment</span></div><span class="rs"><span class="lbl g">Pass</span><span class="m">3/3 EMC</span></span></div>
+          <div class="ui-row"><span class="tick run">↻</span><div class="rt"><b>CCTV</b><span>Camera config + region</span></div><span class="rs"><span class="lbl b">Running</span></span></div>
+          <div class="ui-row"><span class="tick dim">–</span><div class="rt"><b>VSAT power levels</b><span>Es/No &amp; C/No</span></div><span class="rs"><span class="lbl m">N/A · non-Gilat</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 · CCTV -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">The camera configures itself</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 04 · CCTV</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">There's no separate CCTV test to run any more. The CCTV card does the whole job automatically: it <strong>checks the camera, applies the standard configuration, and pulls a snapshot</strong>.</p>
+          <p>Your part is the bit only a human can do: when the snapshot loads, <strong>frame the cabinet box</strong>, then tick that the <strong>cabinet is in the box and the solar panels are visible</strong>. That pushes the intrusion region and completes the card.</p>
+          <div class="note" style="margin-top:18px"><span class="ic" style="background:var(--amn-accent);color:#fff">↻</span><div class="tx">A live status line shows the current step — <em>checking… applying… loading snapshot… pushing region</em> — with a full log behind <strong>Show log</strong> if you need it.</div></div>
+        </div>
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">CCTV · automated setup</span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Camera reachable &amp; authed</b><span>DS-2CD2 · FW V5.7</span></div></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Standard config applied</b><span>including FTP upload target</span></div></div>
+          <div class="ui-row"><span class="tick run">↻</span><div class="rt"><b>Snapshot loaded — frame the cabinet</b><span>drag a box around the cabinet</span></div></div>
+          <div class="ui-row"><span class="tick dim">–</span><div class="rt"><b>Confirm cabinet &amp; solar visible</b><span>then the region is pushed</span></div><button class="ghostbtn">Confirm</button></div>
+        </div>
+      </div>
+      <div class="note warn animate d4"><span class="ic">!</span><div class="tx"><strong>New or swapped camera?</strong> ACS can only take over a camera it can reach and log in to. First, in the camera's own web page: <strong>activate it</strong> with the country password, set it to the site's correct <strong>IP address</strong> (ACS shows the IP it's expecting), and make sure the <strong>password</strong> is the standard one. Then Initiate again — if anything's still wrong, the card tells you exactly which of the three it is.</div></div>
+    </div>
+  </div>
+
+  <!-- 11 · VSAT -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">The power-level test runs on Gilat only</h2>
+      <p class="lead animate d1">ACS 2.0 reads the site's recorded backhaul and only runs the Es/No &amp; C/No power-level test where it can — on <strong>Gilat</strong>, the one satellite platform whose modem reports those levels.</p>
+      <div class="grid2 animate d2">
+        <div class="card">
+          <h3 style="display:flex;align-items:center;gap:10px"><span class="tick pass">✓</span> Gilat sites</h3>
+          <p>The <strong>Es/No and C/No power-level test runs</strong> and must pass. Expand the card to watch both level sets build up in 60-second blocks.</p>
+        </div>
+        <div class="card">
+          <h3 style="display:flex;align-items:center;gap:10px"><span class="tick dim">–</span> Everything else</h3>
+          <p>Other VSAT platforms (<strong>Hughes, UHP…</strong>) don't expose those readings, and LEO sites (<strong>Starlink, Amazon…</strong>) have no dish — so the card shows <strong>N/A</strong>. That's correct, not an error: the 15-minute BTS ping covers the link.</p>
+        </div>
+      </div>
+      <div class="note warn animate d3"><span class="ic">!</span><div class="tx">If a genuine <strong>Gilat</strong> site ever shows the power test as N/A, its backhaul may be recorded wrongly — flag it to GNOC rather than signing off, because the dish won't have been power-checked.</div></div>
+    </div>
+  </div>
+
+  <!-- 12 · SATELLITE -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Pointing &amp; skew — only when it matters</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 06 · Satellite info</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">For dish-backhaul sites, the satellite step shows the calculated pointing and <strong>skew angle</strong>. Enter your measured skew and confirm it — it must sit within tolerance of the calculated value.</p>
+          <p>On <strong>LEO sites this whole step disappears</strong>, because there's no dish to skew.</p>
+          <div class="note warn" style="margin-top:18px"><span class="ic">!</span><div class="tx"><strong>If the satellite data hasn't loaded, the skew check holds as a failure — not a pass.</strong> Wait for the pointing data to appear (select a cell if needed), then enter and confirm your reading.</div></div>
+        </div>
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">06 · Satellite pointing</span></div>
+          <div class="ui-row"><div class="rt"><b>Azimuth</b></div><span class="rs"><span class="lbl">122.4°</span></span></div>
+          <div class="ui-row"><div class="rt"><b>Elevation</b></div><span class="rs"><span class="lbl">31.8°</span></span></div>
+          <div class="ui-row"><div class="rt"><b>Calculated skew</b></div><span class="rs"><span class="lbl">−18.5°</span></span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Measured skew confirmed</b><span>within 5° tolerance</span></div><span class="rs"><span class="lbl g">−17.0°</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 · VALIDATE & SUBMIT -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">The checklist, your leave code, and upload</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 07 · Validate &amp; submit</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">The Validate step tallies everything: <strong>Passed / Failed / N/A</strong>. Any failure has a <strong>Fix →</strong> button that jumps you straight to the field that needs attention.</p>
+          <p style="margin-bottom:14px"><strong>Zero failures issues a leave code automatically.</strong> With failures you can still submit — but the leave code has to come from GNOC.</p>
+          <p>On submit you get an <strong>item-by-item progress list</strong>, then an outcome box confirming everything reached the ACS server — so you're never guessing whether it went through.</p>
+        </div>
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">07 · Validate &amp; submit</span></div>
+          <div class="counts">
+            <div><div class="n p">14</div><div class="cl">Passed</div></div>
+            <div><div class="n f">0</div><div class="cl">Failed</div></div>
+            <div><div class="n a">3</div><div class="cl">N/A</div></div>
+          </div>
+          <div class="leavecode"><div class="cl">Leave code</div><div class="code">MNG_9983</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 · SECTION 03 -->
+  <div class="slide section-divider">
+    <div class="content">
+      <div class="section-number animate">07</div>
+      <h2 class="animate d1">On Site</h2>
+      <p class="muted animate d2">What stays the same, and what to remember on the day</p>
+    </div>
+  </div>
+
+  <!-- 15 · WHAT'S THE SAME -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">What hasn't changed</h2>
+      <p class="lead animate d1">This is a new way to drive the same machine. Everything you already trust about ACS is intact.</p>
+      <div class="pills animate d2">
+        <span class="pill"><span class="tick pass sm">✓</span> The tests themselves &amp; what they measure</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Validation rules &amp; thresholds</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Leave-code logic &amp; GNOC escalation</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Signal, cross-pol &amp; power readings</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Drive test &amp; Snyper survey</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Engineer sign-off details</span>
+        <span class="pill"><span class="tick pass sm">✓</span> Data goes to the same ACS server</span>
+      </div>
+      <div class="note key animate d3"><span class="ic">i</span><div class="tx">If you were quick on the old page, you'll be quicker here — the fields are the same, now laid out as a guided workflow that tracks what's outstanding, instead of tabs you had to keep on top of yourself.</div></div>
+    </div>
+  </div>
+
+  <!-- 16 · FIELD TIPS -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">Six things to remember</h2>
+      <div class="grid2 animate d1" style="margin-top:20px">
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">01</span>Check every sector first</h3><p>The tests cover the whole site — confirm all sectors and cells are up before you start.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">02</span>Start the BTS ping early</h3><p>It's a 15-minute test per sector. Kick off "Initiate all" as soon as you arrive and let it run.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">03</span>Start tests, then keep working</h3><p>The long ping runs server-side — move on to other steps while it completes. Just don't reload the page, or it restarts.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">04</span>CCTV is automatic</h3><p>Just frame the cabinet box when the snapshot loads and confirm cabinet + solar are visible.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">05</span>N/A on LEO is normal</h3><p>Starlink/Amazon sites show the VSAT power test as N/A — that's expected, not a fault.</p></div>
+        <div class="card"><h3><span class="badge badge-num" style="margin:0 8px 0 0">06</span>Watch the submit outcome</h3><p>The outcome box confirms every item uploaded. If anything failed, fix it and submit again.</p></div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- COMBINED CLOSE -->
+  <div class="slide title-slide" data-slide="end">
+    <div class="content" style="text-align:center;">
+      <div class="animate"><span class="badge badge-yellow">THAT'S THE UPDATE</span></div>
+      <h2 class="animate d1" style="color:#fff;max-width:22ch;margin:8px auto .3em;">New tools in your hand, and a clearer way to sign off a site.</h2>
+      <p class="muted animate d2" style="max-width:64ch;margin:0 auto;">Drive Test, Field Survey, the Portal and Auto Clock-In in the Field App &mdash; and ACS 2.0 guiding every site visit to a clean leave code.</p>
+      <p class="muted animate d3" style="margin-top:30px;">Africa Mobile Networks &bull; Field App &amp; ACS 2.0 &bull; Questions during a visit go to GNOC</p>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<div class="nav-bar">
+  <button id="prevBtn" onclick="go(-1)">← Previous</button>
+  <span class="slide-counter" id="counter">1 / 38</span>
+  <button id="nextBtn" onclick="go(1)">Next →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  let cur = 0;
+  function show(i) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[i].classList.add('active');
+    slides[i].scrollTop = 0;
+    document.getElementById('counter').textContent = `${i+1} / ${total}`;
+    document.getElementById('prevBtn').disabled = (i === 0);
+    document.getElementById('nextBtn').disabled = (i === total - 1);
+    document.getElementById('progressBar').style.width = `${((i+1)/total)*100}%`;
+  }
+  function go(d) { const n = cur + d; if (n >= 0 && n < total) { cur = n; show(cur); } }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
+    if (e.key === 'Home')       { e.preventDefault(); cur = 0; show(cur); }
+    if (e.key === 'End')        { e.preventDefault(); cur = total-1; show(cur); }
+  });
+  show(0);
+</script>
+</body>
+</html>
