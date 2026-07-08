@@ -344,6 +344,29 @@
     </div>
   </div>
 
+  <!-- 8b · DRIVE TEST -->
+  <div class="slide">
+    <div class="content">
+      <h2 class="animate">The drive test checks every technology</h2>
+      <p class="muted animate d1" style="margin-bottom:20px">Step 03 · Drive test</p>
+      <div class="two-col">
+        <div class="animate d2">
+          <p style="margin-bottom:14px">Every sector runs a cell <strong>per technology</strong> — 2G and 4G (and 3G where it's deployed). ACS 2.0 validates <strong>each of those cells on its own</strong>: enough coverage points, a strong enough peak signal, and good spread around the site.</p>
+          <p>Record it however suits the drive: <strong>one file that covers all technologies</strong>, or <strong>separate files</strong> — say a 2G drive and a 4G drive. ACS combines them and checks every cell against the whole set.</p>
+          <div class="note key" style="margin-top:18px"><span class="ic">i</span><div class="tx">Files <strong>add up</strong> as you attach them — drop in the 2G file, then the 4G. Re-adding the same file does nothing, and you can remove one with <strong>✕</strong>. <strong>Every live cell must pass</strong> for the drive test to go green.</div></div>
+        </div>
+        <div class="ui animate d3">
+          <div class="ui-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="t">Drive test · per-cell results</span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Sector 1 · 2G</b><span>148 points · peak −71 dBm</span></div><span class="rs"><span class="lbl g">Pass</span></span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Sector 1 · 4G</b><span>132 points · peak −68 dBm</span></div><span class="rs"><span class="lbl g">Pass</span></span></div>
+          <div class="ui-row"><span class="tick pass">✓</span><div class="rt"><b>Sector 2 · 2G</b><span>151 points · peak −74 dBm</span></div><span class="rs"><span class="lbl g">Pass</span></span></div>
+          <div class="ui-row"><span class="tick fail">✕</span><div class="rt"><b>Sector 2 · 4G</b><span>peak −101 dBm (min −95)</span></div><span class="rs"><span class="lbl r">Fail</span></span></div>
+          <div class="ui-row"><span class="tick dim">–</span><div class="rt"><b>Sector 3 · 2G / 4G</b><span>awaiting file</span></div><span class="rs"><span class="lbl m">Pending</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 9 · BACKGROUND TESTS -->
   <div class="slide">
     <div class="content">
@@ -522,7 +545,7 @@
   <span class="brand">AMN &bull; ACS <b>2.0</b></span>
   <div class="mid">
     <button id="prevBtn" onclick="go(-1)">← Previous</button>
-    <span class="slide-counter" id="counter">1 / 17</span>
+    <span class="slide-counter" id="counter">1 / 18</span>
     <button id="nextBtn" onclick="go(1)">Next →</button>
   </div>
 </div>
