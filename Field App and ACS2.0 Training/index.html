@@ -190,6 +190,25 @@
   .slide.active .animate.d2 { animation-delay: .25s; opacity: 0; }
   .slide.active .animate.d3 { animation-delay: .4s; opacity: 0; }
   .slide.active .animate.d4 { animation-delay: .55s; opacity: 0; }
+
+  /* Click-to-enlarge lightbox */
+  img.zoomable { cursor: zoom-in; }
+  .lightbox {
+    position: fixed; inset: 0; z-index: 200;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.85); backdrop-filter: blur(4px);
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 92vw; max-height: 90vh;
+    border-radius: 10px;
+    box-shadow: 0 10px 50px rgba(0,0,0,.6);
+  }
+  .lightbox .lightbox-hint {
+    position: absolute; bottom: 24px; left: 0; right: 0;
+    text-align: center; color: var(--amn-muted); font-size: .9rem;
+  }
 </style>
 <style>
 
@@ -614,23 +633,23 @@
     </ul>
     <div class="animate d3" style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:22px;align-items:start;">
       <div>
-        <div class="screenshot-placeholder"><img src="snyper-1-connect.jpeg" style="max-height:34vh;"></div>
+        <div class="screenshot-placeholder"><img class="zoomable" src="snyper-1-connect.jpeg" style="max-height:34vh;"></div>
         <p class="muted" style="margin-top:8px;text-align:center;font-size:.85rem;">1. Connect via the supplied cable + OTG adapter</p>
       </div>
       <div>
-        <div class="screenshot-placeholder"><img src="snyper-2-hdd-menu.jpeg" style="max-height:34vh;"></div>
+        <div class="screenshot-placeholder"><img class="zoomable" src="snyper-2-hdd-menu.jpeg" style="max-height:34vh;"></div>
         <p class="muted" style="margin-top:8px;text-align:center;font-size:.85rem;">2. Main menu → HDD Storage → OK</p>
       </div>
       <div>
-        <div class="screenshot-placeholder"><img src="snyper-3-hdd-disabled.jpeg" style="max-height:34vh;"></div>
+        <div class="screenshot-placeholder"><img class="zoomable" src="snyper-3-hdd-disabled.jpeg" style="max-height:34vh;"></div>
         <p class="muted" style="margin-top:8px;text-align:center;font-size:.85rem;">3. Screen shows HDD Disabled</p>
       </div>
       <div>
-        <div class="screenshot-placeholder"><img src="snyper-4-select-on.jpg" style="max-height:34vh;"></div>
+        <div class="screenshot-placeholder"><img class="zoomable" src="snyper-4-select-on.jpg" style="max-height:34vh;"></div>
         <p class="muted" style="margin-top:8px;text-align:center;font-size:.85rem;">4. Press right arrow ▶ to select On</p>
       </div>
       <div>
-        <div class="screenshot-placeholder"><img src="snyper-5-hdd-enabled.jpeg" style="max-height:34vh;"></div>
+        <div class="screenshot-placeholder"><img class="zoomable" src="snyper-5-hdd-enabled.jpeg" style="max-height:34vh;"></div>
         <p class="muted" style="margin-top:8px;text-align:center;font-size:.85rem;">5. HDD Enabled — ready to connect</p>
       </div>
     </div>
@@ -674,9 +693,62 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 14 — Field Survey: Photos
+     SLIDE 14 — Field Survey: Candidate Sites & Options
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="14">
+<div class="slide" data-slide="14">
+  <div class="content">
+    <h2 class="animate">Candidate Sites &amp; Candidate Options</h2>
+    <p class="animate d1" style="margin-bottom:22px;">
+      Each survey can record <span class="highlight">multiple candidate locations</span> for the
+      tower — Candidate 1, 2, 3… Add a candidate for every location surveyed; each one is a
+      self-contained card in the form, and unwanted candidates can be removed.
+    </p>
+    <div class="three-col animate d2">
+      <div class="card">
+        <h3>Location &amp; Landlord</h3>
+        <ul>
+          <li>GPS captured at the candidate spot — latitude, longitude, altitude</li>
+          <li>Landlord name, phone, email &amp; address</li>
+          <li>Directions from the main road</li>
+          <li>Soil type</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Suitability Data</h3>
+        <ul>
+          <li>Distances to landmarks — road, power, nearest property, school, church, hospital, airfield, watercourse</li>
+          <li>Permit success % and agreement %</li>
+          <li>Supporting comments</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Site Checks <span class="muted" style="font-weight:400;">(yes/no + comment)</span></h3>
+        <ul>
+          <li>On a known flight path</li>
+          <li>Build challenges</li>
+          <li>Land floods</li>
+          <li>In a national park / environmentally sensitive</li>
+          <li>Other land restrictions or zoning</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card animate d3" style="margin-top:22px;border-color:rgba(255,214,0,.4);">
+      <h3>Preferred Candidate</h3>
+      <p>Mark exactly <span class="highlight">one candidate as Preferred</span> using the radio
+         button on its card — this is the surveyor's recommended location. The survey
+         <span class="highlight">cannot be submitted</span> until a preferred candidate is selected.
+         Panoramic photos are also taken per candidate site (next slide).</p>
+    </div>
+    <p class="muted animate d4" style="margin-top:18px;text-align:center;">
+      Demonstrated live in the app
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 15 — Field Survey: Photos
+     ═══════════════════════════════════════════ -->
+<div class="slide phone-screenshot" data-slide="15">
   <div class="content">
     <h2 class="animate">Site Photos</h2>
     <p class="animate d1" style="margin-bottom:25px;">
@@ -707,9 +779,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 15 — Field Survey: Pass / Fail Verdict
+     SLIDE 16 — Field Survey: Pass / Fail Verdict
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="15">
+<div class="slide phone-screenshot" data-slide="16">
   <div class="content">
     <h2 class="animate">Survey Verdict — Pass or Fail</h2>
     <div class="two-col">
@@ -739,9 +811,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 16 — Field Survey: Signature & Submission
+     SLIDE 17 — Field Survey: Signature & Submission
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="16">
+<div class="slide phone-screenshot" data-slide="17">
   <div class="content">
     <h2 class="animate">Signature &amp; Submission</h2>
     <div class="two-col">
@@ -778,9 +850,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 17 — Field Survey: Workflow Summary
+     SLIDE 18 — Field Survey: Workflow Summary
      ═══════════════════════════════════════════ -->
-<div class="slide" data-slide="17">
+<div class="slide" data-slide="18">
   <div class="content">
     <h2 class="animate">Field Survey Workflow</h2>
     <div class="flow animate d1" style="justify-content:center; margin: 30px 0;">
@@ -819,9 +891,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 18 — Section: Backend Portal
+     SLIDE 19 — Section: Backend Portal
      ═══════════════════════════════════════════ -->
-<div class="slide section-divider" data-slide="18">
+<div class="slide section-divider" data-slide="19">
   <div class="content">
     <div class="section-number animate">03</div>
     <h2 class="animate d1">Backend Portal</h2>
@@ -830,9 +902,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 19 — Backend: Survey Dashboard
+     SLIDE 20 — Backend: Survey Dashboard
      ═══════════════════════════════════════════ -->
-<div class="slide wide-screenshot" data-slide="19">
+<div class="slide wide-screenshot" data-slide="20">
   <div class="content">
     <h2 class="animate">Survey Dashboard</h2>
     <div class="two-col">
@@ -863,9 +935,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 20 — Backend: Survey Detail View
+     SLIDE 21 — Backend: Survey Detail View
      ═══════════════════════════════════════════ -->
-<div class="slide wide-screenshot" data-slide="20">
+<div class="slide wide-screenshot" data-slide="21">
   <div class="content">
     <h2 class="animate">Detailed Survey View</h2>
     <div class="two-col">
@@ -903,9 +975,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 21 — Backend: PDF Export
+     SLIDE 22 — Backend: PDF Export
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="21">
+<div class="slide phone-screenshot" data-slide="22">
   <div class="content">
     <h2 class="animate">PDF Report Export</h2>
     <div class="two-col">
@@ -935,9 +1007,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 22 — Section: Auto Clock-In
+     SLIDE 23 — Section: Auto Clock-In
      ═══════════════════════════════════════════ -->
-<div class="slide section-divider" data-slide="22">
+<div class="slide section-divider" data-slide="23">
   <div class="content">
     <div class="section-number animate">04</div>
     <h2 class="animate d1">Auto Clock-In</h2>
@@ -946,9 +1018,9 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SLIDE 23 — Auto Clock-In: How It Works
+     SLIDE 24 — Auto Clock-In: How It Works
      ═══════════════════════════════════════════ -->
-<div class="slide phone-screenshot" data-slide="23">
+<div class="slide phone-screenshot" data-slide="24">
   <div class="content">
     <h2 class="animate">Auto Clock-In</h2>
     <div class="two-col">
@@ -1268,6 +1340,11 @@
   <button id="nextBtn" onclick="go(1)">Next →</button>
 </div>
 
+<div class="lightbox" id="lightbox">
+  <img id="lightboxImg" src="" alt="">
+  <p class="lightbox-hint">Click anywhere or press Esc to close</p>
+</div>
+
 <script>
   const slides = document.querySelectorAll('.slide');
   const total  = slides.length;
@@ -1282,7 +1359,22 @@
     document.getElementById('progressBar').style.width = `${((i+1)/total)*100}%`;
   }
   function go(d) { const n = cur + d; if (n >= 0 && n < total) { cur = n; show(cur); } }
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  document.querySelectorAll('img.zoomable').forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src;
+      lightbox.classList.add('open');
+    });
+  });
+  lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+
   document.addEventListener('keydown', e => {
+    if (lightbox.classList.contains('open')) {
+      if (e.key === 'Escape') { e.preventDefault(); lightbox.classList.remove('open'); }
+      return;
+    }
     if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
     if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); }
     if (e.key === 'Home')       { e.preventDefault(); cur = 0; show(cur); }
