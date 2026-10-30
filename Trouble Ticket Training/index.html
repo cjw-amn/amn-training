@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trouble Ticket Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="icon" href="logo.png">
+<style>
+  html, body { margin: 0; height: 100%; background: #041224; overflow: hidden; }
+  #stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: center center; }
+  .slide { position: absolute; inset: 0; width: 1920px; height: 1080px; box-sizing: border-box; overflow: hidden; visibility: hidden; }
+  .slide.active { visibility: visible; }
+  .slide * { margin: 0; box-sizing: border-box; }
+  .slide ul { padding-left: 1.1em; }
+  .slide li + li { margin-top: 0.35em; }
+  .slide table { border-collapse: separate; border-spacing: 0; }
+  .slide th, .slide td { padding: 14px 20px; vertical-align: top; border-bottom: 1px solid #d5dee9; }
+  .slide tr:last-child td { border-bottom: none; }
+  .slide th { font-weight: 600; text-align: left; }
+  .slide h1 { line-height: 1.1; } .slide h2 { line-height: 1.15; } .slide h3 { line-height: 1.2; } .slide p { line-height: 1.4; }
+  .slide a { color: inherit; }
+  x-shape { display: block; flex: none; }
+  x-shape[data-kind="ellipse"] { border-radius: 50%; }
+  x-shape[data-kind="arrow-right"] { clip-path: polygon(0 30%, 60% 30%, 60% 0, 100% 50%, 60% 100%, 60% 70%, 0 70%); }
+  .notes { display: none; }
+  #notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 35vh; overflow: auto; background: #0c223e; color: #eaf1f8;
+    font: 16px/1.5 "IBM Plex Sans", system-ui, sans-serif; padding: 16px 24px; border-top: 1px solid #1f3c5f; display: none; }
+  body.show-notes #notes { display: block; }
+  #bar { position: fixed; right: 16px; bottom: 12px; display: flex; gap: 8px; align-items: center;
+    font: 14px "IBM Plex Sans", system-ui, sans-serif; color: #9cb0c6; opacity: 0.25; transition: opacity .2s; }
+  #bar:hover { opacity: 1; }
+  #bar button { background: #0c223e; color: #eaf1f8; border: 1px solid #1f3c5f; border-radius: 8px; padding: 6px 12px; font: inherit; cursor: pointer; }
+  #bar button:focus-visible { outline: 2px solid #8fc0f5; outline-offset: 2px; }
+  #progress { position: fixed; left: 0; top: 0; height: 4px; background: #4bb332; transition: width .2s; }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="stage">
+<section class="slide" id="cover" style="background:#073364;color:#f6f8fb;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<svg aria-label="Signal arcs" viewBox="0 0 640 640" width="640" height="640" style="position:absolute;left:1152px;top:312px;width:640px;height:640px"><path d="M0 460 A180 180 0 0 1 180 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round"/><path d="M0 280 A360 360 0 0 1 360 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.6"/><path d="M0 100 A540 540 0 0 1 540 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.3"/></svg>
+<img src="logo.png" alt="AMN logo" style="width:180px;height:180px;object-fit:contain">
+<div style="display:flex;flex-direction:column;gap:32px;width:1100px">
+<h1 style="font-family:'Outfit', Arial, sans-serif;font-size:120px;font-weight:600;line-height:1.05;letter-spacing:-2px;color:#f6f8fb">Trouble tickets, end to end</h1>
+<p style="font-size:36px;line-height:1.4;color:#c9d6e6">How tickets open and close themselves, the pages around them, and how to keep country teams on the right work</p>
+</div>
+<p style="font-size:24px;color:#c9d6e6">AMN Portal · Training session and reference guide · October 2026</p>
+<aside class="notes">Welcome. This deck is both the training session and the reference guide you keep afterwards. Every slide has notes with the detail behind it, so you can come back to it later. The facts in this deck come from how the portal actually behaves (the Ticket Analysis engine and the trouble ticket pages) as of October 2026.</aside>
+</section>
+<section class="slide" id="role" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">YOUR ROLE</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.15;letter-spacing:-1px;color:#0a1e36;width:1500px">Every real fault gets one ticket, one owner and one date, and closes for the right reason</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">THE SYSTEM</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600;line-height:1.2">Opens and closes most tickets</h3>
+<p style="font-size:28px;line-height:1.45;color:#4d5f75">Ticket Analysis runs every morning, raises tickets for faulty sites and closes them once sites are clean.</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">YOU</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600;line-height:1.2">Make sure tickets get worked</h3>
+<p style="font-size:28px;line-height:1.45;color:#4d5f75">Check the run, triage what lands with GNOC, and spot tickets with no ETA, no progress or no owner.</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">THE COUNTRIES</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600;line-height:1.2">Fix the sites, in the right order</h3>
+<p style="font-size:28px;line-height:1.45;color:#4d5f75">Country FE teams schedule visits and fix sites. You keep them on HIGH first, then the oldest and the overdue.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">Welcome</p>
+<aside class="notes">The single most important idea: most ticket opening and closing is automatic. Your value is not in typing tickets. It is in making sure the automatic tickets are owned, scheduled and progressing, and in steering each country's field engineering (FE) team towards the faults that matter most. GNOC = the Global Network Operations Centre team; tickets that need judgement land with GNOC in "Triage" first.</aside>
+</section>
+<section class="slide" id="agenda" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">THE SESSION</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Five parts, then a reference section</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:32px 64px">
+<div style="display:flex;gap:28px;align-items:baseline;border-top:1px solid #d5dee9;padding:24px 0 0 0"><p style="font-family:'Outfit', Arial, sans-serif;font-size:44px;font-weight:600;color:#276f1c;width:72px">01</p><div style="display:flex;flex-direction:column;gap:4px"><p style="font-size:32px;font-weight:600">How a ticket works</p><p style="font-size:26px;color:#4d5f75">Statuses, priorities, owners, lifecycle</p></div></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-top:1px solid #d5dee9;padding:24px 0 0 0"><p style="font-family:'Outfit', Arial, sans-serif;font-size:44px;font-weight:600;color:#276f1c;width:72px">04</p><div style="display:flex;flex-direction:column;gap:4px"><p style="font-size:32px;font-weight:600">Working a ticket by hand</p><p style="font-size:26px;color:#4d5f75">Actions, ETAs, comments, the guard rails</p></div></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-top:1px solid #d5dee9;padding:24px 0 0 0"><p style="font-family:'Outfit', Arial, sans-serif;font-size:44px;font-weight:600;color:#276f1c;width:72px">02</p><div style="display:flex;flex-direction:column;gap:4px"><p style="font-size:32px;font-weight:600">Automatic opening</p><p style="font-size:26px;color:#4d5f75">The daily run, six fault codes, surges</p></div></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-top:1px solid #d5dee9;padding:24px 0 0 0"><p style="font-family:'Outfit', Arial, sans-serif;font-size:44px;font-weight:600;color:#276f1c;width:72px">05</p><div style="display:flex;flex-direction:column;gap:4px"><p style="font-size:32px;font-weight:600">The pages around tickets</p><p style="font-size:26px;color:#4d5f75">Criteria, Discrepancy, Stats, Scheduler</p></div></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-top:1px solid #d5dee9;padding:24px 0 0 0"><p style="font-family:'Outfit', Arial, sans-serif;font-size:44px;font-weight:600;color:#276f1c;width:72px">03</p><div style="display:flex;flex-direction:column;gap:4px"><p style="font-size:32px;font-weight:600">Automatic closing</p><p style="font-size:26px;color:#4d5f75">Three clean days, site visits, the FE bonus</p></div></div>
+<div style="display:flex;gap:28px;align-items:baseline;border-top:1px solid #d5dee9;padding:24px 0 0 0"><p style="font-family:'Outfit', Arial, sans-serif;font-size:44px;font-weight:600;color:#4d5f75;width:72px">R</p><div style="display:flex;flex-direction:column;gap:4px"><p style="font-size:32px;font-weight:600">Reference</p><p style="font-size:26px;color:#4d5f75">Glossary, page addresses, AI Agent</p></div></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">Welcome</p>
+<aside class="notes">Suggested timing for a live session: about 75 minutes. Parts 1 to 3 are the foundation (35 min), part 4 is hands-on with a real ticket (15 min), and part 5 is best done with the pages open side by side (25 min). Keep the reference section open on a second screen during your first weeks.</aside>
+</section>
+<section class="slide" id="div-basics" data-transition="fade" style="background:#073364;color:#f6f8fb;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:32px">
+<svg aria-label="Signal arcs" viewBox="0 0 640 640" width="640" height="640" style="position:absolute;left:1152px;top:312px;width:640px;height:640px"><path d="M0 460 A180 180 0 0 1 180 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round"/><path d="M0 280 A360 360 0 0 1 360 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.6"/><path d="M0 100 A540 540 0 0 1 540 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.3"/></svg>
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:160px;font-weight:600;line-height:1;color:#4bb332">01</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1.05;letter-spacing:-2px;color:#f6f8fb">How a ticket works</h2>
+<p style="font-size:36px;line-height:1.4;color:#c9d6e6;width:1000px">Statuses, priorities, who owns a ticket, and the path from raised to closed</p>
+</section>
+<section class="slide" id="status-codes" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">STATUS</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Five statuses, each with a number</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#fbf0d9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:88px;font-weight:600;line-height:1;color:#8a5300">1</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600">Triage</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">Waiting for GNOC to look at it first</p>
+</div>
+<div style="flex:1;background:#e2ebf6;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:88px;font-weight:600;line-height:1;color:#073364">2</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600">Open</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">With the country team to fix</p>
+</div>
+<div style="flex:1;background:#e9eef5;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:88px;font-weight:600;line-height:1;color:#4d5f75">3</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600">Pending</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">Parked; still counts as open work</p>
+</div>
+<div style="flex:1;background:#e3f4dc;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:88px;font-weight:600;line-height:1;color:#276f1c">4</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600">Resolved</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">Fixed on site, waiting to be confirmed</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:88px;font-weight:600;line-height:1;color:#0a1e36">5</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600">Closed</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">Done. The site has proven it is healthy</p>
+</div>
+</div>
+<div style="background:#073364;border-radius:16px;padding:32px 40px;display:flex;gap:24px;align-items:center">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#4bb332;width:44px;height:44px;flex:none"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+<p style="font-size:30px;line-height:1.4;color:#f6f8fb"><b>Resolved is not Closed.</b> A visit marks a ticket Resolved; the system closes it only when the site’s numbers prove the fix held.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">01 · How a ticket works</p>
+<aside class="notes">The numbers matter because filters, the AI Agent and some reports use them. 1 Triage: tickets routed to GNOC start here. 2 Open: normal automatic tickets start here, assigned to the country FE team. Saving an ETA on a ticket also forces it to Open. 3 Pending: on hold; it is still counted in open-ticket figures and in the weekly age snapshot (statuses 1 to 3). 4 Resolved: the banner reads "Marked as Resolved, awaiting GNOC closure". Set by an ACS site visit, or by a TT Admin. 5 Closed. In the Trouble Tickets page the tabs are All, Triage, Open (the default tab), Pending, Resolved and Closed (click to load). Status names are held in the TTConfig collection, so the label text could be changed centrally.</aside>
+</section>
+<section class="slide" id="priority-owners" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">PRIORITY AND OWNER</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Every ticket has a priority and a team</h2>
+</div>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600">Priority</h3>
+<table style="font-size:28px;color:#0a1e36;width:100%">
+<tr><th style="width:18%">No.</th><th style="width:26%">Label</th><th style="width:56%">Used for</th></tr>
+<tr><td>4</td><td>Urgent</td><td>Manual tickets only</td></tr>
+<tr><td>3</td><td>High</td><td>Site or BTS down, no traffic</td></tr>
+<tr><td>2</td><td>Medium</td><td>Bad availability</td></tr>
+<tr><td>1</td><td>Low</td><td>Bad call success rate</td></tr>
+</table>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">The countries work HIGH first, then MEDIUM. The stats pages total those two together.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600">Owner</h3>
+<div style="background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:30px;font-weight:600">Country FE team, at Open</p>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">The default. Chosen from the site’s operator and country, e.g. “Nigeria FE”, “DRC FE”, “Sudan FE”.</p>
+</div>
+<div style="background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:30px;font-weight:600">GNOC, at Triage</p>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">When a ticket needs judgement first: bad call success, a chronic site, or a surge of tickets.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">01 · How a ticket works</p>
+<aside class="notes">Automatic tickets only ever use priorities 1 to 3; 4 (Urgent) is available when creating a ticket by hand. Priority comes from the fault code (next part), except a chronic site, which is forced to HIGH. Ownership: the country team is taken from the Operator_Country of the site's main live BTS and mapped to a group mailbox (for example MTN_Nigeria to "Nigeria FE"; Orange_DRC to "DRC FE"). If the BTS lookup fails, the country is worked out from the site name prefix. Each ticket is also stamped with its MNO impact (which operator's customers are affected) and a High Value Site flag, both shown on the ticket card.</aside>
+</section>
+<section class="slide" id="lifecycle" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">THE LIFECYCLE</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">From raised to closed, mostly on its own</h2>
+</div>
+<div style="display:flex;gap:16px;align-items:center">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">SYSTEM · 08:00</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Raised</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">The daily run flags a faulty site and opens a ticket</p>
+</div>
+<x-shape data-kind="arrow-right" style="width:56px;height:28px;background:#7a8ca2"></x-shape>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">GNOC · COUNTRY</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Triage or Open</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">An owner, an ETA and a slot on the FE Scheduler</p>
+</div>
+<x-shape data-kind="arrow-right" style="width:56px;height:28px;background:#7a8ca2"></x-shape>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">FE · ACS VISIT</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Resolved</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">The engineer fixes the site and records the visit in ACS</p>
+</div>
+<x-shape data-kind="arrow-right" style="width:56px;height:28px;background:#7a8ca2"></x-shape>
+<div style="flex:1;background:#e3f4dc;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#276f1c">SYSTEM · 08:00</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Closed</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">After three clean days in a row, the run closes it</p>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#4d5f75;width:1500px">A site that recovers on its own also closes after three clean days, with no visit. If the site is still faulty, the ticket stays open, whatever its status.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">01 · How a ticket works</p>
+<aside class="notes">This is the picture to remember. The system owns the two ends (raising and closing). People own the middle: GNOC triage, the country team scheduling a visit (which sets the ETA), and the field engineer resolving it through an ACS visit. ACS is the site-visit record the field engineer completes; when an engineer lists a ticket as fixed and has a valid leave code, the ticket moves to Resolved automatically. Closing then waits for proof: three consecutive clean days on every live cell of the ticket. Parts 2 and 3 cover each end in detail.</aside>
+</section>
+<section class="slide" id="div-open" data-transition="fade" style="background:#073364;color:#f6f8fb;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:32px">
+<svg aria-label="Signal arcs" viewBox="0 0 640 640" width="640" height="640" style="position:absolute;left:1152px;top:312px;width:640px;height:640px"><path d="M0 460 A180 180 0 0 1 180 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round"/><path d="M0 280 A360 360 0 0 1 360 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.6"/><path d="M0 100 A540 540 0 0 1 540 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.3"/></svg>
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:160px;font-weight:600;line-height:1;color:#4bb332">02</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1.05;letter-spacing:-2px;color:#f6f8fb">Automatic opening</h2>
+<p style="font-size:36px;line-height:1.4;color:#c9d6e6;width:1000px">Ticket Analysis: when it runs, what it looks for, and where it sends each ticket</p>
+</section>
+<section class="slide" id="daily-run" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">THE DAILY RUN</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Ticket Analysis judges yesterday, twice a day</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4d5f75">03:00</p>
+<p style="font-size:28px;font-weight:600">Scheduler tidy-up</p>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">FE Scheduler entries older than 7 days are cleared</p>
+</div>
+<div style="flex:1;background:#073364;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4bb332">08:00</p>
+<p style="font-size:28px;font-weight:600;color:#f6f8fb">Main run</p>
+<p style="font-size:26px;line-height:1.4;color:#c9d6e6">Opens, re-codes and closes tickets from yesterday’s data</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#4d5f75">08:30</p>
+<p style="font-size:28px;font-weight:600">Mondays, UTC</p>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">Weekly snapshot of ticket ages for TT Stats</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1;color:#073364">14:00</p>
+<p style="font-size:28px;font-weight:600">Second run</p>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">Same rules again, catching sites that came back today</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">ORDER INSIDE EACH RUN</p>
+<div style="display:flex;gap:16px;align-items:center">
+<p style="font-size:28px;font-weight:600;background:#e3f4dc;color:#276f1c;padding:12px 28px;border-radius:9999px">1 · Close</p>
+<x-shape data-kind="arrow-right" style="width:40px;height:20px;background:#7a8ca2"></x-shape>
+<p style="font-size:28px;font-weight:600;background:#e2ebf6;color:#073364;padding:12px 28px;border-radius:9999px">2 · Re-code</p>
+<x-shape data-kind="arrow-right" style="width:40px;height:20px;background:#7a8ca2"></x-shape>
+<p style="font-size:28px;font-weight:600;background:#e2ebf6;color:#073364;padding:12px 28px;border-radius:9999px">3 · Refresh subsystem status</p>
+<x-shape data-kind="arrow-right" style="width:40px;height:20px;background:#7a8ca2"></x-shape>
+<p style="font-size:28px;font-weight:600;background:#fbf0d9;color:#8a5300;padding:12px 28px;border-radius:9999px">4 · Open new</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">02 · Automatic opening</p>
+<aside class="notes">Ticket Analysis runs in the portal's background process at 08:00 and 14:00 (server time). Both runs look at YESTERDAY's data (the "end date"); some rules also check that a site is still down today. Only one run can happen at a time. Practical consequence: a site that went down this morning will not get an automatic ticket until it has been down for a whole calendar day, so it appears in tomorrow's 08:00 run. If something urgent cannot wait, it needs a manual ticket. The 08:00 run is the one to check each morning. Inside a run, closes happen first, then re-codes of existing tickets, then a refresh of each open ticket's subsystem status (SAT, BTS, CCTV, EMC, power, ARN), then new tickets. Automatic tickets send no email. If a run fails or is missed, the Portal Status page goes amber after 20 hours and red after 44 hours, and the portal team gets a Google Chat alert. Admins can trigger a run by hand.</aside>
+</section>
+<section class="slide" id="fault-codes" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">WHAT RAISES A TICKET</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Six fault codes, most severe first</h2>
+</div>
+<table style="font-size:28px;color:#0a1e36;width:100%;background:#ffffff">
+<tr style="background:#e9eef5"><th style="width:22%">Fault code</th><th style="width:13%">Priority</th><th style="width:65%">Rule, checked on yesterday’s data</th></tr>
+<tr><td><b>Site Down</b></td><td>HIGH</td><td>Satellite link failed every ping all day, and still down today</td></tr>
+<tr><td><b>BTS Down</b></td><td>HIGH</td><td>BTS failed every ping all day, and still down today</td></tr>
+<tr><td><b>No Traffic</b></td><td>HIGH</td><td>Fewer than 100 location updates in the day</td></tr>
+<tr><td><b>Low Erlangs</b></td><td>HIGH</td><td>Voice traffic collapsed: last 7 days far below the 28 before</td></tr>
+<tr><td><b>Bad Availability</b></td><td>MEDIUM</td><td>Down over 4 hours yesterday, and on 5 of the last 7 days</td></tr>
+<tr><td><b>Bad CSR</b></td><td>LOW</td><td>Call success under 70% on 5 of the last 7 days</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.4;color:#4d5f75">A site only ever carries its most severe code. All six look at 2G cells.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">02 · Automatic opening</p>
+<aside class="notes">These six are the "managed" fault codes; the system fully owns tickets with these codes. Details. Site Down: across the whole site (grouped by the 7-character site prefix), the satellite (SAT) ping had zero successes and at least one failure for the whole of yesterday, and there has been no successful SAT ping today. BTS Down: the same test on the BTS ping. No Traffic: the highest daily location-update count is under 100 (2G). Low Erlangs: compares the last 7 days with the 28 days before and confirms over the last 2 days. It triggers on any of: a drop of more than 80 Erlangs a day; a drop of more than 25 a day together with at least a 20% fall in availability or call success; or recent traffic at 25% or less of its history. Days with 4 hours or more of downtime are left out of this comparison. Bad Availability: more than 4 hours (14,400 s) of downtime yesterday and on at least 5 of the last 7 days. Bad CSR: call success rate under 70% on at least 5 of the last 7 days that had call attempts, and yesterday must itself be one of them. A "Bad Blocking" rule exists in the code but is switched off. Note: the TT Stats page lists Low Erlangs in its LOW group, but the engine raises it as HIGH.</aside>
+</section>
+<section class="slide" id="not-triggers" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">WHAT DOES NOT RAISE A TICKET</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Knowing the gaps is half the job</h2>
+</div>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600">Never raised automatically</h3>
+<ul style="font-size:28px;line-height:1.5;color:#0a1e36">
+<li>Alarms, and the live Monitor page on their own</li>
+<li>3G and 4G cells (the rules are 2G)</li>
+<li>Cells that went live yesterday</li>
+<li>Stopped or decommissioned sites</li>
+<li>Sites marked as test sites</li>
+<li>A site down yesterday but back today</li>
+<li>Fault codes or sites excluded in the settings</li>
+</ul>
+</div>
+<div style="flex:1;background:#073364;border-radius:16px;padding:48px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4bb332">SO, A SITE IS DOWN RIGHT NOW</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600;line-height:1.2;color:#f6f8fb">It gets a ticket tomorrow at 08:00, once it has been down a whole day</h3>
+<p style="font-size:28px;line-height:1.45;color:#c9d6e6">If it cannot wait, or the fault is something the six rules don’t cover, it needs a manual ticket.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">02 · Automatic opening</p>
+<aside class="notes">The engine works from hourly and daily aggregates, not from live alarms or the live ping page. Exclusions in detail: 3G (-Xu) and 4G (-Xl) cells are dropped from the criteria; cells whose live date equals yesterday are left out; stopped or decommissioned sites are left out; sites with "test site" set never get a ticket (they appear as "skipped" in the run output); a site that was down all of yesterday but is back today is not raised under any lower code either (recovered-from-down suppression); and the settings can exclude whole fault codes or site prefixes. An ARN in USB-2 mode is shown on tickets as a subsystem issue but never raises a ticket on its own. Manual tickets: the "Create New Ticket (amnPortal)" button on the Trouble Tickets page is shown to admin users only. Creating one requires subject, description, type, priority, status and fault code, and it emails the assignee and the notify list.</aside>
+</section>
+<section class="slide" id="one-per-site" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">ONE TICKET PER SITE</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">A changing fault changes the ticket, not the count</h2>
+</div>
+<div style="display:flex;gap:56px">
+<div style="flex:3;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:28px;line-height:1.4;color:#4d5f75">When a site already has an automatic ticket, the run compares today’s code with the ticket’s:</p>
+<div style="background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column;gap:6px">
+<p style="font-size:30px;font-weight:600">Same code → unchanged</p>
+<p style="font-size:26px;color:#4d5f75">Nothing happens; the ticket keeps running</p>
+</div>
+<div style="background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column;gap:6px">
+<p style="font-size:30px;font-weight:600">Worse code → re-coded at once</p>
+<p style="font-size:26px;color:#4d5f75">Same ticket number; subject and priority updated, with a comment</p>
+</div>
+<div style="background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column;gap:6px">
+<p style="font-size:30px;font-weight:600">Milder code → re-coded</p>
+<p style="font-size:26px;color:#4d5f75">With the downgrade hold switched on, only after 3 clean days</p>
+</div>
+</div>
+<div style="flex:2;background:#e9eef5;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">SEVERITY LADDER</p>
+<p style="font-size:30px;font-weight:600"><span style="color:#b42318">6</span>  Site Down</p>
+<p style="font-size:30px;font-weight:600"><span style="color:#b42318">5</span>  BTS Down</p>
+<p style="font-size:30px;font-weight:600"><span style="color:#b42318">4</span>  No Traffic</p>
+<p style="font-size:30px;font-weight:600"><span style="color:#b42318">3</span>  Low Erlangs</p>
+<p style="font-size:30px;font-weight:600"><span style="color:#8a5300">2</span>  Bad Availability</p>
+<p style="font-size:30px;font-weight:600"><span style="color:#4d5f75">1</span>  Bad CSR</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">02 · Automatic opening</p>
+<aside class="notes">The engine keeps one managed ticket per site, keyed by the 7-character site prefix, across statuses 1 to 4. If the site already has one, it never opens a second; it re-codes the existing one instead ("modify"). A re-code rewrites the subject ("BTS: Fault Code"), the priority and the fault code, and adds a system comment "Fault code changed by Ticket Analysis". Escalations (to a more severe code) happen immediately. Downgrades: if the downgrade hysteresis setting is on, a downgrade such as Site Down to Bad Availability must pass the same three-clean-day test used for closing; until then it is held ("downgrade held") and keeps its code. If yesterday's KPI or monitor data is missing, a re-code is skipped rather than made on bad data. Why it matters to you: the ticket number stays stable while the fault evolves, so the ticket history tells the whole story of the site. Duplicate tickets for one site are a problem to fix (see Ticket Discrepancy).</aside>
+</section>
+<section class="slide" id="routing" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">ROUTING AND SAFEGUARDS</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Some tickets come to GNOC first, some not at all</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#8a5300">TO GNOC TRIAGE</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Bad CSR</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">Call success problems need analysis before anyone travels</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#8a5300">TO GNOC TRIAGE, HIGH</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Chronic site</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">Its 3rd automatic ticket in 90 days: fix the cause, not the symptom</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#8a5300">TO GNOC TRIAGE</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Soft surge</h3>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">An unusual cluster on one MNO or BSC; could be a shared cause</p>
+</div>
+</div>
+<div style="background:#fbe4e1;border-radius:16px;padding:32px 40px;display:flex;gap:28px;align-items:center">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#b42318;width:48px;height:48px;flex:none"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+<p style="font-size:28px;line-height:1.45;color:#0a1e36"><b>Hard surge: no new tickets at all.</b> When over 10% of an MNO’s sites, or over half a BSC, would get tickets on the same day, the run opens none. That is a network outage for GNOC, not site visits.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">02 · Automatic opening</p>
+<aside class="notes">Everything not listed here goes straight to the country FE team at Open. Exact thresholds. Chronic site: the site already has 2 or more Closed automatic tickets created in the 90 days to yesterday, so the new one is at least its third; it goes to GNOC Triage at HIGH whatever the code, with a banner "3 or more auto-tickets in the last 90 days". Soft surge: an MNO with more than 3.5% of its live sites getting new tickets (at least 5), or a BSC with more than 12.5% (at least 5). The tickets ARE opened, but routed to GNOC Triage with a yellow "Soft Surge" banner. Flood protection: an MNO with more than 10% of its live sites getting new tickets (and at least 5), or a BSC with more than 50% of its live BTS affected (and at least 10). Those creates are suppressed (shown as "Surge" / flood_suppressed in the run history) and no ticket is opened. Flood protection only applies once there are at least 50 existing tickets. As GNOC, your Triage job is to decide: send the ticket to the country team (with an owner and an ETA), or keep it for remote analysis. A flood day needs a human outage response: find the shared cause (backhaul, BSC, hub) rather than waiting for site tickets.</aside>
+</section>
+<section class="slide" id="surges" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">SOFT SURGE AND HARD SURGE</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">When too many sites fail at once</h2>
+</div>
+<table style="font-size:26px;color:#0a1e36;width:100%;background:#ffffff">
+<tr style="background:#e9eef5"><th style="width:20%"></th><th style="width:40%">Soft surge</th><th style="width:40%">Hard surge (flood protection)</th></tr>
+<tr><td><b>One MNO</b></td><td>Over 3.5% of its live sites, and at least 5</td><td>Over 10% of its live sites, and at least 5</td></tr>
+<tr><td><b>One BSC</b></td><td>Over 12.5% of its BTS, and at least 5</td><td>Over 50% of its live BTS, and at least 10</td></tr>
+<tr><td><b>What happens</b></td><td>Tickets open, but go to GNOC Triage with a yellow “Soft Surge” banner</td><td>No new tickets for that MNO or BSC. Existing tickets still update and close</td></tr>
+<tr><td><b>Where you see it</b></td><td>Run History “Soft surge”; the Triage tab</td><td>Run History “Surge”; the sites still show on Ticket Criteria</td></tr>
+<tr><td><b>Your move</b></td><td>Network issue or separate faults? Then send each ticket on</td><td>Handle as one outage: find the shared cause before any site visit</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">02 · Automatic opening</p>
+<aside class="notes">Both checks look at the NEW tickets a run is about to open, measured against live sites. Hard surge (flood protection) is checked first, at two levels. MNO level: the new tickets for one MNO are more than 10% of its live sites and there are at least 5. BSC level: the BTS on one BSC with new tickets are more than 50% of that BSC's live BTS and there are at least 10. When either fires, the creates for that MNO or BSC are suppressed (the run history counts them under "Surge", flood_suppressed in the logs) and no ticket is opened. Other MNOs and BSCs are unaffected, and tickets that already exist are still re-coded and closed as normal. The run also rates the flood's confidence: HIGH when the MNO ratio is more than double the threshold, or when 80% or more of the affected BTS sit on one BSC; otherwise MODERATE. Hard surge checks are skipped while there are fewer than 50 open tickets in total, and specific MNOs can be exempted in the settings. Soft surge applies below those levels: an MNO with more than 3.5% of its live sites getting new tickets (at least 5), or a BSC with more than 12.5% (at least 5). Those tickets ARE opened, but routed to GNOC at Triage with the banner "Soft Surge: Routed to GNOC Triage — elevated number of new tickets detected for this MNO/BSC. Please assess whether this is a network-level issue or individual site failures." What to do: for a soft surge, look at what the sites share (same BSC, hub, backhaul, region, power event). If it is one network fault, raise or work it as one problem; if they are separate faults, assign each ticket to the country team with an ETA. For a hard surge, treat it as an outage and investigate the shared cause straight away; nothing will appear in the country's ticket list. If the sites are still flagged on a later run that is not a surge, they get their own tickets then.</aside>
+</section>
+<section class="slide" id="div-close" data-transition="fade" style="background:#073364;color:#f6f8fb;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:32px">
+<svg aria-label="Signal arcs" viewBox="0 0 640 640" width="640" height="640" style="position:absolute;left:1152px;top:312px;width:640px;height:640px"><path d="M0 460 A180 180 0 0 1 180 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round"/><path d="M0 280 A360 360 0 0 1 360 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.6"/><path d="M0 100 A540 540 0 0 1 540 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.3"/></svg>
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:160px;font-weight:600;line-height:1;color:#4bb332">03</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1.05;letter-spacing:-2px;color:#f6f8fb">Automatic closing</h2>
+<p style="font-size:36px;line-height:1.4;color:#c9d6e6;width:1000px">Three clean days, what a site visit does, and what happens when a ticket closes</p>
+</section>
+<section class="slide" id="clean-days" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">THE CLOSING RULE</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px;width:1500px">A ticket closes when every live cell has three clean days in a row</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1;color:#073364">&gt; 95%</p>
+<p style="font-size:28px;color:#4d5f75">availability: no more than 72 minutes down in the day</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1;color:#073364">≥ 150</p>
+<p style="font-size:28px;color:#4d5f75">location updates in the day (not checked on 4G cells)</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1;color:#b42318">No data</p>
+<p style="font-size:28px;color:#4d5f75">a day with missing KPI data counts as not clean</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">EXAMPLE: FIXED ON MONDAY MORNING</p>
+<div style="display:flex;gap:12px">
+<p style="flex:1;font-size:28px;font-weight:600;background:#e3f4dc;color:#276f1c;padding:20px 24px;border-radius:12px">Mon · clean</p>
+<p style="flex:1;font-size:28px;font-weight:600;background:#e3f4dc;color:#276f1c;padding:20px 24px;border-radius:12px">Tue · clean</p>
+<p style="flex:1;font-size:28px;font-weight:600;background:#e3f4dc;color:#276f1c;padding:20px 24px;border-radius:12px">Wed · clean</p>
+<p style="flex:1;font-size:28px;font-weight:600;background:#073364;color:#f6f8fb;padding:20px 24px;border-radius:12px">Thu 08:00 · closed</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">03 · Automatic closing</p>
+<aside class="notes">When a site is no longer flagged by any of the six rules, its ticket becomes a close candidate. It closes only if yesterday and the two days before were all clean for every live cell on the ticket. Clean means downtime of 4,320 seconds (72 minutes) or less in the day, which is better than 95% availability, AND at least 150 location updates in the day (the location-update test is waived for 4G cells). A day with no KPI data at all counts as a fail. If the test fails, the ticket stays open and appears in the run output as "skipped" with the reason "closure criteria not met". In the example, the fix happens early on Monday, so Monday counts as a full clean day; if the site was still down for part of Monday, Monday would fail and closing slips a day. Exception: tickets on sites that have been stopped or decommissioned are closed straight away, with no clean-day test. Why three days: it stops tickets closing on a site that only flickers back for a day. This is also why chasing a country to "close the ticket" makes no sense: they need to fix the site, and the closing follows.</aside>
+</section>
+<section class="slide" id="acs-resolve" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">WHAT A SITE VISIT DOES</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">A visit resolves the ticket; the data closes it</h2>
+</div>
+<div style="display:flex;gap:16px;align-items:center">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">1 · ON SITE</p>
+<p style="font-size:28px;line-height:1.4">The engineer records the visit in ACS and lists the ticket as fixed</p>
+</div>
+<x-shape data-kind="arrow-right" style="width:56px;height:28px;background:#7a8ca2"></x-shape>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">2 · LEAVE CODE</p>
+<p style="font-size:28px;line-height:1.4">Issued automatically, or granted by GNOC (who can also reject it)</p>
+</div>
+<x-shape data-kind="arrow-right" style="width:56px;height:28px;background:#7a8ca2"></x-shape>
+<div style="flex:1;background:#e3f4dc;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#276f1c">3 · RESOLVED (4)</p>
+<p style="font-size:28px;line-height:1.4">“Resolved by ACS site visit”, awaiting closure</p>
+</div>
+<x-shape data-kind="arrow-right" style="width:56px;height:28px;background:#7a8ca2"></x-shape>
+<div style="flex:1;background:#073364;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4bb332">4 · CLOSED (5)</p>
+<p style="font-size:28px;line-height:1.4;color:#f6f8fb">By the next run after three clean days</p>
+</div>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#e9eef5;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:28px;font-weight:600">Visit, but not fixed?</p>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">If the engineer says the ticket is not fixed, the visit only adds a comment. The ticket stays where it was.</p>
+</div>
+<div style="flex:1;background:#e9eef5;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:28px;font-weight:600">Resolved, but still faulty?</p>
+<p style="font-size:26px;line-height:1.4;color:#4d5f75">It will not close and cannot be closed by hand. Ask the country why the fix did not hold.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">03 · Automatic closing</p>
+<aside class="notes">How the ACS write-back works: when an ACS dispatch carries a leave code and lists a ticket with "close status = yes", the ticket is set to Resolved (4). An automatic leave code resolves it directly; a GNOC-granted leave code resolves it unless GNOC chose "reject". With "close status = no", only a comment is added. The ticket is marked as resolved by ACS (resolution source: ACS) with the comment "Resolved by ACS site visit", and an automatic ticket keeps the fault code the engine gave it. Resolved is not Closed: Ticket Analysis closes the ticket only once the site passes the three-clean-day test. When it does, the Action Taken text written by the ACS visit is kept. A Resolved automatic ticket that stays faulty is one of the most useful things to spot: it means a visit claimed a fix that did not hold. The Ticket Discrepancy page lists these under "Resolved" with the reason the ticket should remain open.</aside>
+</section>
+<section class="slide" id="close-does" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">WHEN A TICKET CLOSES</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">One close updates four places</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:24px">
+<div style="background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;gap:28px;align-items:start">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#276f1c;width:56px;height:56px;flex:none"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+<div style="display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600">The ticket</h3><p style="font-size:26px;line-height:1.4;color:#4d5f75">Closed (5) with an end date, an Action Taken line and a “closed by system” comment</p></div>
+</div>
+<div style="background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;gap:28px;align-items:start">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#073364;width:56px;height:56px;flex:none"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+<div style="display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600">The Monitor page</h3><p style="font-size:26px;line-height:1.4;color:#4d5f75">The ticket number is removed from the site’s row</p></div>
+</div>
+<div style="background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;gap:28px;align-items:start">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#073364;width:56px;height:56px;flex:none"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+<div style="display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600">The FE Scheduler</h3><p style="font-size:26px;line-height:1.4;color:#4d5f75">The ticket comes off the board: “✓ Done” if a visit fixed it, “Closed” if not</p></div>
+</div>
+<div style="background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;gap:28px;align-items:start">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#8a5300;width:56px;height:56px;flex:none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+<div style="display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600">The FE bonus</h3><p style="font-size:26px;line-height:1.4;color:#4d5f75">The visit that fixed it is released from Pending and scored</p></div>
+</div>
+</div>
+<p style="font-size:28px;color:#4d5f75">Automatic closes send no email. Country teams see them on the pages, not in their inbox.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">03 · Automatic closing</p>
+<aside class="notes">When Ticket Analysis closes a ticket it: sets status 5 and the end date to today; writes Action Taken = "Problem resolved — no longer flagged by ticket criteria" (or keeps the ACS visit's Action Taken text if a visit resolved it); adds the system comment "Ticket closed by: system (Ticket Analysis)"; clears the ticket link from the site's Monitor comment; removes the ticket from the FE Scheduler board (the history shows "✓ Done" only when an ACS visit resolved it, otherwise "Closed"); and triggers FE bonus processing for the visit that claimed the fix. Manual closes by a TT Admin do the same bonus processing. One known gap: closing a ticket through the full Edit form (setting Status to Closed) clears the Monitor link but does not remove it from the FE Scheduler straight away; the scheduler's own sweep removes it later. Prefer the "Close Ticket" button over editing the status.</aside>
+</section>
+<section class="slide" id="fe-bonus" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">WHY CLOSURE MATTERS TO FEs</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">A visit only earns a bonus once the fix holds</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:30px;line-height:1.45">The visit’s bonus stays <b>Pending</b> until the ticket closes. The engineer must also have been on site: within 1,000 m, within 12 hours of the visit.</p>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#073364;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1;color:#4bb332">1.0</p>
+<p style="font-size:26px;color:#c9d6e6">automatic leave code</p>
+</div>
+<div style="flex:1;background:#073364;border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:72px;font-weight:600;line-height:1;color:#4bb332">0.5</p>
+<p style="font-size:26px;color:#c9d6e6">GNOC-granted leave code</p>
+</div>
+</div>
+</div>
+<div style="flex:1;background:#fbe4e1;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:16px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;color:#b42318">Rejected at month end when</h3>
+<ul style="font-size:28px;line-height:1.5">
+<li>the ticket is still open 4+ days after the visit</li>
+<li>the engineer was not proven on site</li>
+<li>a later visit was the one that fixed it</li>
+<li>it was a pre-installation visit</li>
+</ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">03 · Automatic closing</p>
+<aside class="notes">This is the lever behind steering the countries: field engineers are paid for fixes that hold, so the countries share your interest in tickets closing for the right reason. When a ticket closes (automatically or by hand), the portal finds the newest ACS visit that claimed it with close status "yes". For field engineers who were within location (1,000 m, within plus or minus 12 hours, from their tracked positions): an automatic leave code scores the entry as AutoLeaveCode (weight 1, or 0.5 for upgrade visits); a GNOC-granted leave code scores it as GnocLeaveCode (weight 0.5, or 0.25 for upgrades); otherwise it is Rejected. Drivers are judged on the leave code only. Month-end rules applied when the period is closed off: A, the ticket was still open more than 4 days after the visit; B, the ticket closed but the engineer was not within 1,000 m or had no location pings; C, a location rejection is reversed if fresher tracking data later proves presence; D, a later visit closed the ticket, so the earlier visit is rejected; P, a pre-installation visit earns no bonus. This is why a GNOC decision to grant or reject a leave code matters: it changes what the engineer is paid.</aside>
+</section>
+<section class="slide" id="holds" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">OPTIONAL RULES</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Three rules that can be switched on or off</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;flex-direction:column;gap:14px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Downgrade hold</h3>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">A ticket only moves to a milder code after three clean days. Stops a recovering site bouncing between codes.</p>
+<p style="font-size:24px;font-weight:600;color:#073364;background:#e2ebf6;padding:8px 16px;border-radius:9999px">Column: Downgr. held</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;flex-direction:column;gap:14px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Satellite-down hold</h3>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">While a site’s satellite link is down today, its ticket is left alone, for at most two days in a row.</p>
+<p style="font-size:24px;font-weight:600;color:#073364;background:#e2ebf6;padding:8px 16px;border-radius:9999px">Column: Held SAT</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:36px;display:flex;flex-direction:column;gap:14px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Manual ticket close</h3>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Hand-raised tickets over 30 days old also close after three clean days. These closes do send an email.</p>
+<p style="font-size:24px;font-weight:600;color:#073364;background:#e2ebf6;padding:8px 16px;border-radius:9999px">Column: Closed (manual)</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.45;color:#4d5f75;width:1500px">Ask the portal team which are on today. A number above zero in the matching Run History column on Ticket Criteria also shows a rule is active.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">03 · Automatic closing</p>
+<aside class="notes">All three are settings in the Ticket Analysis configuration and all three ship switched off; production may differ, so confirm the current values (the portal team can confirm them). Downgrade hysteresis: a downgrade such as Site Down to Bad Availability must pass the three-clean-day test; until then the ticket keeps its code and shows as "downgrade held". Escalations are never held. SAT-down hold: if a site's satellite link is down today (no successful SAT ping so far today and at least one failure), lower codes are not raised and the existing ticket is neither closed nor re-coded; it shows as "Held SAT" (deferred). The hold lasts at most two consecutive end dates, after which the site is raised under its own code ("deferral released"). Manual close: hand-raised tickets (not stamped as automatic) in statuses 1 to 4 and older than 30 days are closed on the same three-clean-day test with the text "Auto-closed by Ticket Analysis: manual ticket > 30 days old, site clean for 3 consecutive days"; some fault codes can be exempted. Unlike automatic closes, these send the closed-ticket email. A separate older "diagnostic auto-close" job exists (admin page /autoCloseTickets) but its schedule is disabled; treat that page as advisory.</aside>
+</section>
+<section class="slide" id="div-work" data-transition="fade" style="background:#073364;color:#f6f8fb;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:32px">
+<svg aria-label="Signal arcs" viewBox="0 0 640 640" width="640" height="640" style="position:absolute;left:1152px;top:312px;width:640px;height:640px"><path d="M0 460 A180 180 0 0 1 180 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round"/><path d="M0 280 A360 360 0 0 1 360 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.6"/><path d="M0 100 A540 540 0 0 1 540 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.3"/></svg>
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:160px;font-weight:600;line-height:1;color:#4bb332">04</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1.05;letter-spacing:-2px;color:#f6f8fb">Working a ticket by hand</h2>
+<p style="font-size:36px;line-height:1.4;color:#c9d6e6;width:1000px">What you can do on a ticket, what the system stops you doing, and why the ETA matters most</p>
+</section>
+<section class="slide" id="do-dont" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">GROUND RULES</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Steer the work; let the system keep the score</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:16px;align-items:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#276f1c;width:44px;height:44px;flex:none"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600;color:#276f1c">Do</h3></div>
+<ul style="font-size:28px;line-height:1.5">
+<li>Make sure every HIGH and MEDIUM ticket has an ETA</li>
+<li>Comment on the ticket each time you chase</li>
+<li>Reassign a ticket sitting with the wrong team</li>
+<li>Get a manual ticket raised for faults the rules miss</li>
+</ul>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:16px;align-items:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#b42318;width:44px;height:44px;flex:none"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600;color:#b42318">Don’t</h3></div>
+<ul style="font-size:28px;line-height:1.5">
+<li>Change the fault code on an open automatic ticket (blocked)</li>
+<li>Close a Resolved automatic ticket by hand (blocked)</li>
+<li>Close a still-faulty ticket to tidy up: it reopens as a new one</li>
+<li>Close by editing the Status field; use Close Ticket</li>
+</ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">04 · Working a ticket</p>
+<aside class="notes">Two guard rails are enforced by the portal on automatic tickets: the fault code cannot be changed while the ticket is not Closed, and a Resolved automatic ticket cannot be closed by hand (the message says the system will close it once service recovers). Manual tickets have no such restrictions. Why not close a faulty automatic ticket by hand: the next morning's run finds the site still flagged and no ticket open, so it raises a brand new ticket, losing the history and the age of the original. That also makes the age statistics look better than reality. Why use the Close Ticket button rather than the Edit form: the button also removes the ticket from the FE Scheduler board straight away and runs FE bonus processing; the Edit path only clears the Monitor link. Comments are what show a ticket is being worked (see "Last Comment" two slides on), so chase in ticket comments rather than only by chat or email.</aside>
+</section>
+<section class="slide" id="modal-actions" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">THE TICKET WINDOW</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">The buttons on a ticket, and who sees them</h2>
+</div>
+<table style="font-size:26px;color:#0a1e36;width:100%;background:#ffffff">
+<tr style="background:#e9eef5"><th style="width:24%">Button</th><th style="width:20%">Who</th><th style="width:56%">Worth knowing</th></tr>
+<tr><td><b>Add comment</b></td><td>TT Admin</td><td>Your main chasing tool; it shows as Last Comment</td></tr>
+<tr><td><b>Add / Change ETA</b></td><td>Admin</td><td>Moves the ticket to Open and emails the ETA</td></tr>
+<tr><td><b>Reassign</b></td><td>TT Admin</td><td>Emails the new owner</td></tr>
+<tr><td><b>Mark as Resolved</b></td><td>TT Admin</td><td>Open tickets only; needs “Action Taken”</td></tr>
+<tr><td><b>Close Ticket</b></td><td>TT Admin, Admin</td><td>Needs “Action Taken”; not on Resolved auto tickets</td></tr>
+<tr><td><b>Re-Open</b></td><td>Admin</td><td>Resolved only; clears the ETA and the scheduler slot</td></tr>
+<tr><td><b>Edit</b></td><td>TT Admin</td><td>Full form; logs every change and emails the owner</td></tr>
+<tr><td><b>Check Latest Status</b></td><td>TT Admin</td><td>Re-checks SAT, BTS, CCTV, EMC and power now</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">04 · Working a ticket</p>
+<aside class="notes">Open any ticket from the Trouble Tickets page (Operations, Tickets, Trouble Tickets, at /troubletickets) or by clicking a ticket number on the Monitor page. "TT Admin" and "Admin" are portal roles; ask which you have been given. Details. ETA: not offered while a ticket is in Triage. An ETA later than the GNOC due date needs a note, and choosing "ETA not required" needs a comment. Saving an ETA forces the ticket to Open (2) and sends an ETA email. Reassign is available when the ticket already has an assignee. Mark as Resolved is offered on Open (2) tickets and needs "Action Taken to Resolve". Close Ticket is offered on statuses 1, 2 and 4 and also needs "Action Taken to Resolve"; it is blocked on a Resolved automatic ticket. Re-Open is for Resolved tickets only; it returns the ticket to Open, takes it off the FE Scheduler and clears its ETA. Edit writes a system note listing what changed and emails the assignee. Check Latest Status re-runs the subsystem check (SAT, BTS, CCTV, EMC, power, ARN) for the ticket's site. List view filters worth learning: the Raised toggle (All / Automatic / Manual), Fault Code, Priority, Country, Assigned To, "ETA = Breached", and the Subsystem filters (for example all tickets where SAT is DOWN). Cards also show "FE ETA not added" and "FE ETA overdue" warnings, an Insecure Site pill and a High Value Site badge.</aside>
+</section>
+<section class="slide" id="eta" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">THE ETA</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">The FE’s ETA is the ticket’s due date</h2>
+</div>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:32px;line-height:1.45">A ticket without an ETA has no plan. A ticket past its ETA has a broken promise. Those are the two things you chase.</p>
+<p style="font-size:28px;line-height:1.45;color:#4d5f75">The older GNOC and SLA due dates have not been set since September 2026. Ignore them if you see them on old tickets.</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:20px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600">How an ETA is set and cleared</h3>
+<ul style="font-size:28px;line-height:1.5">
+<li>Put a ticket on a day in the FE Scheduler: the ETA becomes that day</li>
+<li>Take it off the board: the ETA is cleared</li>
+<li>Or Add ETA on the ticket itself</li>
+<li>Board entries older than 7 days are cleared each night, ETA included</li>
+</ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">04 · Working a ticket</p>
+<aside class="notes">The live due date on a ticket is the FE ETA (custom field "eta"). The AI Agent's "overdue" answers and the TT Stats ETA columns use it. The legacy GNOC_Due_Date and SLA_Due_Date fields have not been written since September 2026, but the ticket window still shows "GNOC overdue" or "SLA overdue" warnings on older tickets where those dates were set. There is no automatic time-based escalation in the portal: escalation is done by people, using ETA overdue, ticket age and last comment. The nightly tidy-up runs at 03:00: FE Scheduler entries more than 7 days in the past are pruned and their ETAs cleared, so unfinished tickets drop back into the "Open Tickets" tray and show up again as "no ETA". That is deliberate: a visit that was planned and did not fix the site needs a new plan. The stats pages count ETA coverage only for HIGH and MEDIUM tickets, so that is where the expectation is firmest.</aside>
+</section>
+<section class="slide" id="last-comment" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">IS ANYONE WORKING IT?</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Trust Last Comment, not Last Updated</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;background:#e9eef5;border-radius:16px;padding:48px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">LAST UPDATED</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600;line-height:1.2">Moves on any change</h3>
+<p style="font-size:28px;line-height:1.45;color:#4d5f75">Including the system’s own notes, subsystem refreshes and re-codes. A busy-looking ticket may have had no human touch in weeks.</p>
+</div>
+<div style="flex:1;background:#073364;border-radius:16px;padding:48px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4bb332">LAST COMMENT</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:40px;font-weight:600;line-height:1.2;color:#f6f8fb">Moves only when a person comments</h3>
+<p style="font-size:28px;line-height:1.45;color:#c9d6e6">The honest signal of progress. Use it to find the tickets nobody is talking about.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">04 · Working a ticket</p>
+<aside class="notes">Last Updated (the top-level updated_at field) moves on every write to the ticket, including automatic system notes, Ticket Analysis comments and subsystem status refreshes. It is also the close time the statistics use. Last Comment (last_comment_at) moves only when a person adds a comment. It is tracked for tickets numbered 30000 and above; older tickets do not have it. Practical use: when a country team says a ticket is being worked, the last comment should show it. A HIGH ticket with an ETA that has passed and no human comment for several days is the strongest candidate for a chase. Agree with your manager how many days of silence should trigger a chase, and apply it consistently across countries so the conversation stays about the work, not about fairness.</aside>
+</section>
+<section class="slide" id="div-pages" data-transition="fade" style="background:#073364;color:#f6f8fb;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:32px">
+<svg aria-label="Signal arcs" viewBox="0 0 640 640" width="640" height="640" style="position:absolute;left:1152px;top:312px;width:640px;height:640px"><path d="M0 460 A180 180 0 0 1 180 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round"/><path d="M0 280 A360 360 0 0 1 360 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.6"/><path d="M0 100 A540 540 0 0 1 540 640" fill="none" stroke="#4bb332" stroke-width="30" stroke-linecap="round" opacity="0.3"/></svg>
+<p style="font-family:'Outfit', Arial, sans-serif;font-size:160px;font-weight:600;line-height:1;color:#4bb332">05</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:96px;font-weight:600;line-height:1.05;letter-spacing:-2px;color:#f6f8fb">The pages around tickets</h2>
+<p style="font-size:36px;line-height:1.4;color:#c9d6e6;width:1000px">Each page answers one question. Know which question you are asking, and you know which page to open</p>
+</section>
+<section class="slide" id="page-map" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">HOW THE PAGES FIT</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">One flow of work, two checks, two sources of context</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">THE FLOW</p>
+<div style="display:flex;gap:16px;align-items:center">
+<div style="flex:1;background:#073364;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:30px;font-weight:600;color:#f6f8fb">Ticket Criteria</p><p style="font-size:24px;color:#c9d6e6">What do the rules flag?</p></div>
+<x-shape data-kind="arrow-right" style="width:48px;height:24px;background:#7a8ca2"></x-shape>
+<div style="flex:1;background:#073364;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:30px;font-weight:600;color:#f6f8fb">Trouble Tickets</p><p style="font-size:24px;color:#c9d6e6">What is the work?</p></div>
+<x-shape data-kind="arrow-right" style="width:48px;height:24px;background:#7a8ca2"></x-shape>
+<div style="flex:1;background:#073364;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:30px;font-weight:600;color:#f6f8fb">FE Scheduler</p><p style="font-size:24px;color:#c9d6e6">Who goes, and when?</p></div>
+<x-shape data-kind="arrow-right" style="width:48px;height:24px;background:#7a8ca2"></x-shape>
+<div style="flex:1;background:#e3f4dc;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:30px;font-weight:600;color:#276f1c">ACS visit</p><p style="font-size:24px;color:#0a1e36">Was it fixed?</p></div>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">THE CHECKS</p>
+<div style="display:flex;gap:16px">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:30px;font-weight:600">Ticket Discrepancy</p><p style="font-size:24px;color:#4d5f75">Do tickets match the rules?</p></div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:30px;font-weight:600">TT Stats</p><p style="font-size:24px;color:#4d5f75">How is each country doing?</p></div>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">THE CONTEXT</p>
+<div style="display:flex;gap:16px">
+<div style="flex:1;background:#e9eef5;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:30px;font-weight:600">Monitor</p><p style="font-size:24px;color:#4d5f75">What is the site doing now?</p></div>
+<div style="flex:1;background:#e9eef5;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:6px"><p style="font-size:30px;font-weight:600">Availability Analysis</p><p style="font-size:24px;color:#4d5f75">Which sites cost the most?</p></div>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">05 · The pages</p>
+<aside class="notes">Use this slide as the map for the rest of the section. The flow: Ticket Criteria shows what the six rules see and records each Ticket Analysis run; Trouble Tickets is the work list itself; the FE Scheduler is where the country plans who visits which site on which day (and that sets the ETA); the ACS visit is the engineer's record of the fix, which resolves the ticket. The checks: Ticket Discrepancy compares the rules with the open tickets to find gaps, duplicates and stuck tickets; TT Stats tracks volume, ETA coverage and ticket age by country. The context: the Monitor page shows the live state of a site and its ticket number; Availability Analysis shows which sites lose the most availability and revenue, which helps you prioritise. The next slides take each page in turn: where to find it, what to look at, and what to do with it.</aside>
+</section>
+<section class="slide" id="ticket-criteria" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">PAGE · TICKET CRITERIA</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Did this morning’s run work, and what did it do?</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="width:560px;background:#e9eef5;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">WHERE</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;color:#073364">/ticketCriteria</p>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Short form <span style="color:#073364">/tc</span>. Not in the main menu: type the address or open it from the wall.</p>
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">WHEN</p>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Every morning, after 08:00</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600">What to look at</h3>
+<ul style="font-size:28px;line-height:1.5">
+<li><b>Run History:</b> today’s 08:00 row is there, with no Errors</li>
+<li><b>Opened, Closed, Modified:</b> in line with a normal day</li>
+<li><b>Surge, Soft surge:</b> any number here means a cluster</li>
+<li><b>Criteria by country:</b> where today’s faults sit</li>
+</ul>
+<div style="background:#073364;border-radius:16px;padding:28px 36px">
+<p style="font-size:28px;line-height:1.45;color:#f6f8fb"><b>Act:</b> no run, or errors → tell the portal team. A surge → look for a shared cause before tickets go out to countries.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">05 · The pages</p>
+<aside class="notes">Ticket Criteria is open to internal users and to the wall display account. It is not in the internal sidebar; it appears in the wall's Alarms group, so bookmark it. Top of the page: today's matches against the six rules, with Problem, Priority, Criteria, Formula, number of Sites and Radio Nodes, and a Country by Problem pivot, plus per-criterion site lists with filters. The "Ticket Open/Close Run History" table has one row per run with these columns: Run, Mode, Trigger, End date, Opened, Closed (manual), Modified, Unchanged, Subsys upd., Skipped, Surge, Soft surge, Held SAT, Downgr. held, Errors, Time. Hover over Held SAT or Downgr. held to see which site prefixes were held. "Skipped" is not an error count: it is actions the run deliberately did not take (test sites, missing data, closing test failed, holds). Admins can trigger a run by hand. Do not trigger previews or runs around 08:00 and 14:00, because they take the same lock as the scheduled run.</aside>
+</section>
+<section class="slide" id="discrepancy" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">PAGE · TICKET DISCREPANCY</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Do the open tickets match what the rules see?</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="width:560px;background:#e9eef5;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">WHERE</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;color:#073364">/ticketDiscrepancy</p>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Menu: Tickets → Ticket Discrepancy</p>
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">WHEN</p>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Daily, after the run check</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<table style="font-size:26px;color:#0a1e36;width:100%;background:#ffffff">
+<tr style="background:#e9eef5"><th style="width:38%">Section</th><th style="width:62%">What to do</th></tr>
+<tr><td><b>Criteria only, no ticket</b></td><td>Find out why: held, surge, or a real miss</td></tr>
+<tr><td><b>Duplicate tickets</b></td><td>Agree which to keep; close the other</td></tr>
+<tr><td><b>Managed, not closed</b></td><td>Read “should remain open” reasons</td></tr>
+<tr><td><b>Ready to close</b></td><td>Expect the next run to close these</td></tr>
+<tr><td><b>Other fault codes</b></td><td>Not automatic; work them by hand</td></tr>
+</table>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Its closing check is simpler than the real one, so “Ready to close” is a forecast, not a promise.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">05 · The pages</p>
+<aside class="notes">Ticket Discrepancy compares yesterday's criteria (which sites should have a managed ticket) with every ticket that is not closed. Sections: an Executive Summary; a Fault Code Breakdown (Criteria vs Tickets vs No Problem vs Delta); All Managed Tickets not closed, with Problem Exists, Resolved, Avail Below (95%), LU Below (150), Should Remain Open and its reason, and "Ready to close (next run should close)"; Criteria Only (a flagged site with no ticket); Other Fault Code Tickets (codes outside the six, "handled by separate processes"); and Duplicate Tickets (two or more managed tickets on one site). Caveats: the page's closing check looks at 2 days with a 3-day minimum age, while the real engine uses 3 clean days and no minimum age, so treat "Ready to close" as approximate. It also does not apply the SAT hold or flood suppression, so "Criteria only" can include sites the engine held back on purpose; check the run history before raising anything. The short address /td opens Ticket Diagnostics, not this page, so bookmark the full address. The most valuable rows: a Resolved ticket where the problem still exists (a visit that did not fix the site).</aside>
+</section>
+<section class="slide" id="tt-stats" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">PAGE · TROUBLE TICKET STATS</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">How is each country doing?</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="width:560px;background:#e9eef5;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">WHERE</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;color:#073364">/troubleTicketStats</p>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">On the wall and by address. Refreshes itself every 30 minutes.</p>
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">WHEN</p>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Daily for ETAs; Mondays for age and trends</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<table style="font-size:26px;color:#0a1e36;width:100%;background:#ffffff">
+<tr style="background:#e9eef5"><th style="width:42%">Section</th><th style="width:58%">Tells you</th></tr>
+<tr><td><b>ETA Coverage</b></td><td>Share of HIGH/MEDIUM with an ETA, and how many are overdue</td></tr>
+<tr><td><b>Count by country and code</b></td><td>Where the open tickets are</td></tr>
+<tr><td><b>Tickets by Age</b></td><td>Under 30, 31–60, 61–90, over 90 days, week on week</td></tr>
+<tr><td><b>Country Ticket and Cell</b></td><td>Open tickets as a share of live cells</td></tr>
+<tr><td><b>Trouble Calls Closed</b></td><td>FE fault visits per country, Monday to Monday</td></tr>
+</table>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">ETA Coverage is your main lever with country teams.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">05 · The pages</p>
+<aside class="notes">Trouble Ticket Stats is open to internal users and the wall account; like Ticket Criteria it is not in the internal sidebar, so bookmark it. Sections in order: Ticket Count by Operator Country and Fault Code (the six managed codes grouped HIGH, MEDIUM, LOW with a HIGH plus MEDIUM subtotal; toggle "Open Only", the default, which counts status 2, or "All Non-Closed", statuses 1 to 4). ETA Coverage for HIGH and MEDIUM: Tickets, With ETA %, and ETA Overdue (ETA before today, in red). A live Trouble Ticket Status chart filterable by country. Trouble Tickets by Age (Monday to Monday) with a Week-over-Week Comparison table: priority by age band with the change since last week, from a snapshot of statuses 1 to 3 taken every Monday at 08:30 UTC. MNO Down Cells for the previous day. Country Ticket and Cell Stats: live cells, open tickets and open tickets as a percentage of live cells (fairer than raw counts when comparing a big country with a small one). FE Maintenance Trouble Calls Closed: fault-call ACS visits per country, one per site per day, with a running total. Average months between visits. Known quirk: this page lists Low Erlangs under LOW, but the engine raises Low Erlangs as HIGH. Coming soon (awaiting release): a week breakdown page where each Week-over-Week number links to the tickets behind it, showing which joined (opened, re-opened, aged in, priority changed) and which left (closed, aged out). It explains, for example, whether the under-30-days count fell because tickets were closed or because they simply aged into the next band.</aside>
+</section>
+<section class="slide" id="fe-scheduler" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">PAGE · FE SCHEDULER</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Who is going where, and on which day?</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="width:560px;background:#e9eef5;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">WHERE</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;color:#073364">/feScheduler</p>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Menu: Tickets → FE Scheduler. Page title: Trouble Ticket Schedule</p>
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#4d5f75">WHEN</p>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Daily, one country at a time</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600">What to look at</h3>
+<ul style="font-size:28px;line-height:1.5">
+<li><b>Open Tickets tray:</b> anything left here has no plan</li>
+<li><b>The board:</b> teams by day, two weeks ahead</li>
+<li><b>The map:</b> sites and engineers, to group nearby visits</li>
+<li><b>History marks:</b> ✓ Done, Closed, Removed, Reopen</li>
+</ul>
+<div style="background:#073364;border-radius:16px;padding:28px 36px">
+<p style="font-size:28px;line-height:1.45;color:#f6f8fb"><b>Act:</b> every HIGH and MEDIUM ticket should be on the board. Placing a ticket on a day sets its ETA.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">05 · The pages</p>
+<aside class="notes">Pick a country first. The "Open Tickets" tray lists that country's tickets in statuses 1 to 3, most recently updated first, with Insecure Site and High Value Site flags. The board is a timetable of teams by day, from today to 13 days ahead; drag back to see the past 7 days. The map shows the country's BTS sites and FE positions, which helps group visits to nearby sites on one trip. Besides tickets, the board holds "Other Site Visit" entries: Power Upgrade, BTS Upgrade, BTS Downgrade, Deinstall, Relocation, Install, Migration to Starlink, Battery Replacement, Preventive Maintenance and Coverage Reduced. Editing needs the TT Admin or Admin role. Placing a ticket on a day sets its ETA to that date; removing it clears the ETA. Tickets resolved by an ACS visit in the last 7 days are ticked. Every night at 03:00, entries more than 7 days old are pruned and their ETAs cleared, so unfinished tickets return to the tray. History legend: ✓ Done (closed after an ACS visit fixed it), Closed (closed without a fixing visit), an arrow for moved, ↩ Reopen, Removed. This is the main tool for steering a country team: the conversation with a country lead can happen with this page on screen.</aside>
+</section>
+<section class="slide" id="monitor-aa" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">PAGES FOR CONTEXT</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Three pages that explain a ticket</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:14px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;color:#073364">/Monitor</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Monitor</h3>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">The live state of every site. A site’s row shows its ticket number and fault code; click it to open the ticket.</p>
+<p style="font-size:26px;line-height:1.45"><b>Use it to</b> see whether a site is up right now, before you chase.</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:14px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;color:#073364">/AA</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Availability Analysis</h3>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">KPI → Availability Analysis. Lost traffic and revenue by site, with the worst sites ranked.</p>
+<p style="font-size:26px;line-height:1.45"><b>Use it to</b> decide which tickets matter most when everything is HIGH.</p>
+</div>
+<div style="flex:1;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px;display:flex;flex-direction:column;gap:14px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;color:#073364">/ticketDiagnostics</p>
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600;line-height:1.2">Ticket Diagnostics</h3>
+<p style="font-size:26px;line-height:1.45;color:#4d5f75">Per-ticket health check: voltage, availability, location updates, with a “could close” verdict.</p>
+<p style="font-size:26px;line-height:1.45"><b>Advisory only.</b> The daily run, not this page, decides closing.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">05 · The pages</p>
+<aside class="notes">Monitor: Ticket Analysis and manual ticket creation write the ticket number and fault code into the site's Monitor comment, and closing clears it, so a site row with a ticket number has an open ticket. Click the number to open the ticket window. Availability Analysis (/AA, under KPI in the menu) is not a ticket page: it shows daily availability with revenue impact (lost Erlangs and GB, valued at the site's 28-day median), Top Revenue-Losing Sites, a breakdown of unavailability by category, a Pareto chart, timeline and maps. Use it to put the most expensive faults first when many tickets share a priority. Note that its low-voltage (LVD) detection is deliberately different from the ticket closing rule, so the two pages can disagree about a site. Ticket Diagnostics (/ticketDiagnostics, internal, not in the menu) shows for each ticket whether it "Can Auto-Close" under the Cell Diagnostics thresholds. It belongs to an older auto-close job whose schedule is disabled, so treat it as a second opinion only. Admins also have a Ticket Preview page (/ticketPreview), a sandbox for trial runs of the engine.</aside>
+</section>
+<section class="slide" id="glossary" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">REFERENCE · GLOSSARY</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">The words you will meet</h2>
+</div>
+<div style="display:flex;gap:32px">
+<table style="font-size:24px;color:#0a1e36;width:100%;background:#ffffff">
+<tr style="background:#e9eef5"><th style="width:36%">Term</th><th style="width:64%">Meaning</th></tr>
+<tr><td><b>Ticket Analysis</b></td><td>The engine that opens and closes tickets</td></tr>
+<tr><td><b>Managed fault code</b></td><td>One of the six codes the engine owns</td></tr>
+<tr><td><b>End date</b></td><td>The day a run judges: yesterday</td></tr>
+<tr><td><b>Clean day</b></td><td>Over 95% available, 150+ location updates</td></tr>
+<tr><td><b>Re-code</b></td><td>Same ticket, new fault code</td></tr>
+<tr><td><b>Skipped</b></td><td>An action the run chose not to take</td></tr>
+<tr><td><b>Held SAT</b></td><td>Left alone while the satellite is down</td></tr>
+<tr><td><b>Downgrade held</b></td><td>Milder code waiting for 3 clean days</td></tr>
+</table>
+<table style="font-size:24px;color:#0a1e36;width:100%;background:#ffffff">
+<tr style="background:#e9eef5"><th style="width:36%">Term</th><th style="width:64%">Meaning</th></tr>
+<tr><td><b>Soft surge</b></td><td>Cluster of new tickets: opened, sent to Triage</td></tr>
+<tr><td><b>Hard surge</b></td><td>Bigger cluster: new tickets not opened</td></tr>
+<tr><td><b>Chronic site</b></td><td>Third automatic ticket in 90 days</td></tr>
+<tr><td><b>ACS visit</b></td><td>The engineer’s site-visit record</td></tr>
+<tr><td><b>Leave code</b></td><td>Visit sign-off: automatic or GNOC-granted</td></tr>
+<tr><td><b>ETA</b></td><td>The FE’s planned date; the due date</td></tr>
+<tr><td><b>MNO</b></td><td>Mobile network operator, our customer</td></tr>
+<tr><td><b>LU</b></td><td>Location update: a phone checking in</td></tr>
+</table>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">Reference</p>
+<aside class="notes">More terms. Triage (1), Open (2), Pending (3), Resolved (4), Closed (5): the ticket statuses. Fault codes in severity order: Site Down, BTS Down, No Traffic, Low Erlangs, Bad Availability, Bad CSR. CSR: call success rate. Erlang: a unit of voice traffic (one call held for an hour). SAT: the site's satellite backhaul link. BTS: the base station radio at a site. BSC: the controller a group of BTS connect to. Subsystem status: the SAT, BTS, CCTV, EMC, power and ARN health lines shown on a ticket. Deferred: the run output's word for sites held by the satellite-down rule. Flood suppressed: the log word for a hard surge. GNOC: the network operations team that owns Triage. FE: field engineer. TT Admin: the portal role that can work tickets (comment, reassign, resolve, close, edit). Insecure Site and High Value Site: flags on ticket cards that affect how and how urgently a visit is planned.</aside>
+</section>
+<section class="slide" id="quick-ref" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">REFERENCE · PAGES</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Bookmark these</h2>
+</div>
+<table style="font-size:26px;color:#0a1e36;width:100%;background:#ffffff">
+<tr style="background:#e9eef5"><th style="width:26%">Page</th><th style="width:30%">Address</th><th style="width:44%">Use it for</th></tr>
+<tr><td><b>Trouble Tickets</b></td><td>/troubletickets</td><td>The work list; open and work a ticket</td></tr>
+<tr><td><b>Ticket Criteria</b></td><td>/ticketCriteria</td><td>Today’s rule matches; run history</td></tr>
+<tr><td><b>Ticket Discrepancy</b></td><td>/ticketDiscrepancy</td><td>Gaps, duplicates, stuck tickets</td></tr>
+<tr><td><b>TT Stats</b></td><td>/troubleTicketStats</td><td>ETA coverage, age, country totals</td></tr>
+<tr><td><b>FE Scheduler</b></td><td>/feScheduler</td><td>Who visits which site, when</td></tr>
+<tr><td><b>Monitor</b></td><td>/Monitor</td><td>Live site state and ticket numbers</td></tr>
+<tr><td><b>Availability Analysis</b></td><td>/AA</td><td>The most costly faults</td></tr>
+<tr><td><b>AI Agent</b></td><td>/AIAgent</td><td>Plain-English questions about tickets</td></tr>
+<tr><td><b>Portal Status</b></td><td>/portalStatus</td><td>Is the Ticket Analysis job healthy?</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">Reference</p>
+<aside class="notes">Addresses are relative to the portal's own address. Ticket Criteria (/tc for short) and TT Stats are not in the internal sidebar menu; they are on the wall display, so bookmark them. The short address /td opens Ticket Diagnostics, not Ticket Discrepancy. Menu paths: Trouble Tickets is under Operations, Tickets; Ticket Discrepancy and FE Scheduler are under Tickets; Availability Analysis is under KPI. Other ticket-related pages: Ticket Diagnostics (/ticketDiagnostics), an advisory per-ticket health check; Auto Close Tickets (/autoCloseTickets, admin), the older disabled auto-close job; Ticket Preview (/ticketPreview, admin), a sandbox for trial runs. Portal Status shows the Ticket Analysis run health: amber after 20 hours without a run, red after 44.</aside>
+</section>
+<section class="slide" id="ai-agent" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;color:#276f1c">REFERENCE · AI AGENT</p>
+<h2 style="font-family:'Outfit', Arial, sans-serif;font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-1px">Ask the AI Agent instead of digging</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="width:640px;background:#073364;border-radius:16px;padding:48px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:30px;color:#4bb332">/AIAgent</p>
+<p style="font-size:30px;line-height:1.45;color:#f6f8fb">Plain-English questions, answered from the same ticket, field-visit and monitor data as the pages.</p>
+<p style="font-size:26px;line-height:1.45;color:#c9d6e6">It only reads data, so nothing you ask can change a ticket.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<h3 style="font-family:'Outfit', Arial, sans-serif;font-size:36px;font-weight:600">Graham’s guide has ready-made questions for</h3>
+<ul style="font-size:28px;line-height:1.5">
+<li>The morning queue: what needs attention today</li>
+<li>Chasing owners</li>
+<li>One ticket in depth</li>
+<li>Field visits (ACS) and time to close</li>
+<li>Network context behind a ticket</li>
+</ul>
+<p style="font-size:28px;font-weight:600;background:#e2ebf6;color:#073364;padding:20px 28px;border-radius:12px"><a href="https://claude.ai/artifact/CRvJvyHnneqCkkmSnWcPMR">Open the AI Agent Ticket Guide →</a></p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:900px;font-size:24px;color:#4d5f75">AMN · Trouble ticket training</p>
+<p style="position:absolute;right:128px;bottom:64px;width:700px;font-size:24px;color:#4d5f75;text-align:right">Reference</p>
+<aside class="notes">The AI Agent is at amnportal.com/AIAgent. The AI Agent Ticket Guide (link on the slide, maintained by Graham) is the companion to this deck: copy any of its questions into the agent and change the country, site, ticket number or dates. It also covers how to ask well, the agent's limits, and which data each answer comes from. Good first questions for a new analyst: the morning queue for one country, the overdue tickets for one country team, and one ticket in depth with its comments and site visits. Avoid asking the agent for a Ticket Analysis preview around 08:00 and 14:00, because a preview takes the same lock as the scheduled run.</aside>
+</section>
+</div>
+<div id="notes" aria-live="polite"></div>
+<div id="bar">
+  <button id="prev" aria-label="Previous slide">&larr;</button>
+  <span id="count"></span>
+  <button id="next" aria-label="Next slide">&rarr;</button>
+  <button id="notesBtn" title="Speaker notes (N)">Notes</button>
+  <button id="fsBtn" title="Full screen (F)">Full screen</button>
+</div>
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage = document.getElementById('stage');
+  var i = 0;
+  function fit() {
+    var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    stage.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+  }
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (el, k) { el.classList.toggle('active', k === i); });
+    var aside = slides[i].querySelector('.notes');
+    document.getElementById('notes').textContent = aside ? aside.textContent : '';
+    document.getElementById('count').textContent = (i + 1) + ' / ' + slides.length;
+    document.getElementById('progress').style.width = ((i + 1) / slides.length * 100) + '%';
+    if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'n' || e.key === 'N') document.body.classList.toggle('show-notes');
+    else if (e.key === 'f' || e.key === 'F') toggleFs();
+  });
+  function toggleFs() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+  }
+  var tx = null;
+  document.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (tx === null) return;
+    var dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+    tx = null;
+  });
+  document.getElementById('prev').onclick = function () { show(i - 1); };
+  document.getElementById('next').onclick = function () { show(i + 1); };
+  document.getElementById('notesBtn').onclick = function () { document.body.classList.toggle('show-notes'); };
+  document.getElementById('fsBtn').onclick = toggleFs;
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', function () { show(parseInt(location.hash.slice(1), 10) - 1 || 0); });
+  fit();
+  show(parseInt(location.hash.slice(1), 10) - 1 || 0);
+})();
+</script>
+</body>
+</html>
