@@ -237,36 +237,39 @@
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">portal #618, #631, #639, #642, #643 · amn-monitor #57, #62 · live since late October</p>
 <aside class="notes">Path monitoring was requested by IT after months of OMG Starlink sites going Link/down together, mostly at busy hours; site to PoP stays at 25-35 ms, so the terrestrial transit to the Johannesburg PoP is the suspect. amn-monitor #57 adds ICMP bursts to transit hops, traceroutes with route-change detection, and #62 adds control pings and fleet ping counts per backhaul group. Portal: Link alarm % (#631), Starlink/VSAT site filter and control pings (#639), path targets editor (#618), Backhaul and Hub columns on Monitor (#642), all Chris. Graham's #643 replaced the 55 s cache plus 60 s poll with a version-based cache, so ping status changes reach browsers straight away.</aside>
 </section>
-<section class="slide" id="usb2" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
-<div style="display:flex;flex-direction:column;gap:16px">
-<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">03 · Operate</p>
-<h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">Finding ARNs that need a USB 3 SDR</h2>
-<p style="font-size:30px;line-height:1.4;color:#4d5f75">An SDR running in USB 2 mode cannot carry 3G or 4G. The fleet now finds these ARNs and makes sure the swap happens.</p>
-</div>
-<div style="display:flex;gap:16px;align-items:center">
-<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px">
-<p style="font-size:24px;font-weight:600;color:#276f1c">1 · amn-monitor</p>
-<p style="font-size:28px;line-height:1.35">Reads the SDR's USB mode and serial from every ARN</p>
-</div>
-<x-shape data-kind="arrow-right" style="width:48px;height:24px;background:#7a8ca2"></x-shape>
-<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px">
-<p style="font-size:24px;font-weight:600;color:#276f1c">2 · Portal</p>
-<p style="font-size:28px;line-height:1.35">Stores it hourly and daily; in the Monitor Hour API and CSV</p>
-</div>
-<x-shape data-kind="arrow-right" style="width:48px;height:24px;background:#7a8ca2"></x-shape>
-<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px">
-<p style="font-size:24px;font-weight:600;color:#276f1c">3 · Auto ticket</p>
-<p style="font-size:28px;line-height:1.35">Gets a "Replace ARN (USB 2 SDR)" line naming the cell and SDR serial</p>
-</div>
-<x-shape data-kind="arrow-right" style="width:48px;height:24px;background:#7a8ca2"></x-shape>
-<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#073364;border-radius:16px;padding:32px">
-<p style="font-size:24px;font-weight:600;color:#8fd877">4 · ACS Step 05</p>
-<p style="font-size:28px;line-height:1.35;color:#ffffff">"ARN replaced" check fails until the FE confirms the swap</p>
-</div>
-</div>
-<div style="display:flex;gap:24px;align-items:center;background:#e2ebf6;border-radius:16px;padding:28px 36px"><p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#073364">New</p><p style="font-size:28px;line-height:1.4;color:#0a1e36">USB mode history for every ARN: a step chart on the ARN List and hourly USB 2 / USB 3 counts on KPI Hour, backfilled for 3,471 ARNs</p></div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Graham · portal #547, #583 · amn-monitor #26, #28 · history: Chris, portal #636</p>
-<aside class="notes">The ticket line is re-read at creation, on a re-code and on the daily refresh, so it clears itself when a USB 3 SDR goes in. Trouble Tickets has a "Replace ARN (USB 2 SDR)" pill and filter, and the diagnostics open-ticket table has a column for it. The AI Agent and CLI guide both describe the line. History (#636): every change is logged in ARNLocationHistory like a firmware change; prod backfill on 26 Oct covered 3,471 ARNs and 3,900 entries; the KPI Hour chart is internal-only.</aside>
+<section class="slide" id="usb2" data-transition="fade" style="background:#f6f8fb">
+  <p id="e1-16uvwdl" style="position:absolute; bottom:64px; left:128px; width:1664px; font-family:'IBM Plex Sans', sans-serif; font-size:24px; color:#4d5f75">Graham · portal #547, #583 · amn-monitor #26, #28 · history: Chris, portal #636</p>
+  <div id="p507f4293aee3r0-3f9bec4f" style="position:absolute; top:128px; left:128px; width:1664px; height:187px; display:flex; flex-direction:column; gap:16px">
+    <p style="font-family:'IBM Plex Sans', sans-serif; font-size:24px; font-weight:600; letter-spacing:4px; text-transform:uppercase; color:#276f1c">03 · Operate</p>
+    <h2 style="font-family:Outfit, sans-serif; font-size:72px; font-weight:600; line-height:1.1; letter-spacing:-1px; color:#073364">Finding ARNs that need a USB 3 SDR</h2>
+    <p style="font-family:'IBM Plex Sans', sans-serif; font-size:30px; line-height:1.4; color:#4d5f75">An SDR running in USB 2 mode cannot carry 3G or 4G. The fleet now finds these ARNs and makes sure the swap happens.</p>
+  </div>
+  <div id="p507f4293aee3r1-3f9bec4f" style="position:absolute; top:363px; left:128px; width:1664px; height:267px; display:flex; flex-direction:row; gap:16px; align-items:center">
+    <div style="display:flex; flex-direction:column; gap:16px; flex:1; padding:32px; background:#ffffff; border:1px solid #d5dee9; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:24px; font-weight:600; color:#276f1c">1 · amn-monitor</p>
+      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:28px; line-height:1.35; color:#0a1e36">Reads the SDR's USB mode and serial from every ARN</p>
+    </div>
+    <x-shape data-kind="arrow-right" style="width:48px; height:24px; background:#7a8ca2"></x-shape>
+    <div style="display:flex; flex-direction:column; gap:16px; flex:1; padding:32px; background:#ffffff; border:1px solid #d5dee9; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:24px; font-weight:600; color:#276f1c">2 · Portal</p>
+      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:28px; line-height:1.35; color:#0a1e36">Stores it hourly and daily; in the Monitor Hour API and CSV</p>
+    </div>
+    <x-shape data-kind="arrow-right" style="width:48px; height:24px; background:#7a8ca2"></x-shape>
+    <div style="display:flex; flex-direction:column; gap:16px; flex:1; padding:32px; background:#ffffff; border:1px solid #d5dee9; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:24px; font-weight:600; color:#276f1c">3 · Auto ticket</p>
+      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:28px; line-height:1.35; color:#0a1e36">Gets a "Replace ARN (USB 2 SDR)" line naming the cell and SDR serial</p>
+    </div>
+    <x-shape data-kind="arrow-right" style="width:48px; height:24px; background:#7a8ca2"></x-shape>
+    <div style="display:flex; flex-direction:column; gap:16px; flex:1; padding:32px; background:#073364; border-radius:16px">
+      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:24px; font-weight:600; color:#8fd877">4 · ACS Step 05</p>
+      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:28px; line-height:1.35; color:#ffffff">"ARN replaced" check fails until the FE confirms the swap</p>
+    </div>
+  </div>
+  <div id="p507f4293aee3r2-3f9bec4f" style="position:absolute; top:678px; left:128px; width:1664px; height:135px; display:flex; flex-direction:row; gap:24px; align-items:center; padding:28px 36px; background:#e2ebf6; border-radius:16px">
+  </div>
+  <p id="p507f4293aee3r2_0-3f9bec4f" style="position:absolute; top:711px; left:145.29px; width:76.71px; height:72.78px; font-family:'IBM Plex Sans', sans-serif; font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#073364">New</p>
+  <p id="p507f4293aee3r2_1-3f9bec4f" style="position:absolute; top:706px; left:245px; width:1511px; font-family:'IBM Plex Sans', sans-serif; font-size:28px; line-height:1.4; color:#0a1e36">USB mode history for every ARN: a step chart on the ARN List and hourly USB 2 / USB 3 counts on KPI Hour, backfilled for 3,471 ARNs</p>
+  <aside class="notes">The ticket line is re-read at creation, on a re-code and on the daily refresh, so it clears itself when a USB 3 SDR goes in. Trouble Tickets has a "Replace ARN (USB 2 SDR)" pill and filter, and the diagnostics open-ticket table has a column for it. The AI Agent and CLI guide both describe the line. History (#636): every change is logged in ARNLocationHistory like a firmware change; prod backfill on 26 Oct covered 3,471 ARNs and 3,900 entries; the KPI Hour chart is internal-only.</aside>
 </section>
 <section class="slide" id="tickets" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
