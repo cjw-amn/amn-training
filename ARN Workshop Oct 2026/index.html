@@ -42,27 +42,27 @@
 <x-shape data-kind="ellipse" style="position:absolute;left:1180px;top:-260px;width:1100px;height:1100px;background:#07336400;border:3px solid #4bb332;opacity:0.55"></x-shape>
 <x-shape data-kind="ellipse" style="position:absolute;left:1380px;top:-60px;width:700px;height:700px;background:#07336400;border:3px solid #4bb332;opacity:0.75"></x-shape>
 <x-shape data-kind="ellipse" style="position:absolute;left:1560px;top:120px;width:340px;height:340px;background:#4bb332;opacity:0.9"></x-shape>
-<img src="logo.png" alt="AMN logo" style="width:160px;height:154px;object-fit:contain;border-radius:12px">
+<img src="logo.png" alt="AMN logo" style="width:200px;height:200px;object-fit:contain">
 <div style="display:flex;flex-direction:column;gap:32px;width:1300px">
-<p style="font-size:28px;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:#8fd877">ARN workshop · October 2026</p>
-<h1 style="font-family:Outfit, sans-serif;font-size:112px;font-weight:600;line-height:1.05;letter-spacing:-2px;color:#ffffff">Software update for the ARN</h1>
+<p style="font-size:28px;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:#8fd877">ARN workshop · November 2026</p>
+<h1 style="font-family:Outfit, sans-serif;font-size:112px;font-weight:600;line-height:1.05;letter-spacing:-2px;color:#ffffff">Software Update</h1>
 <p style="font-size:36px;line-height:1.4;color:#c9d6e6">What changed in the portal, amn-monitor and the FE app since the last workshop on 13 April 2026</p>
 </div>
 <p style="font-size:30px;color:#ffffff"><b>Chris White</b> · <b>Graham Bond</b></p>
-<aside class="notes">Scope: everything merged by Chris and Graham between Monday 13 April and today (13 October 2026) across amnportal, amn-monitor and AMN-Android-App, filtered to what matters for the ARN. amn-monitor lived on Bitbucket until 16 July; that history is included.</aside>
+<aside class="notes">Scope: everything merged by Chris and Graham between Monday 13 April and 2 November 2026 across amnportal, amn-monitor and AMN-Android-App, filtered to what matters for the ARN. amn-monitor lived on Bitbucket until 16 July; that history is included.</aside>
 </section>
 <section class="slide" id="numbers" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
 <div style="display:flex;flex-direction:column;gap:16px">
-<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">Six months in numbers</p>
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">Since April in numbers</p>
 <h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">Three codebases, two developers, one network</h2>
 </div>
 <div style="display:flex;gap:32px">
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#073364;border-radius:16px;padding:40px">
-<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#ffffff">1,300+</p>
+<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#ffffff">1,500+</p>
 <p style="font-size:28px;color:#c9d6e6">commits</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
-<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#073364">378</p>
+<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#073364">446</p>
 <p style="font-size:28px;color:#4d5f75">pull requests merged</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
@@ -72,12 +72,12 @@
 </div>
 <table style="font-size:28px;color:#0a1e36;width:1664px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:20px">
 <tr><th style="text-align:left;color:#4d5f75">Repository</th><th style="text-align:left;color:#4d5f75">What it is</th><th style="text-align:right;color:#4d5f75">Commits</th><th style="text-align:right;color:#4d5f75">PRs merged</th></tr>
-<tr><td><b>amnportal</b></td><td>Web portal, GNOC tools, background jobs</td><td style="text-align:right">934</td><td style="text-align:right">282</td></tr>
-<tr><td><b>amn-monitor</b></td><td>Country app servers that talk to every ARN</td><td style="text-align:right">245</td><td style="text-align:right">65</td></tr>
-<tr><td><b>AMN-Android-App</b></td><td>Field engineer app</td><td style="text-align:right">125</td><td style="text-align:right">31</td></tr>
+<tr><td><b>amnportal</b></td><td>Web portal, GNOC tools, background jobs</td><td style="text-align:right">1,107</td><td style="text-align:right">340</td></tr>
+<tr><td><b>amn-monitor</b></td><td>Country app servers that talk to every ARN</td><td style="text-align:right">268</td><td style="text-align:right">72</td></tr>
+<tr><td><b>AMN-Android-App</b></td><td>Field engineer app</td><td style="text-align:right">135</td><td style="text-align:right">34</td></tr>
 </table>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">13 Apr – 13 Oct 2026. amn-monitor moved from Bitbucket to GitHub on 16 Jul; its 65 PRs include Bitbucket PRs #53–65.</p>
-<aside class="notes">Portal PRs split evenly: Graham 141, Chris 140 (plus one from Michael). amn-monitor: Graham 39 and Chris 13 on GitHub, plus 13 on Bitbucket before the move (Graham's Upgrade_Sites and firmware staging, Chris's ACS 2.0, centralised IP addressing and Starlink ranges). The FE app is all Chris. Open PRs: 5 portal, 2 monitor, 1 app.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">13 Apr – 2 Nov 2026. amn-monitor moved from Bitbucket to GitHub on 16 Jul; its 72 PRs include Bitbucket PRs #53–65.</p>
+<aside class="notes">Portal PRs split evenly: Graham 176, Chris 163 (plus one from Michael). amn-monitor: Graham 42 and Chris 17 on GitHub, plus 13 on Bitbucket before the move (Graham's Upgrade_Sites and firmware staging, Chris's ACS 2.0, centralised IP addressing and Starlink ranges). The FE app is all Chris. Open PRs: 6 portal, 1 monitor, 1 app.</aside>
 </section>
 <section class="slide" id="lifecycle" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -98,7 +98,7 @@
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-top:8px solid #4bb332;border-radius:16px;padding:32px">
 <p style="font-size:24px;font-weight:600;color:#4d5f75">03</p>
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Operate</h3>
-<ul style="font-size:24px;line-height:1.4"><li>Auto-repower</li><li>SDR USB-2 flag</li><li>Ticket automation</li><li>CCTV and panels</li></ul>
+<ul style="font-size:24px;line-height:1.4"><li>Auto-repower</li><li>SDR USB-2 flag</li><li>Ticket automation</li><li>4G and backhaul</li><li>CCTV and panels</li></ul>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-top:8px solid #073364;border-radius:16px;padding:32px">
 <p style="font-size:24px;font-weight:600;color:#4d5f75">04</p>
@@ -112,7 +112,7 @@
 </div>
 </div>
 <p style="font-size:28px;line-height:1.4;color:#4d5f75">Running across all five: the FE app, the AI Agent and CLI, and a sturdier platform underneath.</p>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 13 Oct 2026</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
 <aside class="notes">This is the running order for the rest of the talk. Operate has the most change, so it gets the most slides.</aside>
 </section>
 <section class="slide" id="plan" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
@@ -123,7 +123,7 @@
 <div style="display:flex;gap:32px;flex:1">
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Surveys</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Chris</p></div>
-<ul style="font-size:26px;line-height:1.4"><li>Cell and field survey tools in the FE app</li><li>Multiple candidate locations, signal format v2, surveyor verdict</li><li>Survey Review in the portal: bulk review, Excel import, archive</li><li>Approved surveys flow straight into /sites</li></ul>
+<ul style="font-size:26px;line-height:1.4"><li>Cell and field survey tools in the FE app</li><li>Multiple candidate locations, signal format v2, surveyor verdict</li><li>Survey Review in the portal: bulk review, Excel import, archive</li><li>Approved surveys reach /sites; coverage plot and approval on the site history</li></ul>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Site-first model</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Chris</p></div>
@@ -134,8 +134,8 @@
 <ul style="font-size:26px;line-height:1.4"><li>Centralised IP addressing: subnet, gateway, CCTV and VLAN derived</li><li>Starlink /28 cell masks and non-standard ranges</li><li>ARN Tools: site diagnostics, deploy status, change site IPs</li><li>XGA Site Editor synced with xga-manager</li></ul>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 13 Oct 2026</p>
-<aside class="notes">Portal PRs: field survey tool #333, survey detail #357, Site Survey Review #404, review rework #421; site-first model #377, site editor #408, per-BSC Cell_Id uniqueness #414, CSV upload preview and revert #570. ARN Tools #310, tag ARN #314, Change Site IPs #497, XGA Site Editor #361 and GitHub sync #306 and #397. amn-monitor: centralised IP addressing (Bitbucket #60), MBJ Starlink /28 (#53), non-standard Starlink range (#62). App: cell survey tool #19, field survey 2 #20.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
+<aside class="notes">Portal PRs: field survey tool #333, survey detail #357, Site Survey Review #404, review rework #421; site-first model #377, site editor #408, per-BSC Cell_Id uniqueness #414, CSV upload preview and revert #570. ARN Tools #310, tag ARN #314, Change Site IPs #497, XGA Site Editor #361 and GitHub sync #306 and #397. amn-monitor: centralised IP addressing (Bitbucket #60), MBJ Starlink /28 (#53), non-standard Starlink range (#62). App: cell survey tool #19, field survey 2 #20, refusal reason shown #53. Since 13 Oct: coverage plot and deployment approval on site history #616, deployment comment #608, file limit raised to 100 #635, Full_Site_ID in the sites CSV #633.</aside>
 </section>
 <section class="slide" id="install" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -149,11 +149,11 @@
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">At GNOC (portal)</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Chris · Graham</p></div>
-<ul style="font-size:26px;line-height:1.4"><li>New /ACS2 page with site-based dispatches</li><li>A passed ACS sets 3G/4G cells live and dates the site</li><li>Pass / failed / N/A counts; CSV and XLSX export</li><li>GNOC confirms every Upgrade and Install dispatch</li><li>Every dispatch carries site coordinates and ticket priority</li></ul>
+<ul style="font-size:26px;line-height:1.4"><li>New /ACS2 page with site-based dispatches</li><li>A passed ACS sets cells live and recomputes the site</li><li>Pass / failed / N/A counts; CSV and XLSX export</li><li>GNOC confirms every Upgrade and Install dispatch</li><li>Every dispatch carries site coordinates and ticket priority</li></ul>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 13 Oct 2026</p>
-<aside class="notes">amn-monitor: ACS 2.0 (Bitbucket #61, #65), validation fixes from Graham (#2, #3), coordinates and priority on dispatch (#10), GNOC confirmation prompt (#39), validation counts (#30), Step 05 label (#31), Starlink pointing tool (#51), FTP server rewrite (#45), CCTV NTP (#33). Portal: /ACS2 page #443, set 3G/4G live #479, Live_Date propagation #428, ACS exports #522, weekly stats fix #495, drive-test map fix #553, Cell_Id 0 hardening #485.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
+<aside class="notes">amn-monitor: ACS 2.0 (Bitbucket #61, #65), validation fixes from Graham (#2, #3), coordinates and priority on dispatch (#10), GNOC confirmation prompt (#39), validation counts (#30), Step 05 label (#31), Starlink pointing tool (#51), FTP server rewrite (#45), CCTV NTP (#33). Portal: /ACS2 page #443, set 3G/4G live #479, Live_Date propagation #428, site recompute on go-live plus a daily sweep #604, ACS exports #522, weekly stats fix #495, drive-test map fix #553, Cell_Id 0 hardening #485.</aside>
 </section>
 <section class="slide" id="drivetest" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -189,14 +189,55 @@
 <ul style="font-size:28px;line-height:1.45;color:#ffffff"><li>Runs at 06:00, one attempt per node per day</li><li>Repowers through the EMC on the same node's 2G cell, matched by BTS_IP, so multi-sector sites hit the right ARN</li><li>4G first, then 3G; a node dark on both is cycled once</li></ul>
 </div>
 <div style="flex:2;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Better detection</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Graham</p></div>
-<ul style="font-size:26px;line-height:1.4"><li>Per-generation (2G/3G/4G) BSC alarms in the live alarm engine</li><li>Low Erlangs catches traffic collapses, not just low averages</li><li>Ping outages survive a monitor restart and show on Monitor Hour</li><li>Dual-SDR cells and the 26.01 btsmon schema supported</li></ul>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Better detection</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Graham · Chris</p></div>
+<ul style="font-size:26px;line-height:1.4"><li>Per-generation (2G/3G/4G) BSC alarms in the live alarm engine</li><li>Low Erlangs catches traffic collapses, not just low averages</li><li>Ping outages survive a monitor restart and show on Monitor Hour</li><li>Dual-SDR cells and the 26.01 btsmon schema supported</li><li>Retired BSCs keep their history but raise no alarms</li></ul>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 13 Oct 2026</p>
-<aside class="notes">Portal: 4G auto-repower #402 (June), extended to 3G #418, per-generation BSC alarms #447, Low Erlangs #366 and #423, Ping_Outage in the UI #483 and #484. amn-monitor: monitor persistence #13, dual-SDR cells and 26.01 btsmon schema (Bitbucket Upgrade_Sites PRs, April). Each repower is recorded in BTSreset with Reason "3G Down" or "4G Down".</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
+<aside class="notes">Portal: 4G auto-repower #402 (June), extended to 3G #418, per-generation BSC alarms #447, Low Erlangs #366 and #423, Ping_Outage in the UI #483 and #484, BSC retirement #603 (Chris). amn-monitor: monitor persistence #13, dual-SDR cells and 26.01 btsmon schema (Bitbucket Upgrade_Sites PRs, April). Each repower is recorded in BTSreset with Reason "3G Down" or "4G Down".</aside>
 </section>
-<section class="slide" id="usb2" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
+<section class="slide" id="lte4g" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">03 · Operate</p>
+<h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">4G performance, now in plain sight</h2>
+</div>
+<div style="display:flex;gap:32px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
+<h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">4G charts</h3>
+<ul style="font-size:26px;line-height:1.4"><li>KPI Hour: PRB use, accessibility, E-RAB drop, user throughput, users</li><li>E-RAB setup success rate on its own</li><li>The same 4G KPIs over days, weeks and months</li><li>Hourly Location Updates for 2G/3G</li></ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#073364;border-radius:16px;padding:40px">
+<h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#ffffff">Configured bandwidth</h3>
+<ul style="font-size:26px;line-height:1.4;color:#ffffff"><li>Each sector's 4G bandwidth (1.4, 3 or 5 MHz) read from XGA and shown on Sites</li><li>Cells running below it are flagged: reconfigured, or flapping</li><li>Example: one MNG cell ran at 6 of 25 PRBs for five days in October</li></ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
+<h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Finding problem cells</h3>
+<ul style="font-size:26px;line-height:1.4"><li>Per-cell busy hour: peak PRB, hours near capacity, peak users</li><li>On-air-but-no-service flag</li><li>4G outlier list in the AI Agent and CLI</li></ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Graham · portal #606, #644, #645, #650, #653, #658, #659 · all since late October</p>
+<aside class="notes">Range ingest now stores the 55 4G s1gw counters as numbers and builds a per-cell kpiDay LTE sub-document (#644). The bandwidth check (#659) compares each LTE cell's on-air PRBs with the bandwidth XGA configures for its sector: "reconfigured" means steady at a lower valid bandwidth, "flapping" means never a full hour at the configured PRB. Example from prod: MNG0146_WambaVillage, 22-26 Oct, 25 to 6 PRB. The XGA sync now keeps the bandwidth_4g column (#658). Location Updates chart #606.</aside>
+</section>
+<section class="slide" id="backhaul" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">03 · Operate</p>
+<h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">Watching the backhaul end to end</h2>
+</div>
+<div style="display:flex;gap:32px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#073364;border-radius:16px;padding:48px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#ffffff">Starlink path monitoring</h3><p style="font-size:24px;font-weight:500;color:#06182e;background:#8fd877;border-radius:999px;padding:4px 16px">Chris</p></div>
+<p style="font-size:28px;line-height:1.45;color:#c9d6e6">OMG's Starlink sites kept dropping together for 30 minutes to 2 hours at busy times, while the satellite leg looked healthy. The suspect is the land path from our data centre to the Starlink PoP.</p>
+<ul style="font-size:26px;line-height:1.45;color:#ffffff"><li>amn-monitor probes each hop: loss, latency, jitter</li><li>Traceroutes to site IPs log every route change</li><li>Control pings separate our path from the internet</li></ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">On the portal</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Chris · Graham</p></div>
+<ul style="font-size:26px;line-height:1.4"><li>Backhaul Monitoring: % of sites in Link alarm beside path latency and route changes</li><li>Count Starlink sites or VSAT sites on their own</li><li>Monitor page: Backhaul and Hub columns with filters</li><li>Path targets edited on the Starlink Configuration page</li><li>Ping status reaches the Monitor page as soon as it changes</li></ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">portal #618, #631, #639, #642, #643 · amn-monitor #57, #62 · live since late October</p>
+<aside class="notes">Path monitoring was requested by IT after months of OMG Starlink sites going Link/down together, mostly at busy hours; site to PoP stays at 25-35 ms, so the terrestrial transit to the Johannesburg PoP is the suspect. amn-monitor #57 adds ICMP bursts to transit hops, traceroutes with route-change detection, and #62 adds control pings and fleet ping counts per backhaul group. Portal: Link alarm % (#631), Starlink/VSAT site filter and control pings (#639), path targets editor (#618), Backhaul and Hub columns on Monitor (#642), all Chris. Graham's #643 replaced the 55 s cache plus 60 s poll with a version-based cache, so ping status changes reach browsers straight away.</aside>
+</section>
+<section class="slide" id="usb2" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
 <p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">03 · Operate</p>
 <h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">Finding ARNs that need a USB 3 SDR</h2>
@@ -223,8 +264,9 @@
 <p style="font-size:28px;line-height:1.35;color:#ffffff">"ARN replaced" check fails until the FE confirms the swap</p>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Graham · portal #547, #583 · amn-monitor #26, #28</p>
-<aside class="notes">The ticket line is re-read at creation, on a re-code and on the daily refresh, so it clears itself when a USB 3 SDR goes in. Trouble Tickets has a "Replace ARN (USB 2 SDR)" pill and filter, and the diagnostics open-ticket table has a column for it. The AI Agent and CLI guide both describe the line.</aside>
+<div style="display:flex;gap:24px;align-items:center;background:#e2ebf6;border-radius:16px;padding:28px 36px"><p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#073364">New</p><p style="font-size:28px;line-height:1.4;color:#0a1e36">USB mode history for every ARN: a step chart on the ARN List and hourly USB 2 / USB 3 counts on KPI Hour, backfilled for 3,471 ARNs</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Graham · portal #547, #583 · amn-monitor #26, #28 · history: Chris, portal #636</p>
+<aside class="notes">The ticket line is re-read at creation, on a re-code and on the daily refresh, so it clears itself when a USB 3 SDR goes in. Trouble Tickets has a "Replace ARN (USB 2 SDR)" pill and filter, and the diagnostics open-ticket table has a column for it. The AI Agent and CLI guide both describe the line. History (#636): every change is logged in ARNLocationHistory like a firmware change; prod backfill on 26 Oct covered 3,471 ARNs and 3,900 entries; the KPI Hour chart is internal-only.</aside>
 </section>
 <section class="slide" id="tickets" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -240,9 +282,10 @@
 <tr><td><b>No tickets for test sites</b></td><td>Sites flagged as test raise no auto tickets</td></tr>
 <tr><td><b>Site Insecure flag</b></td><td>Unsafe areas flow through monitor, tickets and scheduler</td></tr>
 <tr><td><b>Closed tickets leave the FE board</b></td><td>The scheduler shows only live work</td></tr>
+<tr><td><b>Week-over-week breakdown</b></td><td>A new stats page shows what moved between weeks</td></tr>
 </table>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Mostly Graham, with Chris · portal #415, #476, #515, #530, #543, #544, #548, #403</p>
-<aside class="notes">Also: Automatic / Manual / All filter on Trouble Tickets (#542), one run-history record per analysis run (#574, #571), Last Updated and Last Comment on tickets and the CSV (#564, #582), and the Trouble Ticket stats on the wall (#566). Bad CSR rule fixed in #515.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Mostly Graham, with Chris · portal #415, #476, #515, #530, #543, #544, #548, #403, #652</p>
+<aside class="notes">Also: Automatic / Manual / All filter on Trouble Tickets (#542), one run-history record per analysis run (#574, #571), Last Updated and Last Comment on tickets and the CSV (#564, #582), and the Trouble Ticket stats on the wall (#566). Bad CSR rule fixed in #515. Since 13 Oct: Week-over-Week page #652, ticket queries for internal users #649, overdue ETAs and auto-close preview #657, richer ticket querying in the AI Agent and CLI #655.</aside>
 </section>
 <section class="slide" id="visibility" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -290,11 +333,11 @@
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">A healthier CCTV fleet</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Graham · Chris</p></div>
-<ul style="font-size:26px;line-height:1.4"><li>Frame index in Mongo: photo lookups by query, not folder listing</li><li>New folder watcher survives upload bursts</li><li>Nightly FTP account audit; wrong FTP server addresses rewritten</li><li>Cameras pointed at NTP; per-network retention</li><li>Detection backoff for noisy cameras (phases 0–1 live)</li></ul>
+<ul style="font-size:26px;line-height:1.4"><li>Frame index in Mongo: photo lookups by query, not folder listing</li><li>New folder watcher survives upload bursts</li><li>Nightly FTP account audit; wrong FTP server addresses rewritten</li><li>Cameras pointed at NTP; per-network retention</li><li>Automatic detection backoff ladder for noisy cameras, with its own config page</li></ul>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">The weekly sweep is built but off until it is switched on in config</p>
-<aside class="notes">Panel rating page #528, prompt v2 #529, three-model rule-A ensemble #532 and #533, severity tiers #551, weekly sweep #578 (Opus skipped on 86% of sites with no change in action, measured), Dirty Panels page #584. amn-monitor (Graham): ACS panel rating during visit #35, live capture as frames #36, photo summary API #32, frame index #41, watcher #42 and #43, purge and retention #48 to #50, camera IP recovery #53. amn-monitor (Chris): FTP audit #44, FTP address rewrite #45, NTP #33, routing-table FTP IP #25, backoff phases #46 and #54 (phase 2 #56 open).</aside>
+<aside class="notes">Panel rating page #528, prompt v2 #529, three-model rule-A ensemble #532 and #533, severity tiers #551, weekly sweep #578 (Opus skipped on 86% of sites with no change in action, measured), Dirty Panels page #584. amn-monitor (Graham): ACS panel rating during visit #35, live capture as frames #36, photo summary API #32, frame index #41, watcher #42 and #43, purge and retention #48 to #50, camera IP recovery #53. amn-monitor (Chris): FTP audit #44, FTP address rewrite #45, NTP #33, routing-table FTP IP #25, backoff phases #46, #54 and #56 (automatic ladder, upload health, motion off), per-network FTP IP #55; portal CCTV Detection Config page #602. Open: monitor #63 stops the ladder cycling cameras back into alarm.</aside>
 </section>
 <section class="slide" id="fwupgrade" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -362,7 +405,7 @@
 <p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">Across the lifecycle · FE app</p>
 <h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">The field engineer's toolkit</h2>
 </div>
-<p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Chris · 31 PRs · v1.3 to v1.5.8</p>
+<p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Chris · 34 PRs · v1.3 to v1.5.13</p>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:24px">
 <div style="display:flex;flex-direction:column;gap:12px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px">
@@ -371,7 +414,7 @@
 </div>
 <div style="display:flex;flex-direction:column;gap:12px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px">
 <h3 style="font-family:Outfit, sans-serif;font-size:30px;font-weight:600;line-height:1.15;color:#073364">Surveys</h3>
-<p style="font-size:24px;line-height:1.4;color:#4d5f75">Cell survey and field survey tools; uploads survive slow links</p>
+<p style="font-size:24px;line-height:1.4;color:#4d5f75">Cell and field survey tools; the portal says why it refuses a survey</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:12px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px">
 <h3 style="font-family:Outfit, sans-serif;font-size:30px;font-weight:600;line-height:1.15;color:#073364">Drive test</h3>
@@ -387,7 +430,7 @@
 </div>
 <div style="display:flex;flex-direction:column;gap:12px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px">
 <h3 style="font-family:Outfit, sans-serif;font-size:30px;font-weight:600;line-height:1.15;color:#073364">Location</h3>
-<p style="font-size:24px;line-height:1.4;color:#4d5f75">GPS fix quality on every position; no offline data loss</p>
+<p style="font-size:24px;line-height:1.4;color:#4d5f75">Steadier 15-minute tracking with a watchdog; Tracking Health tab in the portal</p>
 </div>
 <div style="display:flex;flex-direction:column;gap:12px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px">
 <h3 style="font-family:Outfit, sans-serif;font-size:30px;font-weight:600;line-height:1.15;color:#073364">Contractors</h3>
@@ -395,11 +438,11 @@
 </div>
 <div style="display:flex;flex-direction:column;gap:12px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:32px">
 <h3 style="font-family:Outfit, sans-serif;font-size:30px;font-weight:600;line-height:1.15;color:#073364">Platform</h3>
-<p style="font-size:24px;line-height:1.4;color:#4d5f75">Android 16; releases via the Play API; forced-update gate</p>
+<p style="font-size:24px;line-height:1.4;color:#4d5f75">Android 16, Gradle 9; Play API releases; forced-update gate</p>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 13 Oct 2026</p>
-<aside class="notes">App PRs: cell survey #19, field survey 2 #20, home dashboard and brand refresh #26, FE Schedule v1.4.0 #27, offline location and auth hardening 1.4.1 #28, multi-RAT drive test #29, survey upload on slow links #30, Android 16 #31, site speed test #33 to #36, GPS fix quality #40, FSBs 1.5.7 #42, Play Developer API releases #46, R8 shrinking #48, 1.5.8 crash and ANR fixes #49, App Only mode #50. Earlier fixes: usernames with spaces, optional USB host for non-OTG phones, clocked-in timer.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
+<aside class="notes">App PRs: cell survey #19, field survey 2 #20, home dashboard and brand refresh #26, FE Schedule v1.4.0 #27, offline location and auth hardening 1.4.1 #28, multi-RAT drive test #29, survey upload on slow links #30, Android 16 #31, site speed test #33 to #36, GPS fix quality #40, FSBs 1.5.7 #42, Play Developer API releases #46, R8 shrinking #48, 1.5.8 crash and ANR fixes #49, App Only mode #50, location tracking 1.5.11 #51 with the portal Tracking Health tab #610, survey refusal reason #53, Gradle 9 / AGP 9 #39. Earlier fixes: usernames with spaces, optional USB host for non-OTG phones, clocked-in timer.</aside>
 </section>
 <section class="slide" id="aicli" data-transition="fade" style="background:#073364;color:#ffffff;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -409,15 +452,15 @@
 <div style="display:flex;gap:32px;flex:1">
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#0c2a50;border:1px solid #1f3c5f;border-radius:16px;padding:40px">
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#ffffff">AMN AI Agent</h3>
-<ul style="font-size:26px;line-height:1.45;color:#eaf1f8"><li>Natural-language queries over KPIs, availability, monitor data and site inventory</li><li>Site-based tools: per physical site, per cell, grouped any way</li><li>Quality tuned against an evaluation set</li><li>Scope gate keeps it on network topics</li></ul>
+<ul style="font-size:26px;line-height:1.45;color:#eaf1f8"><li>Natural-language queries over KPIs, availability, monitor data and site inventory</li><li>Site, 4G, trouble-ticket and ACS dispatch tools</li><li>Models re-tested and upgraded; tuned against an evaluation set</li><li>Scope gate keeps it on network topics</li></ul>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#0c2a50;border:1px solid #1f3c5f;border-radius:16px;padding:40px">
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#ffffff">amnportalCLI</h3>
 <ul style="font-size:26px;line-height:1.45;color:#eaf1f8"><li>The agent's read-only tools in a terminal, same parameters</li><li>One-line installers for Windows, macOS and Linux; self-updating</li><li>Ships a skill so AI coding agents can use it</li><li>Drives the deploy health checks</li></ul>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#9cb0c6">Graham · portal #352, #360, #367, #385, #591 and CLI releases 1.0.1–1.0.9</p>
-<aside class="notes">The AI Agent launched as a major release in May (#352), followed by site-based KPI and inventory tooling (#360), per-cell availability and gen-divergence commands (#385), and the Jev scope gate (#591). The CLI (#367) mirrors only the read-only tools; write actions stay in the portal UI. A Remote GNOC role gives AI Agent, ARN Tools and Site Diagnostics access (#396, Chris).</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#9cb0c6">Graham · portal #352, #360, #367, #385, #591, #650, #654, #655 · CLI 1.0.1–1.0.15</p>
+<aside class="notes">The AI Agent launched as a major release in May (#352), followed by site-based KPI and inventory tooling (#360), per-cell availability and gen-divergence commands (#385), and the Jev scope gate (#591). Since 13 Oct: 4G range KPIs, busy hour and lte-outliers (#650), 4G config and bandwidth tools (#658, #659), ACS dispatch queries (#654), richer ticket querying (#655), model re-test and upgrade (#614), non-admin tool fix (#625). The CLI (#367) mirrors only the read-only tools; write actions stay in the portal UI. A Remote GNOC role gives AI Agent, ARN Tools and Site Diagnostics access (#396, Chris).</aside>
 </section>
 <section class="slide" id="platform" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -427,15 +470,33 @@
 <div style="display:flex;gap:32px;flex:1">
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Country app servers</h3>
-<ul style="font-size:26px;line-height:1.4"><li>amn-monitor moved from Bitbucket to GitHub (16 Jul)</li><li>PM2 7 across the fleet with a checked-in config</li><li>Repeatable server provisioning</li><li>Deterministic fleet deploys with automatic checks</li><li>Shadow deploys: test a branch beside the live instance</li></ul>
+<ul style="font-size:26px;line-height:1.4"><li>amn-monitor moved from Bitbucket to GitHub (16 Jul)</li><li>PM2 7 across the fleet with a checked-in config</li><li>Repeatable provisioning; Node 22.23.4 on every server</li><li>Deterministic fleet deploys with automatic checks</li><li>Shadow deploys: test a branch beside the live instance</li></ul>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Portal</h3>
-<ul style="font-size:26px;line-height:1.4"><li>Graceful shutdown; deploys gated on health checks</li><li>Hardened Range and ARN stats ingest on degraded links</li><li>Ready for a Linux host, with a Docker test rig</li><li>Fast and full test tiers</li><li>Portal Status page for the services the portal depends on</li></ul>
+<ul style="font-size:26px;line-height:1.4"><li>Graceful shutdown; deploys gated on health checks</li><li>Range stats: 7-day refresh under 10 min, missed archives backfilled</li><li>Ready for a Linux host, with a Docker test rig</li><li>Fast and full test tiers</li><li>Portal Status page with Google Chat fault alerts</li></ul>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Mostly Graham</p>
 <aside class="notes">Range ingest also got auto-detection and reconstruction of corrupt 2G byte counters and support for intraday files. Deploy tooling now checks KPI Day, Monitor and Comms through the CLI before and after each deploy.</aside>
+</section>
+<section class="slide" id="next" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">What's next</p>
+<h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">In review now</h2>
+</div>
+<table style="font-size:26px;color:#0a1e36;width:1664px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:18px">
+<tr><th style="text-align:left;color:#4d5f75">Work</th><th style="text-align:left;color:#4d5f75">What it does for the ARN</th><th style="text-align:left;color:#4d5f75">Where</th></tr>
+<tr><td><b>Site disable / enable</b></td><td>Take a site off air and back from /sites; fixes multi-sector deploy status</td><td>portal #640</td></tr>
+<tr><td><b>XGA neighbours by name</b></td><td>Neighbour lists read by site name, resolved across XGAs</td><td>portal #662</td></tr>
+<tr><td><b>CCTV ladder fix</b></td><td>Stops the backoff ladder cycling cameras back into alarm</td><td>monitor #63</td></tr>
+<tr><td><b>ODC Starlink hub</b></td><td>Adds AMN-ODC-Starlink to the site Hub list</td><td>portal #663</td></tr>
+<tr><td><b>Weekly ticket stats</b></td><td>One Monday run per week, plus an insecure-site column</td><td>portal #664</td></tr>
+<tr><td><b>Firmware retry counting</b></td><td>Portal tasks no longer copy amn-monitor's "queued" state</td><td>portal #468</td></tr>
+<tr><td><b>App translation</b></td><td>App text ready for Play's automatic translation</td><td>app #52</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Status as of 2 Nov 2026 · the rest of the workshop plans what comes next</p>
+<aside class="notes">Firmware retry counting (#468) is Michael's. Everything else is Chris's. Hand over from here to the planning session.</aside>
 </section>
 </div>
 <div id="notes" aria-live="polite"></div>
@@ -464,6 +525,10 @@
     document.getElementById('progress').style.width = ((i + 1) / slides.length * 100) + '%';
     if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
   }
+  function toggleFs() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+  }
   document.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(i + 1); }
     else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
@@ -472,10 +537,6 @@
     else if (e.key === 'n' || e.key === 'N') document.body.classList.toggle('show-notes');
     else if (e.key === 'f' || e.key === 'F') toggleFs();
   });
-  function toggleFs() {
-    if (document.fullscreenElement) document.exitFullscreen();
-    else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
-  }
   var tx = null;
   document.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
   document.addEventListener('touchend', function (e) {
