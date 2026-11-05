@@ -49,7 +49,7 @@
 <p style="font-size:36px;line-height:1.4;color:#c9d6e6">What changed in the portal, amn-monitor and the FE app since the last workshop on 13 April 2026</p>
 </div>
 <p style="font-size:30px;color:#ffffff"><b>Chris White</b> · <b>Graham Bond</b></p>
-<aside class="notes">Scope: everything merged by Chris and Graham between Monday 13 April and 2 November 2026 across amnportal, amn-monitor and AMN-Android-App, filtered to what matters for the ARN. amn-monitor lived on Bitbucket until 16 July; that history is included.</aside>
+<aside class="notes">Scope: everything merged by Chris and Graham between Monday 13 April and 5 November 2026 across amnportal, amn-monitor and AMN-Android-App, filtered to what matters for the ARN. amn-monitor lived on Bitbucket until 16 July; that history is included.</aside>
 </section>
 <section class="slide" id="numbers" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -58,26 +58,26 @@
 </div>
 <div style="display:flex;gap:32px">
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#073364;border-radius:16px;padding:40px">
-<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#ffffff">1,500+</p>
-<p style="font-size:28px;color:#c9d6e6">commits</p>
+<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#ffffff">1,500</p>
+<p style="font-size:28px;color:#c9d6e6">commits, roughly</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
-<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#073364">446</p>
+<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#073364">466</p>
 <p style="font-size:28px;color:#4d5f75">pull requests merged</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
-<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#073364">8</p>
+<p style="font-family:Outfit, sans-serif;font-size:96px;font-weight:600;line-height:1.1;color:#073364">7</p>
 <p style="font-size:28px;color:#4d5f75">still open, in review</p>
 </div>
 </div>
 <table style="font-size:28px;color:#0a1e36;width:1664px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:20px">
 <tr><th style="text-align:left;color:#4d5f75">Repository</th><th style="text-align:left;color:#4d5f75">What it is</th><th style="text-align:right;color:#4d5f75">Commits</th><th style="text-align:right;color:#4d5f75">PRs merged</th></tr>
-<tr><td><b>amnportal</b></td><td>Web portal, GNOC tools, background jobs</td><td style="text-align:right">1,107</td><td style="text-align:right">340</td></tr>
-<tr><td><b>amn-monitor</b></td><td>Country app servers that talk to every ARN</td><td style="text-align:right">268</td><td style="text-align:right">72</td></tr>
+<tr><td><b>amnportal</b></td><td>Web portal, GNOC tools, background jobs</td><td style="text-align:right">1,125</td><td style="text-align:right">359</td></tr>
+<tr><td><b>amn-monitor</b></td><td>Country app servers that talk to every ARN</td><td style="text-align:right">268</td><td style="text-align:right">73</td></tr>
 <tr><td><b>AMN-Android-App</b></td><td>Field engineer app</td><td style="text-align:right">135</td><td style="text-align:right">34</td></tr>
 </table>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">13 Apr – 2 Nov 2026. amn-monitor moved from Bitbucket to GitHub on 16 Jul; its 72 PRs include Bitbucket PRs #53–65.</p>
-<aside class="notes">Portal PRs split evenly: Graham 176, Chris 163 (plus one from Michael). amn-monitor: Graham 42 and Chris 17 on GitHub, plus 13 on Bitbucket before the move (Graham's Upgrade_Sites and firmware staging, Chris's ACS 2.0, centralised IP addressing and Starlink ranges). The FE app is all Chris. Open PRs: 6 portal, 1 monitor, 1 app.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">13 Apr – 5 Nov 2026. amn-monitor moved from Bitbucket to GitHub on 16 Jul; its 73 PRs include Bitbucket PRs #53–65.</p>
+<aside class="notes">Portal PRs split evenly: Graham 182, Chris 176 (plus one from Michael). amn-monitor: Graham 43 and Chris 17 on GitHub, plus 13 on Bitbucket before the move (Graham's Upgrade_Sites and firmware staging, Chris's ACS 2.0, centralised IP addressing and Starlink ranges). The FE app is all Chris. Open PRs: 5 portal, 1 monitor, 1 app. Counts as of 5 Nov; refresh just before presenting.</aside>
 </section>
 <section class="slide" id="lifecycle" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -112,7 +112,7 @@
 </div>
 </div>
 <p style="font-size:28px;line-height:1.4;color:#4d5f75">Running across all five: the FE app, the AI Agent and CLI, and a sturdier platform underneath.</p>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 5 Nov 2026</p>
 <aside class="notes">This is the running order for the rest of the talk. Operate has the most change, so it gets the most slides.</aside>
 </section>
 <section class="slide" id="plan" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
@@ -134,7 +134,7 @@
 <ul style="font-size:26px;line-height:1.4"><li>Centralised IP addressing: subnet, gateway, CCTV and VLAN derived</li><li>Starlink /28 cell masks and non-standard ranges</li><li>ARN Tools: site diagnostics, deploy status, change site IPs</li><li>XGA Site Editor synced with xga-manager</li></ul>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 5 Nov 2026</p>
 <aside class="notes">Portal PRs: field survey tool #333, survey detail #357, Site Survey Review #404, review rework #421; site-first model #377, site editor #408, per-BSC Cell_Id uniqueness #414, CSV upload preview and revert #570. ARN Tools #310, tag ARN #314, Change Site IPs #497, XGA Site Editor #361 and GitHub sync #306 and #397. amn-monitor: centralised IP addressing (Bitbucket #60), MBJ Starlink /28 (#53), non-standard Starlink range (#62). App: cell survey tool #19, field survey 2 #20, refusal reason shown #53. Since 13 Oct: coverage plot and deployment approval on site history #616, deployment comment #608, file limit raised to 100 #635, Full_Site_ID in the sites CSV #633.</aside>
 </section>
 <section class="slide" id="install" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
@@ -152,7 +152,7 @@
 <ul style="font-size:26px;line-height:1.4"><li>New /ACS2 page with site-based dispatches</li><li>A passed ACS sets cells live and recomputes the site</li><li>Pass / failed / N/A counts; CSV and XLSX export</li><li>GNOC confirms every Upgrade and Install dispatch</li><li>Every dispatch carries site coordinates and ticket priority</li></ul>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 5 Nov 2026</p>
 <aside class="notes">amn-monitor: ACS 2.0 (Bitbucket #61, #65), validation fixes from Graham (#2, #3), coordinates and priority on dispatch (#10), GNOC confirmation prompt (#39), validation counts (#30), Step 05 label (#31), Starlink pointing tool (#51), FTP server rewrite (#45), CCTV NTP (#33). Portal: /ACS2 page #443, set 3G/4G live #479, Live_Date propagation #428, site recompute on go-live plus a daily sweep #604, ACS exports #522, weekly stats fix #495, drive-test map fix #553, Cell_Id 0 hardening #485.</aside>
 </section>
 <section class="slide" id="drivetest" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
@@ -186,15 +186,15 @@
 <div style="flex:3;display:flex;flex-direction:column;gap:24px;background:#073364;border-radius:16px;padding:48px">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:40px;font-weight:600;line-height:1.15;color:#ffffff">Carrier-down auto-repower</h3><p style="font-size:24px;font-weight:500;color:#06182e;background:#8fd877;border-radius:999px;padding:4px 16px">Graham</p></div>
 <p style="font-size:28px;line-height:1.45;color:#c9d6e6">A 4G or 3G carrier at 0% for the whole previous day, while its 2G is up and the site answers pings, used to stay dark: the existing ping and 2G-traffic resets saw a healthy site.</p>
-<ul style="font-size:28px;line-height:1.45;color:#ffffff"><li>Runs at 06:00, one attempt per node per day</li><li>Repowers through the EMC on the same node's 2G cell, matched by BTS_IP, so multi-sector sites hit the right ARN</li><li>4G first, then 3G; a node dark on both is cycled once</li></ul>
+<ul style="font-size:28px;line-height:1.45;color:#ffffff"><li>Runs at 06:00 UTC, one attempt per node per day</li><li>Repowers through the EMC on the same node's 2G cell, matched by BTS_IP, so multi-sector sites hit the right ARN</li><li>4G first, then 3G; a node dark on both is cycled once</li></ul>
 </div>
 <div style="flex:2;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Better detection</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Graham · Chris</p></div>
 <ul style="font-size:26px;line-height:1.4"><li>Per-generation (2G/3G/4G) BSC alarms in the live alarm engine</li><li>Low Erlangs catches traffic collapses, not just low averages</li><li>Ping outages survive a monitor restart and show on Monitor Hour</li><li>Dual-SDR cells and the 26.01 btsmon schema supported</li><li>Retired BSCs keep their history but raise no alarms</li></ul>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
-<aside class="notes">Portal: 4G auto-repower #402 (June), extended to 3G #418, per-generation BSC alarms #447, Low Erlangs #366 and #423, Ping_Outage in the UI #483 and #484, BSC retirement #603 (Chris). amn-monitor: monitor persistence #13, dual-SDR cells and 26.01 btsmon schema (Bitbucket Upgrade_Sites PRs, April). Each repower is recorded in BTSreset with Reason "3G Down" or "4G Down".</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 5 Nov 2026</p>
+<aside class="notes">Portal: 4G auto-repower #402 (June), extended to 3G #418, per-generation BSC alarms #447, Low Erlangs #366 and #423, Ping_Outage in the UI #483 and #484, BSC retirement #603 (Chris). amn-monitor: monitor persistence #13, dual-SDR cells and 26.01 btsmon schema (Bitbucket Upgrade_Sites PRs, April). Each repower is recorded in BTSreset with Reason "3G Down" or "4G Down": 2,493 "4G Down" and 283 "3G Down" since June across 610 cells (attempts, not successes). Repeat resets: MNG1285, MNG1331 and MNG1439 read USB 2 and had 37 carrier-down resets each in the 36 days from 28 Sep; a cooldown is approved but not built.</aside>
 </section>
 <section class="slide" id="lte4g" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -208,15 +208,15 @@
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#073364;border-radius:16px;padding:40px">
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#ffffff">Configured bandwidth</h3>
-<ul style="font-size:26px;line-height:1.4;color:#ffffff"><li>Each sector's 4G bandwidth (1.4, 3 or 5 MHz) read from XGA and shown on Sites</li><li>Cells running below it are flagged: reconfigured, or flapping</li><li>Example: one MNG cell ran at 6 of 25 PRBs for five days in October</li></ul>
+<ul style="font-size:26px;line-height:1.4;color:#ffffff"><li>Each sector's 4G bandwidth (1.4, 3 or 5 MHz) read from XGA and shown on Sites</li><li>Cells running below it are flagged (API, AI Agent and CLI): reconfigured, or flapping</li><li>Example: one MNG cell ran at 6 of 25 PRBs for five days in October</li></ul>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Finding problem cells</h3>
 <ul style="font-size:26px;line-height:1.4"><li>Per-cell busy hour: peak PRB, hours near capacity, peak users</li><li>On-air-but-no-service flag</li><li>4G outlier list in the AI Agent and CLI</li></ul>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Graham · portal #606, #644, #645, #650, #653, #658, #659 · all since late October</p>
-<aside class="notes">Range ingest now stores the 55 4G s1gw counters as numbers and builds a per-cell kpiDay LTE sub-document (#644). The bandwidth check (#659) compares each LTE cell's on-air PRBs with the bandwidth XGA configures for its sector: "reconfigured" means steady at a lower valid bandwidth, "flapping" means never a full hour at the configured PRB. Example from prod: MNG0146_WambaVillage, 22-26 Oct, 25 to 6 PRB. The XGA sync now keeps the bandwidth_4g column (#658). Location Updates chart #606.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Graham · Range LTE only · portal #606, #644, #645, #650, #653, #658, #659 · all since late October</p>
+<aside class="notes">Range ingest now stores the 55 4G s1gw counters as numbers and builds a per-cell kpiDay LTE sub-document (#644). The bandwidth check (#659) compares each LTE cell's on-air PRBs with the bandwidth XGA configures for its sector: "reconfigured" means steady at a lower valid bandwidth, "flapping" means never a full hour at the configured PRB. Example from prod: MNG0146_WambaVillage, 22-26 Oct, 25 to 6 PRB. The XGA sync now keeps the bandwidth_4g column (#658). Location Updates chart #606. Range LTE only: IP Access LTE reports no counters, so ODRC has no 4G charts.</aside>
 </section>
 <section class="slide" id="backhaul" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -242,7 +242,7 @@
   <div id="p507f4293aee3r0-3f9bec4f" style="position:absolute; top:128px; left:128px; width:1664px; height:187px; display:flex; flex-direction:column; gap:16px">
     <p style="font-family:'IBM Plex Sans', sans-serif; font-size:24px; font-weight:600; letter-spacing:4px; text-transform:uppercase; color:#276f1c">03 · Operate</p>
     <h2 style="font-family:Outfit, sans-serif; font-size:72px; font-weight:600; line-height:1.1; letter-spacing:-1px; color:#073364">Finding ARNs that need a USB 3 SDR</h2>
-    <p style="font-family:'IBM Plex Sans', sans-serif; font-size:30px; line-height:1.4; color:#4d5f75">An SDR running in USB 2 mode cannot carry 3G or 4G. The fleet now finds these ARNs and makes sure the swap happens.</p>
+    <p style="font-family:'IBM Plex Sans', sans-serif; font-size:30px; line-height:1.4; color:#4d5f75">An SDR in USB 2 mode starves 4G: those cells carried about 3% of their usual data. The fleet now finds these ARNs and tickets the swap.</p>
   </div>
   <div id="p507f4293aee3r1-3f9bec4f" style="position:absolute; top:363px; left:128px; width:1664px; height:267px; display:flex; flex-direction:row; gap:16px; align-items:center">
     <div style="display:flex; flex-direction:column; gap:16px; flex:1; padding:32px; background:#ffffff; border:1px solid #d5dee9; border-radius:16px">
@@ -262,14 +262,14 @@
     <x-shape data-kind="arrow-right" style="width:48px; height:24px; background:#7a8ca2"></x-shape>
     <div style="display:flex; flex-direction:column; gap:16px; flex:1; padding:32px; background:#073364; border-radius:16px">
       <p style="font-family:'IBM Plex Sans', sans-serif; font-size:24px; font-weight:600; color:#8fd877">4 · ACS Step 05</p>
-      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:28px; line-height:1.35; color:#ffffff">"ARN replaced" check fails until the FE confirms the swap</p>
+      <p style="font-family:'IBM Plex Sans', sans-serif; font-size:28px; line-height:1.35; color:#ffffff">FE must confirm "ARN replaced"; the SDR is not re-read yet</p>
     </div>
   </div>
   <div id="p507f4293aee3r2-3f9bec4f" style="position:absolute; top:678px; left:128px; width:1664px; height:135px; display:flex; flex-direction:row; gap:24px; align-items:center; padding:28px 36px; background:#e2ebf6; border-radius:16px">
   </div>
   <p id="p507f4293aee3r2_0-3f9bec4f" style="position:absolute; top:711px; left:145.29px; width:76.71px; height:72.78px; font-family:'IBM Plex Sans', sans-serif; font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#073364">New</p>
   <p id="p507f4293aee3r2_1-3f9bec4f" style="position:absolute; top:706px; left:245px; width:1511px; font-family:'IBM Plex Sans', sans-serif; font-size:28px; line-height:1.4; color:#0a1e36">USB mode history for every ARN: a step chart on the ARN List and hourly USB 2 / USB 3 counts on KPI Hour, backfilled for 3,471 ARNs</p>
-  <aside class="notes">The ticket line is re-read at creation, on a re-code and on the daily refresh, so it clears itself when a USB 3 SDR goes in. Trouble Tickets has a "Replace ARN (USB 2 SDR)" pill and filter, and the diagnostics open-ticket table has a column for it. The AI Agent and CLI guide both describe the line. History (#636): every change is logged in ARNLocationHistory like a firmware change; prod backfill on 26 Oct covered 3,471 ARNs and 3,900 entries; the KPI Hour chart is internal-only.</aside>
+  <aside class="notes">The ticket line is re-read at creation, on a re-code and on the daily refresh, so it clears itself when a USB 3 SDR goes in. Trouble Tickets has a "Replace ARN (USB 2 SDR)" pill and filter, and the diagnostics open-ticket table has a column for it. The AI Agent and CLI guide both describe the line. History (#636): every change is logged in ARNLocationHistory like a firmware change; prod backfill on 26 Oct covered 3,471 ARNs and 3,900 entries; the KPI Hour chart is internal-only. Caveats (Graham, re-measured 3 Nov): USB mode is set at boot and the flag reads the live mode, so it comes and goes on a toggling ARN: 141 ARNs read USB 2 between 28 Sep and 3 Nov, 84 toggling and 57 stuck. 2G-only sites are still flagged: 51 of the 60 USB 2 ARNs at 12:00 UTC on 3 Nov. 19 4G cells stayed up on USB 2 and 18 carried about 3% or less of their USB 3 data (3G not measured). Step 05 passes on the FE's checkbox: of 10 confirmed swaps since 10 Sep, MNG0013 and ODC1291 kept the same ARN serial and still read USB 2.</aside>
 </section>
 <section class="slide" id="tickets" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -280,15 +280,15 @@
 <tr><th style="text-align:left;color:#4d5f75">Change</th><th style="text-align:left;color:#4d5f75">Why it matters</th></tr>
 <tr><td><b>Hold lower fault codes while the satellite is down</b></td><td>One SAT outage raises one ticket, not a cascade</td></tr>
 <tr><td><b>3-clean-day downgrade hysteresis</b></td><td>Tickets stop flapping between fault codes</td></tr>
-<tr><td><b>Fault code locked on auto tickets</b></td><td>The code the system raised stays the code</td></tr>
+<tr><td><b>Staff can't change the code on auto tickets</b></td><td>Only the analysis re-codes them</td></tr>
 <tr><td><b>Manual tickets over 30 days auto-close</b></td><td>On the same 3-clean-day test as auto tickets</td></tr>
 <tr><td><b>No tickets for test sites</b></td><td>Sites flagged as test raise no auto tickets</td></tr>
 <tr><td><b>Site Insecure flag</b></td><td>Unsafe areas flow through monitor, tickets and scheduler</td></tr>
-<tr><td><b>Closed tickets leave the FE board</b></td><td>The scheduler shows only live work</td></tr>
+<tr><td><b>Site Down needs real KPI downtime</b></td><td>Starlink sites still passing traffic are no longer ticketed as down</td></tr>
 <tr><td><b>Week-over-week breakdown</b></td><td>A new stats page shows what moved between weeks</td></tr>
 </table>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Mostly Graham, with Chris · portal #415, #476, #515, #530, #543, #544, #548, #403, #652</p>
-<aside class="notes">Also: Automatic / Manual / All filter on Trouble Tickets (#542), one run-history record per analysis run (#574, #571), Last Updated and Last Comment on tickets and the CSV (#564, #582), and the Trouble Ticket stats on the wall (#566). Bad CSR rule fixed in #515. Since 13 Oct: Week-over-Week page #652, ticket queries for internal users #649, overdue ETAs and auto-close preview #657, richer ticket querying in the AI Agent and CLI #655.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Mostly Graham, with Chris · portal #415, #476, #515, #530, #543, #544, #548, #403, #652, #666</p>
+<aside class="notes">Also: Automatic / Manual / All filter on Trouble Tickets (#542), one run-history record per analysis run (#574, #571), Last Updated and Last Comment on tickets and the CSV (#564, #582), and the Trouble Ticket stats on the wall (#566). Bad CSR rule fixed in #515. Since 13 Oct: Week-over-Week page #652, ticket queries for internal users #649, overdue ETAs and auto-close preview #657, richer ticket querying in the AI Agent and CLI #655. Site Down (#666, deployed 2 Nov): 36 of 731 Lagos Starlink sites showed signs of being ticketed down while passing traffic; the first run on 3 Nov kept 6 sites out of Site Down. Closed tickets leave the FE board (#530). Be ready for: open tickets rose from 410 to 444 last week.</aside>
 </section>
 <section class="slide" id="visibility" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -327,12 +327,12 @@
 <section class="slide" id="cctv" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
 <p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">03 · Operate</p>
-<h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">CCTV pictures now drive panel cleaning</h2>
+<h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">CCTV pictures now rank panels for cleaning</h2>
 </div>
 <div style="display:flex;gap:32px;flex:1">
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#073364;border-radius:16px;padding:48px">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#ffffff">AI panel-soiling rating</h3><p style="font-size:24px;font-weight:500;color:#06182e;background:#8fd877;border-radius:999px;padding:4px 16px">Graham</p></div>
-<ul style="font-size:26px;line-height:1.45;color:#ffffff"><li>Three models rate each site's CCTV picture for dirty solar panels; staff verdicts build a labelled dataset</li><li>Weekly sweep ranks the whole reachable estate; Opus is called only when its vote could change the action</li><li>Dirty Panels page lists flagged sites with history</li><li>ACS rates the picture taken during the visit</li></ul>
+<ul style="font-size:26px;line-height:1.45;color:#ffffff"><li>Three models rate each site's CCTV picture for dirty solar panels; staff verdicts build a labelled dataset</li><li>Weekly sweep ranks the whole reachable estate; Opus is called only when its vote could change the action</li><li>Dirty Panels page lists flagged sites with history; notifications and dispatch to come</li><li>ACS panel rating: deployed, to be enabled after FSB023</li></ul>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">A healthier CCTV fleet</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Graham · Chris</p></div>
@@ -340,7 +340,7 @@
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">The weekly sweep is now switched on and runs every week across the estate</p>
-<aside class="notes">Panel rating page #528, prompt v2 #529, three-model rule-A ensemble #532 and #533, severity tiers #551, weekly sweep #578 (Opus skipped on 86% of sites with no change in action, measured), Dirty Panels page #584. amn-monitor (Graham): ACS panel rating during visit #35, live capture as frames #36, photo summary API #32, frame index #41, watcher #42 and #43, purge and retention #48 to #50, camera IP recovery #53. amn-monitor (Chris): FTP audit #44, FTP address rewrite #45, NTP #33, routing-table FTP IP #25, backoff phases #46, #54 and #56 (automatic ladder, upload health, motion off), per-network FTP IP #55; portal CCTV Detection Config page #602. Open: monitor #63 stops the ladder cycling cameras back into alarm.</aside>
+<aside class="notes">Panel rating page #528, prompt v2 #529, three-model rule-A ensemble #532 and #533, severity tiers #551, weekly sweep #578 (in a 672-group replay Opus was skipped on 86% of sites with no change in action; agreement with human labels 78.5%, against 83.0% with all three models), Dirty Panels page #584 (not in the menu yet; the Country Manager notification is not built, and nothing dispatches cleaning). ACS panel rating is deployed but not enabled on the App Servers; FSB023 is submitted for approval with an implementation date of 16 Nov. amn-monitor (Graham): ACS panel rating during visit #35, live capture as frames #36, photo summary API #32, frame index #41, watcher #42 and #43, purge and retention #48 to #50, camera IP recovery #53. amn-monitor (Chris): FTP audit #44, FTP address rewrite #45, NTP #33, routing-table FTP IP #25, backoff phases #46, #54 and #56 (automatic ladder, upload health, motion off), per-network FTP IP #55; portal CCTV Detection Config page #602. Open: monitor #63 stops the ladder cycling cameras back into alarm.</aside>
 </section>
 <section class="slide" id="fwupgrade" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -378,7 +378,7 @@
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Safety fixes</h3>
-<ul style="font-size:26px;line-height:1.4"><li><b>The RAN must be fully stopped before flashing</b>, after an ARN was bricked in Zambia (MZM) on 21 July</li><li>An upgrade survives an amn-monitor restart mid-job</li><li>Portal restarts and deploys are safe mid-job</li><li>The image selector no longer resets on refresh, which had caused an accidental downgrade</li></ul>
+<ul style="font-size:26px;line-height:1.4"><li><b>The RAN must be fully stopped before flashing</b>, after five MZM 2G+4G sites were bricked on 21 July</li><li>An upgrade survives an amn-monitor restart mid-job</li><li>Portal restarts and deploys are safe mid-job</li><li>The image selector no longer resets on refresh, which had caused an accidental downgrade</li></ul>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Graham · portal #444, #445, #464, #473 · amn-monitor #8, #9, #11 and Bitbucket #63–64</p>
@@ -444,7 +444,7 @@
 <p style="font-size:24px;line-height:1.4;color:#4d5f75">Android 16, Gradle 9; Play API releases; forced-update gate</p>
 </div>
 </div>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 2 Nov 2026</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 5 Nov 2026</p>
 <aside class="notes">App PRs: cell survey #19, field survey 2 #20, home dashboard and brand refresh #26, FE Schedule v1.4.0 #27, offline location and auth hardening 1.4.1 #28, multi-RAT drive test #29, survey upload on slow links #30, Android 16 #31, site speed test #33 to #36, GPS fix quality #40, FSBs 1.5.7 #42, Play Developer API releases #46, R8 shrinking #48, 1.5.8 crash and ANR fixes #49, App Only mode #50, location tracking 1.5.11 #51 with the portal Tracking Health tab #610, survey refusal reason #53, Gradle 9 / AGP 9 #39. Earlier fixes: usernames with spaces, optional USB host for non-OTG phones, clocked-in timer.</aside>
 </section>
 <section class="slide" id="aicli" data-transition="fade" style="background:#073364;color:#ffffff;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
@@ -459,7 +459,7 @@
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#0c2a50;border:1px solid #1f3c5f;border-radius:16px;padding:40px">
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#ffffff">amnportalCLI</h3>
-<ul style="font-size:26px;line-height:1.45;color:#eaf1f8"><li>The agent's read-only tools in a terminal, same parameters</li><li>One-line installers for Windows, macOS and Linux; self-updating</li><li>Ships a skill so AI coding agents can use it</li><li>Drives the deploy health checks</li></ul>
+<ul style="font-size:26px;line-height:1.45;color:#eaf1f8"><li>The agent's read-only tools in a terminal, same parameters</li><li>One-line installers for Windows, macOS and Linux; self-updating</li><li>Ships a skill so AI coding agents can use it</li><li>For admins and the AI Agent role; internal alone is not enough</li></ul>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#9cb0c6">Graham · portal #352, #360, #367, #385, #591, #650, #654, #655 · CLI 1.0.1–1.0.15</p>
@@ -477,11 +477,11 @@
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
 <h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Portal</h3>
-<ul style="font-size:26px;line-height:1.4"><li>Graceful shutdown; deploys gated on health checks</li><li>Range stats: 7-day refresh under 10 min, missed archives backfilled</li><li>Ready for a Linux host, with a Docker test rig</li><li>Fast and full test tiers</li><li>Portal Status page with Google Chat fault alerts</li></ul>
+<ul style="font-size:26px;line-height:1.4"><li>Graceful shutdown; deploys verified by health checks</li><li>Range stats: 7-day refresh under 10 min, missed archives backfilled</li><li>Ready for a Linux host (not migrated), with a Docker test rig</li><li>Faster, and no more bounces to the login page</li><li>Portal Status page with Google Chat fault alerts</li></ul>
 </div>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Mostly Graham</p>
-<aside class="notes">Range ingest also got auto-detection and reconstruction of corrupt 2G byte counters and support for intraday files. Deploy tooling now checks KPI Day, Monitor and Comms through the CLI before and after each deploy.</aside>
+<aside class="notes">Speed: the median background request went from 380 ms to 13 ms, the worst KPI Day query from 460 s to 1.7 s, and a failed fetch on a KPI page now shows an error instead of sending the user to login. ARN stats also survive 0-byte downloads over bad links. Range ingest also got auto-detection and reconstruction of corrupt 2G byte counters and support for intraday files. Deploy tooling now checks KPI Day, Monitor and Comms through the CLI before and after each deploy.</aside>
 </section>
 <section class="slide" id="next" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
@@ -490,16 +490,15 @@
 </div>
 <table style="font-size:26px;color:#0a1e36;width:1664px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:18px">
 <tr><th style="text-align:left;color:#4d5f75">Work</th><th style="text-align:left;color:#4d5f75">What it does for the ARN</th><th style="text-align:left;color:#4d5f75">Where</th></tr>
-<tr><td><b>Site disable / enable</b></td><td>Take a site off air and back from /sites; fixes multi-sector deploy status</td><td>portal #640</td></tr>
-<tr><td><b>XGA neighbours by name</b></td><td>Neighbour lists read by site name, resolved across XGAs</td><td>portal #662</td></tr>
+<tr><td><b>Site disable / enable</b></td><td>Phase 1, ARN900 only: take a site off air and back from /sites; not yet run on a real BTS</td><td>portal #640</td></tr>
+<tr><td><b>ACS panel rating</b></td><td>Deployed; switched on after FSB023 tells the FEs (16 Nov)</td><td>monitor #35</td></tr>
+<tr><td><b>XGA Gauge</b></td><td>E-RAB bar and 24-hour maximum on the gauge</td><td>portal #680</td></tr>
 <tr><td><b>CCTV ladder fix</b></td><td>Stops the backoff ladder cycling cameras back into alarm</td><td>monitor #63</td></tr>
-<tr><td><b>ODC Starlink hub</b></td><td>Adds AMN-ODC-Starlink to the site Hub list</td><td>portal #663</td></tr>
-<tr><td><b>Weekly ticket stats</b></td><td>One Monday run per week, plus an insecure-site column</td><td>portal #664</td></tr>
 <tr><td><b>Firmware retry counting</b></td><td>Portal tasks no longer copy amn-monitor's "queued" state</td><td>portal #468</td></tr>
 <tr><td><b>App translation</b></td><td>App text ready for Play's automatic translation</td><td>app #52</td></tr>
 </table>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Status as of 2 Nov 2026 · the rest of the workshop plans what comes next</p>
-<aside class="notes">Firmware retry counting (#468) is Michael's. Everything else is Chris's. Hand over from here to the planning session.</aside>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Status as of 5 Nov 2026 · the rest of the workshop plans what comes next</p>
+<aside class="notes">Firmware retry counting (#468) is Michael's. ACS panel rating is Graham's. Everything else is Chris's. #662, #663 and #664 merged on 2 Nov. Hand over from here to the planning session.</aside>
 </section>
 </div>
 <div id="notes" aria-live="polite"></div>
