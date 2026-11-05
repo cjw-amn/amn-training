@@ -79,6 +79,24 @@
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">13 Apr – 5 Nov 2026. amn-monitor moved from Bitbucket to GitHub on 16 Jul; its 73 PRs include Bitbucket PRs #53–65.</p>
 <aside class="notes">Portal PRs split evenly: Graham 182, Chris 176 (plus one from Michael). amn-monitor: Graham 43 and Chris 17 on GitHub, plus 13 on Bitbucket before the move (Graham's Upgrade_Sites and firmware staging, Chris's ACS 2.0, centralised IP addressing and Starlink ranges). The FE app is all Chris. Open PRs: 5 portal, 1 monitor, 1 app. Counts as of 5 Nov; refresh just before presenting.</aside>
 </section>
+<section class="slide" id="portal" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">First · The portal itself</p>
+<h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">A refreshed portal that works on a phone</h2>
+</div>
+<div style="display:flex;gap:32px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#073364;border-radius:16px;padding:48px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#ffffff">New navigation</h3><p style="font-size:24px;font-weight:500;color:#06182e;background:#8fd877;border-radius:999px;padding:4px 16px">Chris · Graham</p></div>
+<ul style="font-size:28px;line-height:1.45;color:#ffffff"><li>One sidebar on every page, collapsible on a desktop</li><li>On a phone it becomes a drawer behind a menu button</li><li>Type in the sidebar search to jump to any page</li><li>New home dashboard: live cells, open tickets, yesterday's KPIs, latest FSBs</li><li>Redesigned login</li></ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><h3 style="font-family:Outfit, sans-serif;font-size:36px;font-weight:600;line-height:1.15;color:#073364">Pages rebuilt for any screen</h3><p style="font-size:24px;font-weight:500;color:#073364;background:#e2ebf6;border-radius:999px;padding:4px 16px">Chris</p></div>
+<ul style="font-size:26px;line-height:1.4"><li>KPI Day, KPI Hour and Monitor Hour: chart grids on a desktop, stacked on a phone</li><li>Monitor map rebuilt: cell detail side panel, filter chips, column picker, wall mode, light and dark</li><li>XGA pages usable on a phone, upright or on its side</li><li>Old pages kept on a direct link while people switched over</li></ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">portal #343, #350, #356, #373, #452, #673 · May to November</p>
+<aside class="notes">The sidebar (#343, May) replaced the top-nav and per-page menus: every protected page is now served through one shell, so the navigation, role gating and page title are the same everywhere. Below 768 px wide the sidebar becomes a drawer. Graham added the sidebar search (#452, July). The responsive KPI Day / KPI Hour / Monitor Hour pages came in #350; the refreshed Monitor map was trialled at /MonitorRefresh (#356) and became the default /Monitor in June (#373), with the classic page at /MonitorOld. The six /xga pages (Table, Grid, Gauge, Big Number, Site, Treemap) were made to work on phones on 4 Nov (#673). Worth demoing on a phone if the room allows.</aside>
+</section>
 <section class="slide" id="lifecycle" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
 <div style="display:flex;flex-direction:column;gap:16px">
 <p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">The map for today</p>
@@ -111,7 +129,7 @@
 <ul style="font-size:24px;line-height:1.4"><li>Test Bench V2</li><li>Repair QA</li></ul>
 </div>
 </div>
-<p style="font-size:28px;line-height:1.4;color:#4d5f75">Running across all five: the FE app, the AI Agent and CLI, and a sturdier platform underneath.</p>
+<p style="font-size:28px;line-height:1.4;color:#4d5f75">Running across all five: the refreshed portal, the FE app, the AI Agent and CLI, and a sturdier platform underneath.</p>
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 5 Nov 2026</p>
 <aside class="notes">This is the running order for the rest of the talk. Operate has the most change, so it gets the most slides.</aside>
 </section>
