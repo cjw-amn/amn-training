@@ -465,6 +465,45 @@
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">ARN workshop · Software update · 13 Apr – 5 Nov 2026</p>
 <aside class="notes">App PRs: cell survey #19, field survey 2 #20, home dashboard and brand refresh #26, FE Schedule v1.4.0 #27, offline location and auth hardening 1.4.1 #28, multi-RAT drive test #29, survey upload on slow links #30, Android 16 #31, site speed test #33 to #36, GPS fix quality #40, FSBs 1.5.7 #42, Play Developer API releases #46, R8 shrinking #48, 1.5.8 crash and ANR fixes #49, App Only mode #50, location tracking 1.5.11 #51 with the portal Tracking Health tab #610, survey refusal reason #53, Gradle 9 / AGP 9 #39. Earlier fixes: usernames with spaces, optional USB host for non-OTG phones, clocked-in timer.</aside>
 </section>
+<section class="slide" id="fsb" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">Across the lifecycle · FE app</p>
+<h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">Every FE gets the bulletin, and signs for it</h2>
+</div>
+<div style="display:flex;gap:16px;align-items:center">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;padding:28px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#276f1c">1 · Portal</p>
+<p style="font-size:26px;line-height:1.35">FSB written and approved; publishing is done by the server</p>
+</div>
+<x-shape data-kind="arrow-right" style="width:48px;height:24px;background:#7a8ca2"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;padding:28px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#276f1c">2 · Pushed</p>
+<p style="font-size:26px;line-height:1.35">Synced to the app for every FE in the affected countries</p>
+</div>
+<x-shape data-kind="arrow-right" style="width:48px;height:24px;background:#7a8ca2"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;padding:28px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#276f1c">3 · Signed</p>
+<p style="font-size:26px;line-height:1.35">FE reads to the end and signs on the phone, even offline</p>
+</div>
+<x-shape data-kind="arrow-right" style="width:48px;height:24px;background:#7a8ca2"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;padding:28px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#276f1c">4 · Tracked</p>
+<p style="font-size:26px;line-height:1.35">Sign-off panel and CSV show who has signed and who hasn't</p>
+</div>
+</div>
+<div style="display:flex;gap:32px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#073364;border-radius:16px;padding:40px">
+<h3 style="font-family:Outfit, sans-serif;font-size:34px;font-weight:600;line-height:1.15;color:#ffffff">Signing is enforced</h3>
+<ul style="font-size:26px;line-height:1.4;color:#ffffff"><li>Unsigned past the deadline (5 days, or the implementation date) and the app locks until it is signed</li><li>A corrected bulletin asks for a fresh signature</li></ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:40px">
+<h3 style="font-family:Outfit, sans-serif;font-size:34px;font-weight:600;line-height:1.15;color:#073364">In the app</h3>
+<ul style="font-size:26px;line-height:1.4"><li>Field Bulletins tile on Home, badged with signatures owed</li><li>Whole library: in force and retired, with why it was withdrawn</li><li>The email still goes out as before</li></ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Chris · portal #470, #538, #545, #559 · app #42 (v1.5.7) · live since September</p>
+<aside class="notes">Before this, FEs only heard about a new FSB by email and nobody could tell who had read one. The deadline is publication plus 5 days, or the implementation date if sooner (at least a day). The lock also waits for 24 hours from when the bulletin first reached that phone, so an engineer out of coverage is not locked out on their first sync. Signing releases the lock straight away, offline; the signature uploads later. The audience is every active field engineer in the bulletin's countries, worked out live, so the compliance count stays right as people join and leave. A good live example: FSB023 has to be signed before ACS panel rating is switched on (16 Nov).</aside>
+</section>
 <section class="slide" id="aicli" data-transition="fade" style="background:#073364;color:#ffffff;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
 <div style="display:flex;flex-direction:column;gap:16px">
 <p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8fd877">Across the lifecycle · AI</p>
