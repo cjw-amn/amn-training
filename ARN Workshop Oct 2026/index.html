@@ -483,23 +483,6 @@
 <p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Mostly Graham</p>
 <aside class="notes">Speed: the median background request went from 380 ms to 13 ms, the worst KPI Day query from 460 s to 1.7 s, and a failed fetch on a KPI page now shows an error instead of sending the user to login. ARN stats also survive 0-byte downloads over bad links. Range ingest also got auto-detection and reconstruction of corrupt 2G byte counters and support for intraday files. Deploy tooling now checks KPI Day, Monitor and Comms through the CLI before and after each deploy.</aside>
 </section>
-<section class="slide" id="next" data-transition="fade" style="background:#f6f8fb;color:#0a1e36;font-family:'IBM Plex Sans', sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
-<div style="display:flex;flex-direction:column;gap:16px">
-<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#276f1c">What's next</p>
-<h2 style="font-family:Outfit, sans-serif;font-size:72px;font-weight:600;line-height:1.1;letter-spacing:-1px;color:#073364">In review now</h2>
-</div>
-<table style="font-size:26px;color:#0a1e36;width:1664px;background:#ffffff;border:1px solid #d5dee9;border-radius:16px;padding:18px">
-<tr><th style="text-align:left;color:#4d5f75">Work</th><th style="text-align:left;color:#4d5f75">What it does for the ARN</th><th style="text-align:left;color:#4d5f75">Where</th></tr>
-<tr><td><b>Site disable / enable</b></td><td>Phase 1, ARN900 only: take a site off air and back from /sites; not yet run on a real BTS</td><td>portal #640</td></tr>
-<tr><td><b>ACS panel rating</b></td><td>Deployed; switched on after FSB023 tells the FEs (16 Nov)</td><td>monitor #35</td></tr>
-<tr><td><b>XGA Gauge</b></td><td>E-RAB bar and 24-hour maximum on the gauge</td><td>portal #680</td></tr>
-<tr><td><b>CCTV ladder fix</b></td><td>Stops the backoff ladder cycling cameras back into alarm</td><td>monitor #63</td></tr>
-<tr><td><b>Firmware retry counting</b></td><td>Portal tasks no longer copy amn-monitor's "queued" state</td><td>portal #468</td></tr>
-<tr><td><b>App translation</b></td><td>App text ready for Play's automatic translation</td><td>app #52</td></tr>
-</table>
-<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4d5f75">Status as of 5 Nov 2026 · the rest of the workshop plans what comes next</p>
-<aside class="notes">Firmware retry counting (#468) is Michael's. ACS panel rating is Graham's. Everything else is Chris's. #662, #663 and #664 merged on 2 Nov. Hand over from here to the planning session.</aside>
-</section>
 </div>
 <div id="notes" aria-live="polite"></div>
 <div id="bar">
